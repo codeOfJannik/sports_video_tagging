@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Attribute")
 data class EventAttribute (
-    @PrimaryKey(autoGenerate = true) val uid: Long,
+    @PrimaryKey(autoGenerate = true) var attributeId: Long? = null,
     @ColumnInfo(name = "attribute_name") val attribute_name: String
 ) {
 }

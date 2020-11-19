@@ -12,7 +12,7 @@ import androidx.room.*
     ]
 )
 data class Player (
-    @PrimaryKey(autoGenerate = true) val playerId: Long,
+    @PrimaryKey(autoGenerate = true) var playerId: Long? = null,
     @ColumnInfo(name = "number") var number: Int,
     @ColumnInfo(name = "team") val team_id: Long,
     @ColumnInfo(name = "name") val name: String? = null

@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(indices = [Index(value = ["team_name"], unique = true)], tableName = "Team")
 data class Team (
-    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @PrimaryKey(autoGenerate = true) var uid: Long? = null,
     @ColumnInfo(name = "team_name") var teamName: String
 ) {
 }

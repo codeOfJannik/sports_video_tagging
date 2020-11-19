@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Entity(tableName = "MatchEventPlayerJoin")
 data class MatchEventPlayer (
-    @PrimaryKey(autoGenerate = true) val uid: Long,
+    @PrimaryKey(autoGenerate = true) var uid: Long? = null,
     val match_event_id: Long,
     val playerId: Long
 )

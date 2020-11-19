@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
     ]
 )
 data class MatchEvent (
-    @PrimaryKey(autoGenerate = true) val uid: Long,
+    @PrimaryKey(autoGenerate = true) var uid: Long? = null,
     @ColumnInfo(name = "match") val match_id: Long,
     @ColumnInfo(name = "match_order_number") val match_event_order_number: Int,
     @ColumnInfo(name = "timestamp") val event_timestamp: Long,
