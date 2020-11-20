@@ -2,9 +2,11 @@ package de.js329.sportsvideotagging.datamodels
 
 import androidx.room.*
 
-@Entity(tableName = "MatchEventAttributeJoin")
+@Entity(
+    tableName = "MatchEventAttributeJoin",
+    primaryKeys = ["match_event_id", "attributeId"]
+)
 data class MatchEventAttribute (
-    @PrimaryKey(autoGenerate = true) var uid: Long? = null,
     val match_event_id: Long,
     val attributeId: Long
 )
@@ -12,7 +14,7 @@ data class MatchEventAttribute (
 data class MatchEventsWithAttributes (
     @Embedded val matchEvent: MatchEvent,
     @Relation(
-        parentColumn = "uid",
+        parentColumn = "match_event_id",
         entityColumn = "attributeId",
         associateBy = Junction(MatchEventAttribute::class)
     )
