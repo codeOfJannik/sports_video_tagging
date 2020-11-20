@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -15,7 +16,7 @@ import java.util.*
     tableName = "Match")
 data class Match(
     @PrimaryKey(autoGenerate = true) var uid: Long? = null,
-    @ColumnInfo(name = "date") var date: Date? = null,
+    @ColumnInfo(name = "date") var date: LocalDateTime? = null,
     @ColumnInfo(name = "home_team") val home_team_id: Long,
     @ColumnInfo(name = "away_team") val away_team_id: Long,
     @ColumnInfo(name = "home_score") val home_score: Int,
