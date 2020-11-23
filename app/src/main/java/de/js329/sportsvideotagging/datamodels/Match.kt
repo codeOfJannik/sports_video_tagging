@@ -15,11 +15,11 @@ import java.util.*
     ],
     tableName = "Match")
 data class Match(
-    @PrimaryKey(autoGenerate = true) var uid: Long? = null,
-    @ColumnInfo(name = "date") var date: LocalDateTime? = null,
-    @ColumnInfo(name = "home_team") val home_team_id: Long,
-    @ColumnInfo(name = "away_team") val away_team_id: Long,
-    @ColumnInfo(name = "home_score") val home_score: Int,
-    @ColumnInfo(name = "away_score") val away_score: Int
+        @PrimaryKey(autoGenerate = true) var uid: Long? = null,
+        @ColumnInfo(name = "date") var date: LocalDateTime? = null,
+        @ColumnInfo(name = "home_team") val homeTeamId: Long,
+        @ColumnInfo(name = "away_team") val awayTeamId: Long,
+        @ColumnInfo(name = "home_score") var homeScore: Int,
+        @ColumnInfo(name = "away_score") var awayScore: Int
 ) {
 }

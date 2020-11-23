@@ -1,6 +1,8 @@
 package de.js329.sportsvideotagging.database
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import de.js329.sportsvideotagging.datamodels.*
@@ -26,4 +28,18 @@ abstract class VideoTagDatabase: RoomDatabase() {
     abstract fun matchDao(): MatchDao
     abstract fun eventDao(): EventDao
     abstract fun eventJoinDao(): EventJoinDao
+
+    companion object {
+        private var INSTANCE: VideoTagDatabase? = null
+        fun getInstance(context: Context): VideoTagDatabase {
+            if (INSTANCE == null) {
+                INSTANCE = Room.databaseBuilder(
+                        context,
+                        VideoTagDatabase::class.java,
+                        "videoTaggingDB"
+                ).build()
+            }
+            return INSTANCE as VideoTagDatabase
+        }
+    }
 }

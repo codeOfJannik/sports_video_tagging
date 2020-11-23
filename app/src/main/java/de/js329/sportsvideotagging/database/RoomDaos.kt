@@ -12,6 +12,9 @@ interface MatchDao {
     @Insert
     fun insertAll(vararg matches: Match): List<Long>
 
+    @Insert
+    fun insert(match: Match): Long
+
     @Update
     fun updateAll(vararg matches: Match)
 
@@ -71,6 +74,9 @@ interface EventDao {
 
     @Insert
     fun insertAllMatchEvents(vararg matchEvents: MatchEvent): List<Long>
+
+    @Insert
+    fun insertMatchEvent(matchEvent: MatchEvent): Long
 }
 
 @Dao

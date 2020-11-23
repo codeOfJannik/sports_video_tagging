@@ -13,11 +13,11 @@ import androidx.room.PrimaryKey
     ]
 )
 data class MatchEvent (
-    @PrimaryKey(autoGenerate = true) var match_event_id: Long? = null,
-    @ColumnInfo(name = "match") val match_id: Long,
-    @ColumnInfo(name = "match_order_number") val match_event_order_number: Int,
-    @ColumnInfo(name = "timestamp") val event_timestamp: Long,
-    @ColumnInfo(name = "event_type") val event_type_id: Long,
-    @ColumnInfo(name = "following_event") val following_event_id: Long? = null
+        @PrimaryKey(autoGenerate = true) var matchEventId: Long? = null,
+        @ColumnInfo(name = "match") val matchId: Long,
+        @ColumnInfo(name = "match_order_number") val matchEventOrderNumber: Int,
+        @ColumnInfo(name = "timestamp") val eventTimestamp: Long,
+        @ColumnInfo(name = "event_type") val eventTypeId: Long,
+        @ColumnInfo(name = "following_event") var followingEventId: Long? = null
 ) {
 }

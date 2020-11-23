@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "EventType")
 data class EventType (
-    @PrimaryKey(autoGenerate = true) var uid: Long? = null,
-    @ColumnInfo(name = "event_title") val event_title: String,
-    @ColumnInfo(name = "long_time_event") val long_timed_event: Boolean,
-    @ColumnInfo(name = "time_offset") val time_offset: Long,
-    @ColumnInfo(name = "player_selection") val player_selection: Boolean,
+        @PrimaryKey(autoGenerate = true) var uid: Long? = null,
+        @ColumnInfo(name = "event_title") val eventTitle: String,
+        @ColumnInfo(name = "long_time_event") val longTimedEvent: Boolean,
+        @ColumnInfo(name = "time_offset") val timeOffset: Long,
+        @ColumnInfo(name = "player_selection") val playerSelection: Boolean,
 ) {
 }

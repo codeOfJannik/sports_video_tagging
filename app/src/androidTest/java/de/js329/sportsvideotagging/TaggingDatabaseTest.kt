@@ -143,7 +143,7 @@ class TaggingDatabaseTest {
 
     private fun insertSampleMatchEvents() {
         db.eventDao().insertAllMatchEvents(*sampleMatchEvents.toTypedArray())
-                .mapIndexed { list_index, db_index -> sampleMatchEvents[list_index].match_event_id = db_index }
+                .mapIndexed { list_index, db_index -> sampleMatchEvents[list_index].matchEventId = db_index }
     }
 
     private fun createSampleEventPlayerJoin(): MatchEventPlayer? {
@@ -151,7 +151,7 @@ class TaggingDatabaseTest {
         insertSampleMatchEvents()
         samplePlayers = createSamplePlayers()
         insertSamplePlayers()
-        val matchEventId = sampleMatchEvents[0].match_event_id ?: return null
+        val matchEventId = sampleMatchEvents[0].matchEventId ?: return null
         val playerId = samplePlayers[0].playerId ?: return null
         return MatchEventPlayer(matchEventId, playerId)
     }
@@ -164,7 +164,7 @@ class TaggingDatabaseTest {
         sampleMatchEvents = createSampleMatchEvents()
         insertSampleMatchEvents()
         insertSampleAttributes()
-        val matchEventId = sampleMatchEvents[0].match_event_id ?: return null
+        val matchEventId = sampleMatchEvents[0].matchEventId ?: return null
         val attributeId = sampleAttributes[0].attributeId ?: return null
         return MatchEventAttribute(matchEventId, attributeId)
     }
