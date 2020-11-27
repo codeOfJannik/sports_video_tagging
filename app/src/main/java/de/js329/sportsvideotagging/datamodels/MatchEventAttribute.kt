@@ -4,17 +4,17 @@ import androidx.room.*
 
 @Entity(
     tableName = "MatchEventAttributeJoin",
-    primaryKeys = ["match_event_id", "attributeId"]
+    primaryKeys = ["matchEventId", "attributeId"]
 )
 data class MatchEventAttribute (
-    val match_event_id: Long,
-    val attributeId: Long
+        val matchEventId: Long,
+        val attributeId: Long
 )
 
 data class MatchEventsWithAttributes (
     @Embedded val matchEvent: MatchEvent,
     @Relation(
-        parentColumn = "match_event_id",
+        parentColumn = "matchEventId",
         entityColumn = "attributeId",
         associateBy = Junction(MatchEventAttribute::class)
     )
@@ -25,7 +25,7 @@ data class AttributesForMatchEvents (
     @Embedded val attribute: EventAttribute,
     @Relation(
         parentColumn = "attributeId",
-        entityColumn = "match_event_id",
+        entityColumn = "matchEventId",
         associateBy = Junction(MatchEventAttribute::class)
     )
     val matchEvents: List<MatchEvent>

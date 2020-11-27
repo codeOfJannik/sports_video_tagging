@@ -4,17 +4,17 @@ import androidx.room.*
 
 @Entity(
     tableName = "MatchEventPlayerJoin",
-    primaryKeys = ["match_event_id", "playerId"]
+    primaryKeys = ["matchEventId", "playerId"]
 )
 data class MatchEventPlayer (
-    val match_event_id: Long,
-    val playerId: Long
+        val matchEventId: Long,
+        val playerId: Long
 )
 
 data class MatchEventsWithPlayers(
     @Embedded val matchEvent: MatchEvent,
     @Relation(
-        parentColumn = "match_event_id",
+        parentColumn = "matchEventId",
         entityColumn = "playerId",
         associateBy = Junction(MatchEventPlayer::class)
     )
@@ -25,7 +25,7 @@ data class PlayersForMatchEvents(
     @Embedded val player: Player,
     @Relation(
         parentColumn = "playerId",
-        entityColumn = "match_event_id",
+        entityColumn = "matchEventId",
         associateBy = Junction(MatchEventPlayer::class)
     )
     val matchEvents: List<MatchEvent>

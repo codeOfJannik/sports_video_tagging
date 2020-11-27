@@ -1,3 +1,39 @@
 <resources>
     <string name="app_name">Sports Video Tagging</string>
+    <string name="startTaggingBtn_txt">Start Tagging Match</string>
+    <string name="configTaggingOptsBtn_txt">Configure Tagging Options</string>
+    <string name="noTeamsAlertTitle">No teams existing</string>
+    <string name="noTeamsAlertMessage">There were no teams created yet. To start tagging a match, please choose \'Configure Tagging Options\' and add teams first.</string>
+    <string name="noEventTypesAlertTitle">No Event Tags Existing</string>
+    <string name="noEventTypesAlertMessage">"There were no event tags created yet. To tag a match there needs to be at least one label created at 'Configure Tagging Options'. "</string>
+    <string name="title_activity_configuration">ConfigurationActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="title_activity_tagging">TaggingActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="editTeamsBtn_txt">Teams (+ Players)</string>
+    <string name="editEventTypesBtn_txt">Event Types</string>
+    <string name="editEventAttributesBtn_txt">Event Attributes</string>
+    <string name="configurationHeader_txt">Configure Tagging Options</string>
+    <string name="noTeamName">No team added. Team name was empty</string>
+    <string name="addFAB_text">Add team</string>
+    <string name="openSubMenuIconDesc">Open Sub Menu</string>
+    <string name="addTeamAlertTitle_txt">Add team</string>
+    <string name="addTeamAlertMessage_txt">Enter name of the team:</string>
+    <string name="deleteTeamTitle_txt">Delete Team</string>
+    <string name="deleteTeamMessage_txt">"Are you sure you want to delete team '%1s'? "</string>
+    <plurals name="numberOfPlayers">
+        <item quantity="one">%d player</item>
+        <item quantity="other">%d players</item>
+    </plurals>
 </resources>

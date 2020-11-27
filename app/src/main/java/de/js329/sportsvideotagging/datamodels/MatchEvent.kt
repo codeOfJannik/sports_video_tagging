@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "MatchEvent",
     foreignKeys = [
         ForeignKey(entity = Match::class, parentColumns = ["uid"], childColumns = ["match"]),
-        ForeignKey(entity = MatchEvent::class, parentColumns = ["match_event_id"], childColumns = ["following_event"])
+        ForeignKey(entity = MatchEvent::class, parentColumns = ["matchEventId"], childColumns = ["following_event"])
     ]
 )
 data class MatchEvent (

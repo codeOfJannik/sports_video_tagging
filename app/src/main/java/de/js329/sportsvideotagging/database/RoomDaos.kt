@@ -7,7 +7,7 @@ import de.js329.sportsvideotagging.datamodels.*
 interface MatchDao {
 
     @Query("SELECT * FROM `Match`")
-    fun getAll(): List<Match>
+    suspend fun getAll(): List<Match>
 
     @Insert
     fun insertAll(vararg matches: Match): List<Long>
@@ -26,10 +26,16 @@ interface MatchDao {
 interface PlayerDao {
 
     @Query("SELECT * FROM Player")
-    fun getAll(): List<Player>
+    suspend fun getAll(): List<Player>
+
+    @Query("SELECT * FROM Player WHERE team = :teamId")
+    suspend fun getPlayersForTeam(teamId: Long): List<Player>
 
     @Insert
     fun insertAll(vararg players: Player): List<Long>
+
+    @Insert
+    fun insert(player: Player): Long
 
     @Update
     fun updateAll(vararg players: Player)
@@ -42,41 +48,50 @@ interface PlayerDao {
 interface TeamDao {
 
     @Query("SELECT * FROM Team")
-    fun getAll(): List<Team>
+    suspend fun getAll(): List<Team>
 
     @Insert
-    fun insertAll(vararg teams: Team): List<Long>
+    suspend fun insertAll(vararg teams: Team): List<Long>
+
+    @Insert
+    suspend fun insert(team: Team): Long
 
     @Update
     fun updateAll(vararg teams: Team)
 
     @Delete
-    fun delete(team: Team)
+    suspend fun delete(team: Team)
 }
 
 @Dao
 interface EventDao {
 
     @Query("SELECT * FROM Attribute")
-    fun getAllAttributes(): List<EventAttribute>
+    suspend fun getAllAttributes(): List<EventAttribute>
 
     @Query("SELECT * FROM EventType")
-    fun getAllEventTypes(): List<EventType>
+    suspend fun getAllEventTypes(): List<EventType>
 
     @Query("SELECT * FROM MatchEvent")
-    fun getAllMatchEvents(): List<MatchEvent>
+    suspend fun getAllMatchEvents(): List<MatchEvent>
 
     @Insert
     fun insertAllEventAttributes(vararg attributes: EventAttribute): List<Long>
 
     @Insert
+    fun insert(eventAttribute: EventAttribute): Long
+
+    @Insert
     fun insertAllEventTypes(vararg eventTypes: EventType): List<Long>
+
+    @Insert
+    fun insert(eventType: EventType): Long
 
     @Insert
     fun insertAllMatchEvents(vararg matchEvents: MatchEvent): List<Long>
 
     @Insert
-    fun insertMatchEvent(matchEvent: MatchEvent): Long
+    fun insert(matchEvent: MatchEvent): Long
 }
 
 @Dao
@@ -84,19 +99,19 @@ interface EventJoinDao {
 
     @Transaction
     @Query("SELECT * FROM Player")
-    fun getPlayersForMatchEvents(): List<PlayersForMatchEvents>
+    suspend fun getPlayersForMatchEvents(): List<PlayersForMatchEvents>
 
     @Transaction
     @Query("SELECT * FROM MatchEvent")
-    fun getMatchEventsWithPlayers(): List<MatchEventsWithPlayers>
+    suspend fun getMatchEventsWithPlayers(): List<MatchEventsWithPlayers>
 
     @Transaction
     @Query("SELECT * FROM Attribute")
-    fun getAttributesForMatchEvent(): List<AttributesForMatchEvents>
+    suspend fun getAttributesForMatchEvent(): List<AttributesForMatchEvents>
 
     @Transaction
     @Query("SELECT * FROM MatchEvent")
-    fun getMatchEventsWithAttributes(): List<MatchEventsWithAttributes>
+    suspend fun getMatchEventsWithAttributes(): List<MatchEventsWithAttributes>
 
     @Insert
     fun insertAllEventPlayerJoins(vararg eventPlayerJoin: MatchEventPlayer): List<Long>
