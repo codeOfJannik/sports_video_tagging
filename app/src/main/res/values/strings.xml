@@ -32,6 +32,17 @@
     <string name="addTeamAlertMessage_txt">Enter name of the team:</string>
     <string name="deleteTeamTitle_txt">Delete Team</string>
     <string name="deleteTeamMessage_txt">"Are you sure you want to delete team '%1s'? "</string>
+    <string name="deletePlayerTitle_txt">Delete Player</string>
+    <string name="deletePlayerMessage_txt">"Are you sure you want to delete the selected player? "</string>
+    <string name="playerNameLbl_text">Player Name:</string>
+    <string name="playerNumberLbl_text">Jersey Number:</string>
+    <string name="addPlayerTitle">Add Player</string>
+    <string name="team">Team</string>
+    <string name="addPlayerMessage">Enter details of the new player</string>
+    <string name="teamAlreadyExists">No team created. Team already exists!</string>
+    <string name="playerNumberEmpty">No player created. Player number can\'t be empty</string>
+    <string name="playerAlreadyExists">No player created. Player with entered details exists already</string>
+    <string name="editTeams">Edit Teams</string>
     <plurals name="numberOfPlayers">
         <item quantity="one">%d player</item>
         <item quantity="other">%d players</item>

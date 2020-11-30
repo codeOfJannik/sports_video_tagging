@@ -1,7 +1,7 @@
 package de.js329.sportsvideotagging.activities
 
 import android.content.Context
-import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
@@ -16,6 +16,7 @@ import de.js329.sportsvideotagging.R
 import de.js329.sportsvideotagging.controller.ConfigurationController
 import de.js329.sportsvideotagging.database.VideoTagDatabase
 import de.js329.sportsvideotagging.datamodels.Team
+import kotlinx.android.synthetic.main.activity_configuration_listview.*
 import kotlinx.coroutines.launch
 
 class EditTeamsActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class EditTeamsActivity : AppCompatActivity() {
         val db = VideoTagDatabase.getInstance(this)
         ConfigurationController(db.eventDao(), db.playerDao(), db.teamDao())
     }
+
     private val allTeams: MutableList<Pair<Team, Int>> = ArrayList()
     private val teamAdapter by lazy {
         TeamAdapter(this, allTeams)
@@ -31,21 +33,27 @@ class EditTeamsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_teams)
+        setContentView(R.layout.activity_configuration_listview)
 
 
         val listView = findViewById<ListView>(R.id.listView)
         val addTeamFAB = findViewById<FloatingActionButton>(R.id.addFAB)
+        findViewById<TextView>(R.id.listViewHeader).text = getString(R.string.editTeams)
         addTeamFAB.setOnClickListener {
             onAddTeamClicked()
         }
         listView.setOnItemLongClickListener { _, _, position, _ ->
             onItemLongClick(position)
         }
-
-        queryTeamsWithPlayers()
+        listView.setOnItemClickListener { _, _, position, _ ->
+            onItemClick(position)
+        }
         listView.adapter = teamAdapter
+    }
 
+    override fun onStart() {
+        super.onStart()
+        queryTeamsWithPlayers()
     }
 
     private fun queryTeamsWithPlayers() {
@@ -66,7 +74,7 @@ class EditTeamsActivity : AppCompatActivity() {
     }
 
     private fun onAddTeamClicked() {
-        var teamName = ""
+        var teamName: String
         val builder = AlertDialog.Builder(this)
 
         val input = EditText(this)
@@ -81,8 +89,13 @@ class EditTeamsActivity : AppCompatActivity() {
             if (teamName.trim() != "") {
                 lifecycleScope.launch {
                     val newTeam = configurationController.addTeam(teamName.trim())
-                    allTeams.add(Pair(newTeam, 0))
-                    updateList()
+                    newTeam?.let {
+                        allTeams.add(Pair(newTeam, 0))
+                        updateList()
+                    } ?: kotlin.run {
+                        Toast.makeText(this@EditTeamsActivity, R.string.teamAlreadyExists, Toast.LENGTH_LONG).show()
+                    }
+
                 }
             } else {
                 dialog.cancel()
@@ -94,6 +107,14 @@ class EditTeamsActivity : AppCompatActivity() {
             dialog.cancel()
         }
         builder.show()
+    }
+
+    private fun onItemClick(position: Int): Boolean {
+        val selectedTeam = teamAdapter.getItem(position)
+        val intent = Intent(this, EditPlayersActivity::class.java)
+        intent.putExtra("teamId", selectedTeam.first.uid)
+        startActivity(intent)
+        return true
     }
 
     private fun onItemLongClick(position: Int): Boolean {
@@ -123,7 +144,7 @@ class TeamAdapter(private val context: Context, var allTeams: List<Pair<Team, In
         return allTeams.size
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): Pair<Team, Int> {
         return allTeams[position]
     }
 
@@ -133,10 +154,9 @@ class TeamAdapter(private val context: Context, var allTeams: List<Pair<Team, In
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.layout_list_view_row_item, parent, false)
-        val listItem = getItem(position)
-        val teamListItem = listItem as Pair<*, *>
-        val team = teamListItem.first as Team
-        val playersCount = teamListItem.second as Int
+        val teamListItem = getItem(position)
+        val team = teamListItem.first
+        val playersCount = teamListItem.second
         view.findViewById<TextView>(R.id.text_view_1).text = team.teamName
         view.findViewById<TextView>(R.id.text_view_2).text = context.resources.getQuantityString(R.plurals.numberOfPlayers, playersCount, playersCount)
         return view

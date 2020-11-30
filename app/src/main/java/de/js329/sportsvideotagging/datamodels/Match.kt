@@ -5,8 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.util.*
 
 @Entity(
     foreignKeys = [

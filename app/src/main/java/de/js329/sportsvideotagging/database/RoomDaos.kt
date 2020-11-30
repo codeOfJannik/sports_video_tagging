@@ -34,14 +34,14 @@ interface PlayerDao {
     @Insert
     fun insertAll(vararg players: Player): List<Long>
 
-    @Insert
-    fun insert(player: Player): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(player: Player): Long
 
     @Update
     fun updateAll(vararg players: Player)
 
     @Delete
-    fun delete(player: Player)
+    suspend fun delete(player: Player)
 }
 
 @Dao
@@ -50,10 +50,13 @@ interface TeamDao {
     @Query("SELECT * FROM Team")
     suspend fun getAll(): List<Team>
 
+    @Query("SELECT * FROM Team WHERE uid = :teamId")
+    suspend fun getTeamForId(teamId: Long): Team?
+
     @Insert
     suspend fun insertAll(vararg teams: Team): List<Long>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(team: Team): Long
 
     @Update

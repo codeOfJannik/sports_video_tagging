@@ -1,21 +1,21 @@
 package de.js329.sportsvideotagging.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import de.js329.sportsvideotagging.R
 import de.js329.sportsvideotagging.database.VideoTagDatabase
-import de.js329.sportsvideotagging.datamodels.EventType
-import de.js329.sportsvideotagging.datamodels.Team
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private val db by lazy { VideoTagDatabase.getInstance(applicationContext) }
+    private var teamCount = 0
+    private var eventTypeCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,18 +27,17 @@ class MainActivity : AppCompatActivity() {
         configTaggingOptsBtn.setOnClickListener(onConfigureTagOptionsClicked)
     }
 
-    private val onStartTaggingClicked = View.OnClickListener {
-        var allTeams: List<Team> = ArrayList()
-        var allEventTypes: List<EventType> = ArrayList()
-
+    override fun onStart() {
+        super.onStart()
         lifecycleScope.launch {
-            val teamQueryResult = db.teamDao().getAll()
-            val eventTypeQueryResult = db.eventDao().getAllEventTypes()
-            allTeams = teamQueryResult
-            allEventTypes = eventTypeQueryResult
+            teamCount = db.teamDao().getAll().size
+            eventTypeCount = db.eventDao().getAllEventTypes().size
         }
+    }
 
-        if (allTeams.size < 2) {
+    private val onStartTaggingClicked = View.OnClickListener {
+
+        if (teamCount < 2) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle(R.string.noTeamsAlertTitle)
             builder.setMessage(R.string.noTeamsAlertMessage)
@@ -47,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             return@OnClickListener
         }
 
-        if (allEventTypes.isEmpty()) {
+        if (eventTypeCount == 0) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle(R.string.noEventTypesAlertTitle)
             builder.setMessage(R.string.noEventTypesAlertMessage)
