@@ -90,7 +90,7 @@ class EditTeamsActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     val newTeam = configurationController.addTeam(teamName.trim())
                     newTeam?.let {
-                        allTeams.add(Pair(newTeam, 0))
+                        allTeams.add(Pair(it, 0))
                         updateList()
                     } ?: kotlin.run {
                         Toast.makeText(this@EditTeamsActivity, R.string.teamAlreadyExists, Toast.LENGTH_LONG).show()

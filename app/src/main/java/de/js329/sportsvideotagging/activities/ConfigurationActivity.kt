@@ -18,10 +18,16 @@ class ConfigurationActivity : AppCompatActivity() {
         val editAttributesBtn = findViewById<Button>(R.id.editAttributesBtn)
 
         editTeamsBtn.setOnClickListener(editTeamsCLicked)
+        editAttributesBtn.setOnClickListener(editAttributesClicked)
     }
 
-    val editTeamsCLicked = View.OnClickListener {
+    private val editTeamsCLicked = View.OnClickListener {
         val intent = Intent(this, EditTeamsActivity::class.java)
+        startActivity(intent)
+    }
+
+    private val editAttributesClicked = View.OnClickListener {
+        val intent = Intent(this, EditAttributesActivity::class.java)
         startActivity(intent)
     }
 }

@@ -81,8 +81,8 @@ interface EventDao {
     @Insert
     fun insertAllEventAttributes(vararg attributes: EventAttribute): List<Long>
 
-    @Insert
-    fun insert(eventAttribute: EventAttribute): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(eventAttribute: EventAttribute): Long
 
     @Insert
     fun insertAllEventTypes(vararg eventTypes: EventType): List<Long>
@@ -95,6 +95,9 @@ interface EventDao {
 
     @Insert
     fun insert(matchEvent: MatchEvent): Long
+
+    @Delete
+    suspend fun delete(attribute: EventAttribute)
 }
 
 @Dao
