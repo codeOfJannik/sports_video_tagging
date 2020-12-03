@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/eventTypeEditHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/eventTypeTitleLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:labelFor="@id/eventTypeTitleEditText"
+        android:text="@string/title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/eventTypeEditHeader"
+        app:layout_constraintTop_toBottomOf="@id/eventTypeEditHeader" />
+
+    <EditText
+        android:id="@+id/eventTypeTitleEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/eventTypeTitleLbl"
+        app:layout_constraintTop_toBottomOf="@+id/eventTypeTitleLbl" />
+
+    <TextView
+        android:id="@+id/timeOffsetLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/time_offset"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/eventTypeTitleEditText"
+        app:layout_constraintTop_toBottomOf="@+id/eventTypeTitleEditText" />
+
+    <TextView
+        android:id="@+id/optionsLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/event_type_options"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/timeOffsetSecondsEditText"
+        app:layout_constraintTop_toBottomOf="@+id/timeOffsetSecondsEditText" />
+
+    <RadioGroup
+        android:id="@+id/positiveNegativeTimeOffsetRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/timeOffsetLbl"
+        app:layout_constraintTop_toBottomOf="@+id/timeOffsetLbl">
+
+        <RadioButton
+            android:id="@+id/positiveTimeOfffset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/timeOffsetPlus_txt" />
+
+        <RadioButton
+            android:id="@+id/negativeTimeOffset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/timeOffsetMinus_txt" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/timeOffsetSecondsEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/timeOffsetSecondLbl"
+        app:layout_constraintStart_toStartOf="@+id/positiveNegativeTimeOffsetRadioGroup"
+        app:layout_constraintTop_toBottomOf="@+id/positiveNegativeTimeOffsetRadioGroup" />
+
+    <TextView
+        android:id="@+id/timeOffsetSecondLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/timeOffsetSecondsEditText"
+        android:text="@string/second_abbrev"
+        app:layout_constraintBottom_toBottomOf="@+id/timeOffsetSecondsEditText"
+        app:layout_constraintEnd_toEndOf="@+id/positiveNegativeTimeOffsetRadioGroup"
+        app:layout_constraintTop_toTopOf="@+id/timeOffsetSecondsEditText" />
+
+    <CheckBox
+        android:id="@+id/longTimeEventCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/long_timed_event"
+        app:layout_constraintStart_toStartOf="@+id/optionsLbl"
+        app:layout_constraintTop_toBottomOf="@+id/optionsLbl" />
+
+    <CheckBox
+        android:id="@+id/playerSelectionEnabledCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enable_player_selection"
+        app:layout_constraintStart_toStartOf="@+id/longTimeEventCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/longTimeEventCheckBox" />
+
+    <CheckBox
+        android:id="@+id/allowAttributesCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/allow_setting_attributes"
+        app:layout_constraintStart_toStartOf="@+id/playerSelectionEnabledCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/playerSelectionEnabledCheckBox" />
+
+    <Button
+        android:id="@+id/saveEventTypeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/cancelEventTypeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

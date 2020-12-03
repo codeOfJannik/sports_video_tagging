@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+
+    <TextView
+        android:id="@+id/eventTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/activeEventTypeCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/activeCheckboxLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/active"
+        app:layout_constraintBottom_toBottomOf="@+id/activeEventTypeCheckBox"
+        app:layout_constraintEnd_toStartOf="@+id/activeEventTypeCheckBox"
+        app:layout_constraintTop_toTopOf="@+id/activeEventTypeCheckBox" />
+
+    <TextView
+        android:id="@+id/timeOffsetTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/eventTitleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/eventTitleTextView" />
+
+    <TextView
+        android:id="@+id/longTimedEventTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/long_time_event_txt"
+        app:layout_constraintStart_toStartOf="@+id/timeOffsetTextView"
+        app:layout_constraintTop_toBottomOf="@+id/timeOffsetTextView" />
+
+    <ImageView
+        android:id="@+id/longTimedEventCheckImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/longTimedEventTextView"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toEndOf="@+id/longTimedEventTextView"
+        app:layout_constraintTop_toTopOf="@id/longTimedEventTextView"
+        app:srcCompat="@drawable/ic_baseline_check_24"
+        app:tint="?attr/colorControlNormal"
+        android:contentDescription="@string/longTimedEventCheck_contentDesc" />
+
+    <TextView
+        android:id="@+id/playerSelectionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/player_selection"
+        app:layout_constraintStart_toStartOf="@+id/longTimedEventTextView"
+        app:layout_constraintTop_toBottomOf="@+id/longTimedEventTextView" />
+
+    <ImageView
+        android:id="@+id/playerSelectionCheckImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/playerSelectionTextView"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toEndOf="@+id/playerSelectionTextView"
+        app:layout_constraintTop_toTopOf="@+id/playerSelectionTextView"
+        app:srcCompat="@drawable/ic_baseline_check_24"
+        app:tint="?attr/colorControlNormal"
+        android:contentDescription="@string/playerSelectionCheck_contentDesc" />
+
+    <TextView
+        android:id="@+id/attributesAllowedTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/attributes_allowed"
+        app:layout_constraintStart_toStartOf="@+id/playerSelectionTextView"
+        app:layout_constraintTop_toBottomOf="@+id/playerSelectionTextView" />
+
+    <ImageView
+        android:id="@+id/attributesAllowedCheckImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/attributesAllowedTextView"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toEndOf="@+id/attributesAllowedTextView"
+        app:layout_constraintTop_toTopOf="@+id/attributesAllowedTextView"
+        app:srcCompat="@drawable/ic_baseline_check_24"
+        app:tint="?attr/colorControlNormal"
+        android:contentDescription="@string/attributesAllowedCheck_contentDesc" />
+</androidx.constraintlayout.widget.ConstraintLayout>

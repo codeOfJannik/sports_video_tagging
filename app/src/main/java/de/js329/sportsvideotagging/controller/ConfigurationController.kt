@@ -51,9 +51,24 @@ class ConfigurationController(
         return eventDao.getAllAttributes()
     }
 
-    fun addEventType(eventTitle: String, longTimedEvent: Boolean, timeOffset: Long, playerSelection: Boolean) {
-        val eventType = EventType(null, eventTitle, longTimedEvent, timeOffset, playerSelection)
+    suspend fun getAllEventTypes(): List<EventType> {
+        return eventDao.getAllEventTypes()
+    }
+
+    suspend fun getEventTypeForId(id: Long): EventType? {
+        return eventDao.getEventTypeForId(id)
+    }
+
+    suspend fun addEventType(eventType: EventType) {
         eventType.uid = eventDao.insert(eventType)
+    }
+
+    suspend fun updateEventType(eventType: EventType) {
+        eventDao.update(eventType)
+    }
+
+    suspend fun deleteEventType(eventType: EventType) {
+        eventDao.delete(eventType)
     }
 
     suspend fun getAllTeams(): List<Team> {

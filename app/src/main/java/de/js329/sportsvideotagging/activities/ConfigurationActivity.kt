@@ -19,6 +19,7 @@ class ConfigurationActivity : AppCompatActivity() {
 
         editTeamsBtn.setOnClickListener(editTeamsCLicked)
         editAttributesBtn.setOnClickListener(editAttributesClicked)
+        editEventTypesBtn.setOnClickListener(editEventTypesClicked)
     }
 
     private val editTeamsCLicked = View.OnClickListener {
@@ -28,6 +29,11 @@ class ConfigurationActivity : AppCompatActivity() {
 
     private val editAttributesClicked = View.OnClickListener {
         val intent = Intent(this, EditAttributesActivity::class.java)
+        startActivity(intent)
+    }
+
+    private val editEventTypesClicked = View.OnClickListener {
+        val intent = Intent(this, EditEventTypesActivity::class.java)
         startActivity(intent)
     }
 }

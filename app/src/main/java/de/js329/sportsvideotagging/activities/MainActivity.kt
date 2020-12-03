@@ -55,8 +55,9 @@ class MainActivity : AppCompatActivity() {
             return@OnClickListener
         }
 
-        val intent = Intent(this, ConfigurationActivity::class.java)
-        startActivity(intent)
+        // TODO
+        // val intent = Intent(this, ...)
+        // startActivity(intent)
     }
 
     private val onConfigureTagOptionsClicked = View.OnClickListener {

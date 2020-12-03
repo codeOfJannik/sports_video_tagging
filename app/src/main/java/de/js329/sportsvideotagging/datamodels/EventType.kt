@@ -11,5 +11,6 @@ data class EventType (
         @ColumnInfo(name = "long_time_event") val longTimedEvent: Boolean,
         @ColumnInfo(name = "time_offset") val timeOffset: Long,
         @ColumnInfo(name = "player_selection") val playerSelection: Boolean,
-) {
-}
+        @ColumnInfo(name = "attributes_allowed") val attributesAllowed: Boolean,
+        @ColumnInfo(name = "active_type") val activeEventType: Boolean
+)
