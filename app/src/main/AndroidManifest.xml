@@ -11,14 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SportsVideoTagging">
-        <activity android:name=".activities.EditEventTypesActivity"/>
-        <activity android:name=".activities.EventTypeDetailsActivity"/>
+        <activity android:name=".activities.TaggingActivity"></activity>
+        <activity android:name=".activities.PreTaggingActivity" />
+        <activity android:name=".activities.EditEventTypesActivity" />
+        <activity android:name=".activities.EventTypeDetailsActivity" />
         <activity android:name=".activities.EditAttributesActivity" />
         <activity android:name=".activities.EditPlayersActivity" />
         <activity android:name=".activities.EditTeamsActivity" />
-        <activity
-            android:name=".activities.TaggingActivity"
-            android:label="@string/title_activity_tagging" />
         <activity
             android:name=".activities.ConfigurationActivity"
             android:label="@string/title_activity_configuration" />

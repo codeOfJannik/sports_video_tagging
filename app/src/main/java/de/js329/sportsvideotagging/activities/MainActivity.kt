@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private val db by lazy { VideoTagDatabase.getInstance(applicationContext) }
+    private val db by lazy { VideoTagDatabase.getInstance(applicationContext, lifecycleScope) }
     private var teamCount = 0
     private var eventTypeCount = 0
 
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             return@OnClickListener
         }
 
-        if (eventTypeCount == 0) {
+        if (eventTypeCount < 2) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle(R.string.noEventTypesAlertTitle)
             builder.setMessage(R.string.noEventTypesAlertMessage)
@@ -55,9 +55,8 @@ class MainActivity : AppCompatActivity() {
             return@OnClickListener
         }
 
-        // TODO
-        // val intent = Intent(this, ...)
-        // startActivity(intent)
+        val intent = Intent(this, PreTaggingActivity::class.java)
+        startActivity(intent)
     }
 
     private val onConfigureTagOptionsClicked = View.OnClickListener {

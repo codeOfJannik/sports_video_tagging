@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class EditTeamsActivity : AppCompatActivity() {
 
     private val configurationController by lazy {
-        val db = VideoTagDatabase.getInstance(this)
+        val db = VideoTagDatabase.getInstance(this, lifecycleScope)
         ConfigurationController(db.eventDao(), db.playerDao(), db.teamDao())
     }
 

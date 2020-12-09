@@ -53,6 +53,7 @@
     <string name="editEventTypesHeader_txt">Edit Event Types</string>
     <string name="deleteEventTypeTitle_txt">Delete Event Type</string>
     <string name="deleteEventTypeMessage_txt">Do you really want to delete the event type \'%1s\'?</string>
+    <string name="timerTextViewTemplate">%1s hh:mm:ss</string>
     <string name="active">Active</string>
     <string name="long_time_event_txt">Long Time Event:</string>
     <string name="longTimedEventCheck_contentDesc">Is long time Event Check</string>
@@ -75,8 +76,23 @@
     <string name="addEventType">Add Event Type</string>
     <string name="noEventTypeTitle">Please enter Event Type title before saving.</string>
     <string name="event_type_options">Event Type Options</string>
+    <string name="preTaggingScreenMessage">Enter match details before you start tagging</string>
+    <string name="home_team">Home Team</string>
+    <string name="match_date">Match Date</string>
+    <string name="match_time">Match Time</string>
+    <string name="away_team">Away Team</string>
+    <string name="continue_btn_txt">Continue</string>
+    <string name="edit_home_team_players_btn">Edit Home Team Players</string>
+    <string name="edit_away_team_players_btn">Edit Away Team Players</string>
     <plurals name="numberOfPlayers">
         <item quantity="one">%d player</item>
         <item quantity="other">%d players</item>
     </plurals>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="undo">Undo</string>
+    <string name="start_match_tagging">Start Match Tagging</string>
+    <string name="stopMatchTagging">Stop Match Tagging</string>
+    <string name="noTimerStarted_TextViewValue">00:00:00 hh:mm:ss</string>
+    <string name="tagCounterTextViewValue">Numer of Tags: %1d</string>
 </resources>

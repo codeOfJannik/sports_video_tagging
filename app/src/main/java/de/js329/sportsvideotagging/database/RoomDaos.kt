@@ -53,6 +53,9 @@ interface TeamDao {
     @Query("SELECT * FROM Team WHERE uid = :teamId")
     suspend fun getTeamForId(teamId: Long): Team?
 
+    @Query("SELECT * FROM Team WHERE team_name = :teamName")
+    suspend fun getTeamForName(teamName: String): Team
+
     @Insert
     suspend fun insertAll(vararg teams: Team): List<Long>
 

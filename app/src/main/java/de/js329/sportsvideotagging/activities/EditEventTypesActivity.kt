@@ -15,6 +15,7 @@ import de.js329.sportsvideotagging.R
 import de.js329.sportsvideotagging.controller.ConfigurationController
 import de.js329.sportsvideotagging.database.VideoTagDatabase
 import de.js329.sportsvideotagging.datamodels.EventType
+import de.js329.sportsvideotagging.toTimeOffsetString
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.util.*
@@ -29,7 +30,7 @@ interface EventTypeChangedListener {
 class EditEventTypesActivity : AppCompatActivity(), EventTypeChangedListener {
 
     private val configurationController by lazy {
-        val db = VideoTagDatabase.getInstance(this)
+        val db = VideoTagDatabase.getInstance(this, lifecycleScope)
         ConfigurationController(db.eventDao(), db.playerDao(), db.teamDao())
     }
 
@@ -60,6 +61,7 @@ class EditEventTypesActivity : AppCompatActivity(), EventTypeChangedListener {
     private fun queryEventTypes() {
         lifecycleScope.launch {
             eventTypes = configurationController.getAllEventTypes().toMutableList()
+            eventTypes.remove(eventTypes.first { it.eventTitle == "Match Start" })
             updateList()
         }
     }
@@ -154,19 +156,5 @@ class EventTypesAdapter(private val context: Context, var allEventTypes: List<Ev
             eventTypeChangedListener.onEventTypeActiveChanged(item, isChecked)
         }
         return view
-    }
-}
-
-fun Long.toTimeOffsetString(): String {
-    val timeOffsetSign = if (this >= 0) "+" else "-"
-    val minSecPair = this.toMinutesAndSecond()
-    return String.format(Locale.getDefault(), "%s%02d:%02d", timeOffsetSign, minSecPair.first, minSecPair.second)
-}
-
-fun Long.toMinutesAndSecond(): Pair<Long, Long> {
-    Duration.ofSeconds(abs(this)).also {
-        val minutes = it.toMinutes()
-        val seconds = it.minusMinutes(minutes).seconds
-        return Pair(minutes, seconds)
     }
 }

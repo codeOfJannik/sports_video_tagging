@@ -3,41 +3,60 @@ package de.js329.sportsvideotagging.controller
 import de.js329.sportsvideotagging.database.EventDao
 import de.js329.sportsvideotagging.database.EventJoinDao
 import de.js329.sportsvideotagging.database.MatchDao
+import de.js329.sportsvideotagging.database.TeamDao
 import de.js329.sportsvideotagging.datamodels.*
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 class MatchTaggingController(
-        homeTeamId: Long,
-        awayTeamId: Long,
-        private val eventTypes: List<EventType>,
         private val matchDao: MatchDao,
         private val eventDao: EventDao,
-        private val joinDao: EventJoinDao
+        private val joinDao: EventJoinDao,
+        private val teamDao: TeamDao
 ) {
 
-    var match = Match(null, null, homeTeamId, awayTeamId, 0, 0)
+    private var eventTypes: List<EventType> = ArrayList()
+    var match: Match? = null
     var matchEvents: MutableList<MatchEvent> = ArrayList()
     var latestMatchEvent: MatchEvent? = null
     var eventOrderNum = 0
 
-    fun startMatch() {
-        val matchId = matchDao.insert(match)
-        match.uid = matchId
-        eventTypes.first { eventType -> eventType.eventTitle == "Match Start" }.uid?.let { uid ->
-            latestMatchEvent = MatchEvent(
-                    null,
-                    matchId,
-                    eventOrderNum,
-                    LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
-                    uid
-            )
-            addMatchEventToList()
+    suspend fun getTeamForName(teamName: String): Team {
+        return teamDao.getTeamForName(teamName)
+    }
+
+    suspend fun getEventTypes(): List<EventType> {
+        if (eventTypes.isEmpty()) {
+            eventTypes = eventDao.getAllEventTypes()
+        }
+        return eventTypes
+    }
+
+    suspend fun getAllTeams(): List<Team> {
+        return teamDao.getAll()
+    }
+
+    suspend fun startMatch(homeTeamId: Long, awayTeamId: Long, timestamp: Long) {
+        match = Match(null, null, homeTeamId, awayTeamId, 0, 0)
+        match?.let {
+            val matchId = matchDao.insert(it)
+            it.uid = matchId
+            getEventTypes()
+            eventTypes.first { eventType -> eventType.eventTitle == "Match Start" }.uid?.let { uid ->
+                latestMatchEvent = MatchEvent(
+                        null,
+                        matchId,
+                        eventOrderNum,
+                        timestamp,
+                        uid
+                )
+                addMatchEventToList()
+            }
         }
     }
 
     fun createMatchEvent(eventType: EventType): Boolean {
-        val matchId = match.uid ?: return false
+        val matchId = match?.uid ?: return false
         val eventTypeId = eventType.uid ?: return false
 
         latestMatchEvent = MatchEvent(
@@ -73,7 +92,7 @@ class MatchTaggingController(
     }
 
     fun addFollowUpEvent(eventType: EventType, players: List<Player> = ArrayList(), attributes: List<EventAttribute> = ArrayList()): Boolean {
-        val matchId = match.uid ?: return false
+        val matchId = match?.uid ?: return false
         val eventTypeId = eventType.uid ?: return false
 
         val followUpEvent = MatchEvent(
@@ -105,9 +124,9 @@ class MatchTaggingController(
     }
 
     fun endMatch(homeTeamScore: Int, awayTeamScore: Int) {
-        match.homeScore = homeTeamScore
-        match.awayScore = awayTeamScore
-        matchDao.updateAll(match)
+        match?.homeScore = homeTeamScore
+        match?.awayScore = awayTeamScore
+        match?.let { matchDao.updateAll(it) }
     }
 
     private fun returnMatchEventId(matchEvent: MatchEvent): Long {
