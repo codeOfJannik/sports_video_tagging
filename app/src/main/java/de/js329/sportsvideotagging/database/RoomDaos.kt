@@ -10,16 +10,16 @@ interface MatchDao {
     suspend fun getAll(): List<Match>
 
     @Insert
-    fun insertAll(vararg matches: Match): List<Long>
+    suspend fun insertAll(vararg matches: Match): List<Long>
 
     @Insert
-    fun insert(match: Match): Long
+    suspend fun insert(match: Match): Long
 
     @Update
-    fun updateAll(vararg matches: Match)
+    suspend fun updateAll(vararg matches: Match)
 
     @Delete
-    fun delete(match: Match)
+    suspend fun delete(match: Match)
 }
 
 @Dao
@@ -32,13 +32,13 @@ interface PlayerDao {
     suspend fun getPlayersForTeam(teamId: Long): List<Player>
 
     @Insert
-    fun insertAll(vararg players: Player): List<Long>
+    suspend fun insertAll(vararg players: Player): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(player: Player): Long
 
     @Update
-    fun updateAll(vararg players: Player)
+    suspend fun updateAll(vararg players: Player)
 
     @Delete
     suspend fun delete(player: Player)
@@ -63,7 +63,7 @@ interface TeamDao {
     suspend fun insert(team: Team): Long
 
     @Update
-    fun updateAll(vararg teams: Team)
+    suspend fun updateAll(vararg teams: Team)
 
     @Delete
     suspend fun delete(team: Team)
@@ -85,22 +85,22 @@ interface EventDao {
     suspend fun getEventTypeForId(id: Long): EventType?
 
     @Insert
-    fun insertAllEventAttributes(vararg attributes: EventAttribute): List<Long>
+    suspend fun insertAllEventAttributes(vararg attributes: EventAttribute): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(eventAttribute: EventAttribute): Long
 
     @Insert
-    fun insertAllEventTypes(vararg eventTypes: EventType): List<Long>
+    suspend fun insertAllEventTypes(vararg eventTypes: EventType): List<Long>
 
     @Insert
     suspend fun insert(eventType: EventType): Long
 
     @Insert
-    fun insertAllMatchEvents(vararg matchEvents: MatchEvent): List<Long>
+    suspend fun insertAllMatchEvents(vararg matchEvents: MatchEvent): List<Long>
 
     @Insert
-    fun insert(matchEvent: MatchEvent): Long
+    suspend fun insert(matchEvent: MatchEvent): Long
 
     @Update
     suspend fun update(eventType: EventType)
@@ -132,8 +132,8 @@ interface EventJoinDao {
     suspend fun getMatchEventsWithAttributes(): List<MatchEventsWithAttributes>
 
     @Insert
-    fun insertAllEventPlayerJoins(vararg eventPlayerJoin: MatchEventPlayer): List<Long>
+    suspend fun insertAllEventPlayerJoins(vararg eventPlayerJoin: MatchEventPlayer): List<Long>
 
     @Insert
-    fun insertAllEventAttributeJoins(vararg eventAttributeJoin: MatchEventAttribute): List<Long>
+    suspend fun insertAllEventAttributeJoins(vararg eventAttributeJoin: MatchEventAttribute): List<Long>
 }

@@ -6,10 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.EditText
+import android.widget.*
 import androidx.lifecycle.lifecycleScope
 import de.js329.sportsvideotagging.R
 import de.js329.sportsvideotagging.controller.MatchTaggingController
@@ -31,7 +28,7 @@ class PreTaggingActivity : AppCompatActivity() {
     private val matchDateCalendar = Calendar.getInstance()
     private val matchTaggingController by lazy {
         val db = VideoTagDatabase.getInstance(this, lifecycleScope)
-        MatchTaggingController(db.matchDao(), db.eventDao(), db.eventJoinDao(), db.teamDao())
+        MatchTaggingController(db.matchDao(), db.eventDao(), db.eventJoinDao(), db.teamDao(), db.playerDao())
     }
     private var allTeams: List<Team> = ArrayList()
     private var selectedHomeTeam: Team? = null
@@ -137,8 +134,14 @@ class PreTaggingActivity : AppCompatActivity() {
     }
 
     private fun onContinueClicked() {
-        val intent = Intent(this, TaggingActivity::class.java)
-        startActivity(intent)
+        if (selectedHomeTeam != selectedAwayTeam) {
+            val intent = Intent(this, TaggingActivity::class.java)
+            intent.putExtra("homeTeamId", selectedHomeTeam?.uid)
+            intent.putExtra("awayTeamId", selectedAwayTeam?.uid)
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, R.string.sameTeamError, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun onEditTeamPlayersClicked(team: Team?) {

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.js329.sportsvideotagging.R
+import de.js329.sportsvideotagging.activities.TaggingFragmentManager
 import de.js329.sportsvideotagging.controller.MatchTaggingController
 import de.js329.sportsvideotagging.datamodels.EventType
 import de.js329.sportsvideotagging.inflate
@@ -23,10 +24,11 @@ import kotlinx.coroutines.launch
 import java.time.Duration
 import kotlin.collections.ArrayList
 
-class MatchTaggingBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClickListener {
+class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClickListener {
 
     private var eventTypes: List<EventType> = ArrayList()
     private lateinit var matchTaggingController: MatchTaggingController
+    private lateinit var taggingFragmentManager: TaggingFragmentManager
     private var matchStarted = false
     private var taggingStartTimestamp = 0L
     private var homeTeamId = -1L
@@ -44,11 +46,16 @@ class MatchTaggingBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
     }
 
     companion object {
-        fun newInstance(matchTaggingController: MatchTaggingController, homeId: Long, awayId: Long) = MatchTaggingBaseFragment().apply {
-            lifecycleScope.launch { setEventTypes(matchTaggingController.getEventTypes()) }
+        fun newInstance(
+                matchTaggingController: MatchTaggingController,
+                homeId: Long,
+                awayId: Long,
+                taggingFragmentManager: TaggingFragmentManager
+        ) = TaggingMatchBaseFragment().apply {
             this.matchTaggingController = matchTaggingController
             this.homeTeamId = homeId
             this.awayTeamId = awayId
+            this.taggingFragmentManager = taggingFragmentManager
         }
     }
 
@@ -58,8 +65,8 @@ class MatchTaggingBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_match_tagging_base, container, false)
@@ -97,8 +104,11 @@ class MatchTaggingBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
 
     private fun setupRecyclerView(view: View) {
         recyclerView = view.findViewById(R.id.recyclerView)
+        lifecycleScope.launch {
+            setEventTypes(matchTaggingController.getEventTypes())
+            recyclerView.adapter = EventTypesRecyclerAdapter(this@TaggingMatchBaseFragment, eventTypes)
+        }
         recyclerView.layoutManager = GridLayoutManager(activity, 2)
-        recyclerView.adapter = EventTypesRecyclerAdapter(this, eventTypes)
         recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, DividerItemDecoration.HORIZONTAL))
         recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL))
         recyclerView.alpha = 0.5F
@@ -138,11 +148,18 @@ class MatchTaggingBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
     }
 
     private fun setEventTypes(eventTypes: List<EventType>) {
-        this.eventTypes = eventTypes
+        val tempList = eventTypes.toMutableList()
+        tempList.remove(eventTypes.find { it.eventTitle == "Match Start" })
+        this.eventTypes = tempList
     }
 
     override fun onItemClick(view: View?, position: Int) {
-        TODO("Add match event logic including database operations and fragment transaction")
+        val eventType = eventTypes[position]
+        matchTaggingController.createMatchEvent(eventType, System.currentTimeMillis() / 1000)
+        if (eventType.playerSelection) {
+            taggingFragmentManager.switchToPlayerSelection()
+        }
+        // TODO("Add match event logic including database operations and fragment transaction")
     }
 }
 
@@ -158,7 +175,9 @@ class EventTypesRecyclerAdapter(val mClickListener: ItemClickListener, private v
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.event_type_recycler_item, false)
-        return ViewHolder(view)
+        val holder = ViewHolder(view)
+        view.setOnClickListener { holder.onClick(view) }
+        return holder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
