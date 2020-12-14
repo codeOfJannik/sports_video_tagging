@@ -113,29 +113,32 @@ class MatchTaggingController(
     }
 
     suspend fun addFollowUpEvent(eventType: EventType, players: List<Player> = ArrayList(), attributes: List<EventAttribute> = ArrayList()): Boolean {
-        val matchId = match?.uid ?: return false
-        val eventTypeId = eventType.uid ?: return false
+        latestMatchEvent?.let {
+            val matchId = match?.uid ?: return false
+            val eventTypeId = eventType.uid ?: return false
 
-        val followUpEvent = MatchEvent(
-                null,
-                matchId,
-                ++eventOrderNum,
-                LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
-                eventTypeId
-        )
+            val followUpEvent = MatchEvent(
+                    null,
+                    matchId,
+                    ++eventOrderNum,
+                    it.eventTimestamp,
+                    eventTypeId
+            )
 
-        if (players.isNotEmpty()) {
-            addEventPlayers(players, followUpEvent)
+            if (players.isNotEmpty()) {
+                addEventPlayers(players, followUpEvent)
+            }
+
+            if (attributes.isNotEmpty()) {
+                addEventAttributes(attributes, followUpEvent)
+            }
+
+            val followUpMatchId = returnMatchEventId(followUpEvent)
+            it.followingEventId = followUpMatchId
+
+            return true
         }
-
-        if (attributes.isNotEmpty()) {
-            addEventAttributes(attributes, followUpEvent)
-        }
-
-        val followUpMatchId = returnMatchEventId(followUpEvent)
-        latestMatchEvent?.followingEventId = followUpMatchId
-
-        return true
+        return false
     }
 
     private fun addMatchEventToList() {

@@ -100,7 +100,12 @@
     <string name="match_event_details">Match Event Details</string>
     <string name="save_match_event">Save Match Event</string>
     <string name="add_attributes_optional">Add Attributes (optional)</string>
-    <string name="add_following_event_optional">Add Following Event (Optional)</string>
+    <string name="add_following_event_optional">Add Follow-Up Event (Optional)</string>
     <string name="addAttributesToEventDialogTitle">Select Attributes for Event</string>
-    <string name="noFollowingEvent">No following event entered</string>
+    <string name="noFollowingEvent">No follow-up event entered</string>
+    <string name="headerFollowUpEventSelection">Select Follow-Up Event from List below</string>
+    <string name="followUpSaveActionTxt">Save with\nselected Players</string>
+    <string name="headerFollowUpPlayerSelection">Select players of follow-up event. Saving without player selection is also possible.</string>
+    <string name="selectAttributesForFollowUp">Select Attributes for follow-up event.</string>
+    <string name="followUpEventAdded">Added follow-up event of type %1s</string>
 </resources>
