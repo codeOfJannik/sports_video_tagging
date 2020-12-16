@@ -71,7 +71,7 @@ class EventTypeDetailsActivity : AppCompatActivity() {
             Toast.makeText(this, R.string.noEventTypeTitle, Toast.LENGTH_LONG).show()
             return
         }
-        var timeOffset = timeOffsetSecondsEditText.text.toString().toLong()
+        var timeOffset = if (timeOffsetSecondsEditText.text.toString() != "") timeOffsetSecondsEditText.text.toString().toLong() else 0
         timeOffset = if (findViewById<RadioButton>(R.id.negativeTimeOffset).isChecked) timeOffset * (-1) else timeOffset
         val longTimed = longTimedEventCheckBox.isChecked
         val playerSelectionEnabled = enablePlayerSelectionCheckBox.isChecked

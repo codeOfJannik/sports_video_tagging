@@ -27,6 +27,7 @@ class TaggingMatchEventFinalizeFragment: Fragment() {
 
     private lateinit var attributes: List<EventAttribute>
     private lateinit var selectedAttributes: BooleanArray
+    private var attributeSelectionEnabled = true
 
     companion object {
         fun newInstance(matchTaggingController: MatchTaggingController, taggingFragmentManager: TaggingFragmentManager) = TaggingMatchEventFinalizeFragment().apply {
@@ -53,12 +54,21 @@ class TaggingMatchEventFinalizeFragment: Fragment() {
     }
 
     private fun setupAttributesDialogButton(root: View) {
-        lifecycleScope.launch {
-            attributes = matchTaggingController.getEventAttributes()
-            attributesTextView = root.findViewById(R.id.attributeListTxtView)
-            selectedAttributes = BooleanArray(attributes.size) { return@BooleanArray false }
-            root.findViewById<Button>(R.id.addAttributesBtn).setOnClickListener { onAddAttributesClicked() }
+        val attributesButton = root.findViewById<Button>(R.id.addAttributesBtn)
+        val eventType = matchTaggingController.getEventType()
+        eventType?.let {
+            if (it.attributesAllowed) {
+                lifecycleScope.launch {
+                    attributes = matchTaggingController.getEventAttributes()
+                    attributesTextView = root.findViewById(R.id.attributeListTxtView)
+                    selectedAttributes = BooleanArray(attributes.size) { return@BooleanArray false }
+                    attributesButton.setOnClickListener { onAddAttributesClicked() }
+                }
+                return
+            }
         }
+        attributeSelectionEnabled = false
+        attributesButton.visibility = View.GONE
     }
 
     private fun onAddFollowingEventClicked() {
@@ -71,10 +81,13 @@ class TaggingMatchEventFinalizeFragment: Fragment() {
     }
 
     private fun finishEventCreation() {
-        lifecycleScope.launch {
-            matchTaggingController.addEventAttributes(getSelectedAttributes())
+        if (attributeSelectionEnabled) {
+            lifecycleScope.launch {
+                matchTaggingController.addEventAttributes(getSelectedAttributes())
+            }
         }
-        // TODO: back to base tagging fragment
+        matchTaggingController.finishMatchEventCreation()
+        taggingFragmentManager.switchToBaseFragment()
     }
 
     private fun onAddAttributesClicked() {

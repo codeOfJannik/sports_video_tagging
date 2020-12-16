@@ -84,6 +84,9 @@ interface EventDao {
     @Query("SELECT * FROM EventType WHERE uid = :id")
     suspend fun getEventTypeForId(id: Long): EventType?
 
+    @Query("DELETE FROM MatchEvent WHERE matchEventId = :uid")
+    suspend fun deleteMatchEventById(uid: Long)
+
     @Insert
     suspend fun insertAllEventAttributes(vararg attributes: EventAttribute): List<Long>
 
@@ -105,11 +108,17 @@ interface EventDao {
     @Update
     suspend fun update(eventType: EventType)
 
+    @Update
+    suspend fun update(matchEvent: MatchEvent)
+
     @Delete
     suspend fun delete(attribute: EventAttribute)
 
     @Delete
     suspend fun delete(eventType: EventType)
+
+    @Delete
+    suspend fun delete(matchEvent: MatchEvent)
 }
 
 @Dao
@@ -131,9 +140,15 @@ interface EventJoinDao {
     @Query("SELECT * FROM MatchEvent")
     suspend fun getMatchEventsWithAttributes(): List<MatchEventsWithAttributes>
 
+    @Query("SELECT playerId FROM MatchEventPlayerJoin WHERE matchEventId = :id")
+    suspend fun getPlayerIdsForMatchEventId(id: Long): List<Long>
+
     @Insert
     suspend fun insertAllEventPlayerJoins(vararg eventPlayerJoin: MatchEventPlayer): List<Long>
 
     @Insert
     suspend fun insertAllEventAttributeJoins(vararg eventAttributeJoin: MatchEventAttribute): List<Long>
+
+    @Delete
+    suspend fun deleteEventPlayerJoin(eventPlayerJoin: MatchEventPlayer)
 }

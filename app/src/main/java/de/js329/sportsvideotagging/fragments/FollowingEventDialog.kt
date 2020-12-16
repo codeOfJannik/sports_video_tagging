@@ -50,11 +50,6 @@ class FollowingEventDialog: DialogFragment(), EventTypesRecyclerAdapter.ItemClic
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // TODO: Make dialog fullscreen here
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.layout_following_event_recyclerview_dialog, container, false)

@@ -108,4 +108,11 @@
     <string name="headerFollowUpPlayerSelection">Select players of follow-up event. Saving without player selection is also possible.</string>
     <string name="selectAttributesForFollowUp">Select Attributes for follow-up event.</string>
     <string name="followUpEventAdded">Added follow-up event of type %1s</string>
+    <string name="finalScoreDialogTitle_txt">Final Score</string>
+    <string name="finalScoreDialogMessage_txt">Enter final score of the match</string>
+    <string name="away_team_score">Away Team Score</string>
+    <string name="home_team_score">Home Team Score</string>
+    <string name="teamPlaceholderScore_txt">%1s Score</string>
+    <string name="invalidScoreMessage">Invalid Score entered!</string>
+    <string name="followUpEvent">Follow Up Event</string>
 </resources>

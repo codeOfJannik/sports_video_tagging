@@ -26,6 +26,13 @@ class MatchTaggingController(
         return teamDao.getTeamForName(teamName)
     }
 
+    fun getEventType(): EventType? {
+        latestMatchEvent?.let {
+            return eventTypes.find { eventType -> eventType.uid == it.eventTypeId }
+        }
+        return null
+    }
+
     suspend fun getEventTypes(): List<EventType> {
         if (eventTypes.isEmpty()) {
             eventTypes = eventDao.getAllEventTypes()
@@ -90,6 +97,45 @@ class MatchTaggingController(
         return true
     }
 
+    fun finishMatchEventCreation() {
+        addMatchEventToList()
+    }
+
+    suspend fun cancelEventCreation() {
+        latestMatchEvent?.let { matchEvent ->
+            if (matchEvent.matchEventId != null) {
+                eventDao.delete(matchEvent)
+            }
+            deleteFollowingEventIfPresent()
+        }
+        eventOrderNum -= 1
+        latestMatchEvent = null
+    }
+
+    suspend fun deleteFollowingEventIfPresent() {
+        latestMatchEvent?.let { matchEvent ->
+            val followIngEventId = matchEvent.followingEventId
+            followIngEventId?.let {
+                matchEvent.followingEventId = null
+                eventDao.update(matchEvent)
+                eventDao.deleteMatchEventById(it)
+                eventOrderNum -= 1
+            }
+        }
+    }
+
+    suspend fun deleteLastMatchEvent() {
+        val lastAddedEvent = matchEvents.removeLastOrNull()
+        lastAddedEvent?.let { matchEvent ->
+            eventDao.delete(matchEvent)
+            eventOrderNum -= 1
+            matchEvent.followingEventId?.let {
+                eventDao.deleteMatchEventById(it)
+                eventOrderNum -= 1
+            }
+        }
+    }
+
     suspend fun addEventAttributes(attributes: List<EventAttribute>, matchEvent: MatchEvent? = latestMatchEvent) {
         matchEvent?.let {
             val matchEventId = returnMatchEventId(it)
@@ -108,6 +154,16 @@ class MatchTaggingController(
                 val playerId = player.playerId ?: return@forEach
                 val eventPlayerJoin = MatchEventPlayer(matchEventId, playerId)
                 joinDao.insertAllEventPlayerJoins(eventPlayerJoin)
+            }
+        }
+    }
+
+    suspend fun deleteEventPlayersForLatestMatchEvent() {
+        latestMatchEvent?.let { matchEvent ->
+            val matchEventId = returnMatchEventId(matchEvent)
+            val playerIds = joinDao.getPlayerIdsForMatchEventId(matchEventId)
+            playerIds.forEach {
+                joinDao.deleteEventPlayerJoin(MatchEventPlayer(matchEventId, it))
             }
         }
     }
