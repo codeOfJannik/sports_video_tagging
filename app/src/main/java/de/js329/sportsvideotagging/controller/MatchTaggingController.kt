@@ -2,8 +2,6 @@ package de.js329.sportsvideotagging.controller
 
 import de.js329.sportsvideotagging.database.*
 import de.js329.sportsvideotagging.datamodels.*
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 
 class MatchTaggingController(
         private val matchDao: MatchDao,
@@ -16,8 +14,8 @@ class MatchTaggingController(
     private var eventTypes: List<EventType> = ArrayList()
     private var eventAttributes: List<EventAttribute> = ArrayList()
     var match: Match? = null
-    var matchEvents: MutableList<MatchEvent> = ArrayList()
-    var latestMatchEvent: MatchEvent? = null
+    private var matchEvents: MutableList<MatchEvent> = ArrayList()
+    private var latestMatchEvent: MatchEvent? = null
     var eventOrderNum = 0
     lateinit var homeTeam: Team
     lateinit var awayTeam: Team

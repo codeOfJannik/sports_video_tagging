@@ -3,7 +3,6 @@ package de.js329.sportsvideotagging.database
 import androidx.room.TypeConverter
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.util.*
 
 object DateConverter {
 

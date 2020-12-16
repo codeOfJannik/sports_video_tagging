@@ -3,22 +3,17 @@ package de.js329.sportsvideotagging.activities
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import de.js329.sportsvideotagging.R
 import de.js329.sportsvideotagging.controller.MatchTaggingController
 import de.js329.sportsvideotagging.database.VideoTagDatabase
 import de.js329.sportsvideotagging.datamodels.Team
-import kotlinx.android.synthetic.main.activity_tagging.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.zip.Inflater
 import kotlin.collections.ArrayList
 
 class PreTaggingActivity : AppCompatActivity() {

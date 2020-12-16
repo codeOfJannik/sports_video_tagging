@@ -9,5 +9,4 @@ import androidx.room.PrimaryKey
 data class Team (
     @PrimaryKey(autoGenerate = true) var uid: Long? = null,
     @ColumnInfo(name = "team_name") var teamName: String
-) {
-}
+)

@@ -20,5 +20,4 @@ data class Match(
         @ColumnInfo(name = "away_team") val awayTeamId: Long,
         @ColumnInfo(name = "home_score") var homeScore: Int,
         @ColumnInfo(name = "away_score") var awayScore: Int
-) {
-}
+)

@@ -2,12 +2,10 @@ package de.js329.sportsvideotagging.fragments
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,9 +27,7 @@ import de.js329.sportsvideotagging.controller.MatchTaggingController
 import de.js329.sportsvideotagging.datamodels.EventType
 import de.js329.sportsvideotagging.toHHMMSSString
 import kotlinx.coroutines.launch
-import java.lang.NumberFormatException
 import java.time.Duration
-import kotlin.collections.ArrayList
 
 class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClickListener {
 
@@ -201,7 +198,7 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
 
     private fun onMatchTaggingFinished(homeScore: Int, awayScore: Int) {
         lifecycleScope.launch {
-            matchTaggingController.endMatch(27, 24)
+            matchTaggingController.endMatch(homeScore, awayScore)
         }
         taggingFragmentManager.onTaggingFinishedCloseFragments()
     }

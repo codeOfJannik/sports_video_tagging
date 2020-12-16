@@ -19,5 +19,4 @@ data class MatchEvent (
         @ColumnInfo(name = "timestamp") val eventTimestamp: Long,
         @ColumnInfo(name = "event_type") val eventTypeId: Long,
         @ColumnInfo(name = "following_event") var followingEventId: Long? = null
-) {
-}
+)

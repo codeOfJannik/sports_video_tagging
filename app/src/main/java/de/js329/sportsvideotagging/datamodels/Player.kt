@@ -17,5 +17,4 @@ data class Player (
     @ColumnInfo(name = "number") var number: Int,
     @ColumnInfo(name = "team") val team_id: Long,
     @ColumnInfo(name = "name") val name: String? = null
-) {
-}
+)

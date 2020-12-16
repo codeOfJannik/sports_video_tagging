@@ -151,7 +151,7 @@ class FollowingEventDialog: DialogFragment(), EventTypesRecyclerAdapter.ItemClic
         val attributes = checkedAttributes.filter { it.value }.keys.toList()
         followUpEvent?.let {
             lifecycleScope.launch {
-                val success = matchTaggingController.addFollowUpEvent(it, selectedPlayers.toList(), attributes)
+                matchTaggingController.addFollowUpEvent(it, selectedPlayers.toList(), attributes)
                 onFollowUpSaved(it)
                 this@FollowingEventDialog.dismiss()
             }

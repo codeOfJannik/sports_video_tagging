@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import de.js329.sportsvideotagging.database.VideoTagDatabase
 import de.js329.sportsvideotagging.datamodels.*
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -50,7 +51,7 @@ class TaggingDatabaseTest {
         return listOf(teamA, teamB)
     }
 
-    private fun insertSampleTeams() {
+    private fun insertSampleTeams() = runBlocking {
         if (sampleTeams[0].uid == null) {
             db.teamDao().insertAll(*sampleTeams.toTypedArray())
                 .mapIndexed { list_index, db_index -> sampleTeams[list_index].uid = db_index }
@@ -63,18 +64,18 @@ class TaggingDatabaseTest {
         return listOf(attributeA, attributeB)
     }
 
-    private fun insertSampleAttributes() {
+    private fun insertSampleAttributes() = runBlocking {
         db.eventDao().insertAllEventAttributes(*sampleAttributes.toTypedArray())
                 .mapIndexed { list_index, db_index -> sampleAttributes[list_index].attributeId = db_index }
     }
 
     private fun createSampleEventTypes(): List<EventType> {
-        val eventTypeA = EventType(null, "Torwurf", false, -5, true)
-        val eventTypeB = EventType(null, "gute Defensivaktion", false, -20, false)
+        val eventTypeA = EventType(null, "Torwurf", longTimedEvent = false, -5, playerSelection = true, attributesAllowed = true, activeEventType = true)
+        val eventTypeB = EventType(null, "gute Defensivaktion", false, -20, false, attributesAllowed = false, activeEventType = true)
         return listOf(eventTypeA, eventTypeB)
     }
 
-    private fun insertSampleEventTypes() {
+    private fun insertSampleEventTypes() = runBlocking {
         db.eventDao().insertAllEventTypes(*sampleEventTypes.toTypedArray())
                 .mapIndexed { list_index, db_index -> sampleEventTypes[list_index].uid = db_index }
     }
@@ -91,7 +92,7 @@ class TaggingDatabaseTest {
         return ArrayList()
     }
 
-    private fun insertSamplePlayers() {
+    private fun insertSamplePlayers() = runBlocking {
         db.playerDao().insertAll(*samplePlayers.toTypedArray())
                 .mapIndexed { list_index, db_index -> samplePlayers[list_index].playerId = db_index }
     }
@@ -111,16 +112,16 @@ class TaggingDatabaseTest {
         )
     }
 
-    private fun createSampleMatchEvents(): List<MatchEvent> {
+    private fun createSampleMatchEvents(): List<MatchEvent> = runBlocking {
         val match = createSampleMatch()
         match?.let {
             it.uid = db.matchDao().insertAll(it)[0]
         }
         insertSampleEventTypes()
 
-        val matchId = match?.uid ?: return ArrayList()
-        val typeAId = sampleEventTypes[0].uid ?: return ArrayList()
-        val typeBId = sampleEventTypes[1].uid ?: return ArrayList()
+        val matchId = match?.uid ?: return@runBlocking ArrayList()
+        val typeAId = sampleEventTypes[0].uid ?: return@runBlocking ArrayList()
+        val typeBId = sampleEventTypes[1].uid ?: return@runBlocking ArrayList()
 
         val matchEventA = MatchEvent(
                 null,
@@ -138,10 +139,10 @@ class TaggingDatabaseTest {
                 typeBId,
                 null
         )
-        return listOf(matchEventA, matchEventB)
+        return@runBlocking listOf(matchEventA, matchEventB)
     }
 
-    private fun insertSampleMatchEvents() {
+    private fun insertSampleMatchEvents() = runBlocking {
         db.eventDao().insertAllMatchEvents(*sampleMatchEvents.toTypedArray())
                 .mapIndexed { list_index, db_index -> sampleMatchEvents[list_index].matchEventId = db_index }
     }
@@ -156,7 +157,7 @@ class TaggingDatabaseTest {
         return MatchEventPlayer(matchEventId, playerId)
     }
 
-    private fun insertSampleEventPlayerJoin(matchEventPlayer: MatchEventPlayer) {
+    private fun insertSampleEventPlayerJoin(matchEventPlayer: MatchEventPlayer) = runBlocking {
         db.eventJoinDao().insertAllEventPlayerJoins(matchEventPlayer)
     }
 
@@ -169,39 +170,39 @@ class TaggingDatabaseTest {
         return MatchEventAttribute(matchEventId, attributeId)
     }
 
-    private fun insertSampleEventAttributeJoin(matchEventAttribute: MatchEventAttribute) {
+    private fun insertSampleEventAttributeJoin(matchEventAttribute: MatchEventAttribute) = runBlocking {
         db.eventJoinDao().insertAllEventAttributeJoins(matchEventAttribute)
     }
 
     @Test
-    fun checkEmptyDatabase() {
+    fun checkEmptyDatabase() = runBlocking {
         val teams = db.teamDao().getAll()
         Assert.assertEquals(0, teams.size)
     }
 
     @Test
-    fun teamInsertAndGet() {
+    fun teamInsertAndGet() = runBlocking {
         insertSampleTeams()
         val teams = db.teamDao().getAll()
         Assert.assertEquals(sampleTeams.size, teams.size)
     }
 
     @Test
-    fun attributesInsertAndGet() {
+    fun attributesInsertAndGet() = runBlocking {
         insertSampleAttributes()
         val attributes = db.eventDao().getAllAttributes()
         Assert.assertEquals(sampleAttributes.size, attributes.size)
     }
 
     @Test
-    fun eventTypesInsertAndGet() {
+    fun eventTypesInsertAndGet() = runBlocking {
         insertSampleEventTypes()
         val eventTypes = db.eventDao().getAllEventTypes()
         Assert.assertEquals(sampleEventTypes.size, eventTypes.size)
     }
 
     @Test
-    fun playersInsertAndGet() {
+    fun playersInsertAndGet() = runBlocking {
         val existingPlayers = samplePlayers.size
         samplePlayers = createSamplePlayers()
         insertSamplePlayers()
@@ -211,7 +212,7 @@ class TaggingDatabaseTest {
     }
 
     @Test
-    fun matchInsertAndGet() {
+    fun matchInsertAndGet() = runBlocking {
         createSampleMatch()?.let {
             it.uid = db.matchDao().insertAll(it)[0]
         }
@@ -220,7 +221,7 @@ class TaggingDatabaseTest {
     }
 
     @Test
-    fun matchEventsInsertAndGet() {
+    fun matchEventsInsertAndGet() = runBlocking {
         val existingMatchEvent = sampleMatchEvents.size
         sampleMatchEvents = createSampleMatchEvents()
         insertSampleMatchEvents()
@@ -230,7 +231,7 @@ class TaggingDatabaseTest {
     }
 
     @Test
-    fun eventPlayerJoinInsertAndGet() {
+    fun eventPlayerJoinInsertAndGet() = runBlocking {
         createSampleEventPlayerJoin()?.let {
             insertSampleEventPlayerJoin(it)
         }
@@ -244,7 +245,7 @@ class TaggingDatabaseTest {
     }
 
     @Test
-    fun eventAttributeInsertAndGet() {
+    fun eventAttributeInsertAndGet() = runBlocking {
         createSampleEventAttributeJoin()?.let {
             insertSampleEventAttributeJoin(it)
         }

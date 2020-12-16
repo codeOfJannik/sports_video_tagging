@@ -8,5 +8,4 @@ import androidx.room.PrimaryKey
 data class EventAttribute (
     @PrimaryKey(autoGenerate = true) var attributeId: Long? = null,
     @ColumnInfo(name = "attribute_name") val attribute_name: String
-) {
-}
+)

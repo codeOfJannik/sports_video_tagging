@@ -1,14 +1,11 @@
 package de.js329.sportsvideotagging.activities
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.*
+import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.js329.sportsvideotagging.R
@@ -16,12 +13,7 @@ import de.js329.sportsvideotagging.adapter.EventTypesAdapter
 import de.js329.sportsvideotagging.controller.ConfigurationController
 import de.js329.sportsvideotagging.database.VideoTagDatabase
 import de.js329.sportsvideotagging.datamodels.EventType
-import de.js329.sportsvideotagging.toTimeOffsetString
 import kotlinx.coroutines.launch
-import java.time.Duration
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.math.abs
 
 interface EventTypeChangedListener {
     fun onEventTypeActiveChanged(eventType: EventType, isActive: Boolean)
