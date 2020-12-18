@@ -44,8 +44,8 @@ class TaggingMatchEventPlayersFragment: Fragment(), InnerRecyclerViewAdapter.Pla
         view.findViewById<Button>(R.id.playerSelectionContinueBtn).setOnClickListener {
             lifecycleScope.launch {
                 matchTaggingController.addEventPlayers(selectedPlayers.toList())
+                taggingFragmentManager.switchToFinalizeMatchInput()
             }
-            taggingFragmentManager.switchToFinalizeMatchInput()
         }
         expandableRecyclerView = view.findViewById(R.id.recyclerView)
         initiateAdapter()

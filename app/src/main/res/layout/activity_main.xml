@@ -11,19 +11,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/startTaggingBtn_txt"
+        app:layout_constraintBottom_toTopOf="@+id/configTaggingOptionsBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/configTaggingOptionsBtn"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/configTaggingOptionsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/configTaggingOptsBtn_txt"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/viewTaggedMatchesBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startTaggingBtn" />
+
+    <Button
+        android:id="@+id/viewTaggedMatchesBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_tagged_matches"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/configTaggingOptionsBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

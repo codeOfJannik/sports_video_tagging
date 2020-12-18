@@ -87,6 +87,9 @@ interface EventDao {
     @Query("DELETE FROM MatchEvent WHERE matchEventId = :uid")
     suspend fun deleteMatchEventById(uid: Long)
 
+    @Query("SELECT * FROM MatchEvent WHERE `match` = :matchId")
+    suspend fun getMatchEventsForMatch(matchId: Long): List<MatchEvent>
+
     @Insert
     suspend fun insertAllEventAttributes(vararg attributes: EventAttribute): List<Long>
 

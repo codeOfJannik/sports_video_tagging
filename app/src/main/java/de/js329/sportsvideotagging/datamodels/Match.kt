@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
 
 @Entity(
     foreignKeys = [
@@ -15,7 +14,7 @@ import java.time.LocalDateTime
     tableName = "Match")
 data class Match(
         @PrimaryKey(autoGenerate = true) var uid: Long? = null,
-        @ColumnInfo(name = "date") var date: LocalDateTime? = null,
+        @ColumnInfo(name = "date") var date: Long? = null,
         @ColumnInfo(name = "home_team") val homeTeamId: Long,
         @ColumnInfo(name = "away_team") val awayTeamId: Long,
         @ColumnInfo(name = "home_score") var homeScore: Int,

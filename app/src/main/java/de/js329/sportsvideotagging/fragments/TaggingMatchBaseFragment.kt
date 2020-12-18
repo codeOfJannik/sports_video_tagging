@@ -28,6 +28,8 @@ import de.js329.sportsvideotagging.datamodels.EventType
 import de.js329.sportsvideotagging.toHHMMSSString
 import kotlinx.coroutines.launch
 import java.time.Duration
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClickListener {
 
@@ -38,6 +40,7 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
     private var taggingStartTimestamp = 0L
     private var homeTeamId = -1L
     private var awayTeamId = -1L
+    private var matchDate = Calendar.getInstance()
     private lateinit var tagCounter: TextView
     private lateinit var timerTextView: TextView
     private lateinit var mainHandler: Handler
@@ -56,11 +59,13 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
                 matchTaggingController: MatchTaggingController,
                 homeId: Long,
                 awayId: Long,
+                matchDate: Long,
                 taggingFragmentManager: TaggingFragmentManager
         ) = TaggingMatchBaseFragment().apply {
             this.matchTaggingController = matchTaggingController
             this.homeTeamId = homeId
             this.awayTeamId = awayId
+            this.matchDate.time = Date(matchDate)
             this.taggingFragmentManager = taggingFragmentManager
         }
     }
@@ -147,7 +152,7 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
             matchStarted = true
             taggingFragmentManager.matchTaggingStarted()
             lifecycleScope.launch {
-                matchTaggingController.startMatch(homeTeamId, awayTeamId, taggingStartTimestamp)
+                matchTaggingController.startMatch(homeTeamId, awayTeamId, matchDate.time.time, taggingStartTimestamp)
             }
             context?.let {
                 button.text = it.getString(R.string.stopMatchTagging)

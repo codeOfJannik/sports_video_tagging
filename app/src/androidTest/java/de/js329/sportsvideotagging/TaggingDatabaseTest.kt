@@ -14,6 +14,7 @@ import java.io.IOException
 import java.time.LocalDateTime
 import java.time.Month
 import java.time.ZoneOffset
+import java.util.*
 import kotlin.collections.ArrayList
 
 class TaggingDatabaseTest {
@@ -104,7 +105,14 @@ class TaggingDatabaseTest {
 
         return Match(
                 null,
-                LocalDateTime.of(2020, Month.OCTOBER, 24, 20, 30, 45),
+                Calendar.getInstance().apply {
+                    set(Calendar.YEAR, 2020)
+                    set(Calendar.MONTH, Month.OCTOBER.value)
+                    set(Calendar.DAY_OF_MONTH, 24)
+                    set(Calendar.HOUR, 13)
+                    set(Calendar.MINUTE, 38)
+                    set(Calendar.SECOND, 22)
+                }.time.time,
                 homeTeamId,
                 awayTeamId,
                 27,

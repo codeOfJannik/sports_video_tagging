@@ -133,6 +133,7 @@ class PreTaggingActivity : AppCompatActivity() {
             val intent = Intent(this, TaggingActivity::class.java)
             intent.putExtra("homeTeamId", selectedHomeTeam?.uid)
             intent.putExtra("awayTeamId", selectedAwayTeam?.uid)
+            intent.putExtra("matchDate", matchDateCalendar.time.time)
             startActivity(intent)
         } else {
             Toast.makeText(this, R.string.sameTeamError, Toast.LENGTH_LONG).show()

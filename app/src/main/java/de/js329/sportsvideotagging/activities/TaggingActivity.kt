@@ -11,17 +11,22 @@ import de.js329.sportsvideotagging.fragments.TaggingMatchBaseFragment
 import de.js329.sportsvideotagging.fragments.TaggingMatchEventFinalizeFragment
 import de.js329.sportsvideotagging.fragments.TaggingMatchEventPlayersFragment
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.util.*
 
 class TaggingActivity : AppCompatActivity(), TaggingFragmentManager {
 
     private val homeTeamId by lazy { intent.getLongExtra("homeTeamId", -1) }
     private val awayTeamId by lazy { intent.getLongExtra("awayTeamId", -1) }
+    private val matchDateTime by lazy {
+        intent.getLongExtra("matchDate", -1)
+    }
     private val matchTaggingController by lazy {
         val db = VideoTagDatabase.getInstance(this, lifecycleScope)
         MatchTaggingController(db.matchDao(), db.eventDao(), db.eventJoinDao(), db.teamDao(), db.playerDao())
     }
     private val matchTaggingFragment by lazy {
-        TaggingMatchBaseFragment.newInstance(matchTaggingController, homeTeamId, awayTeamId, this)
+        TaggingMatchBaseFragment.newInstance(matchTaggingController, homeTeamId, awayTeamId, matchDateTime, this)
     }
     private var allowBack = true
 

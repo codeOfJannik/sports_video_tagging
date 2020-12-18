@@ -61,21 +61,23 @@ class MatchTaggingController(
         teamDao.getTeamForId(awayTeamId)?.let { awayTeam = it }
     }
 
-    suspend fun startMatch(homeTeamId: Long, awayTeamId: Long, timestamp: Long) {
-        match = Match(null, null, homeTeamId, awayTeamId, 0, 0)
+    suspend fun startMatch(homeTeamId: Long, awayTeamId: Long, matchDate: Long, timestamp: Long) {
+        match = Match(null, matchDate, homeTeamId, awayTeamId, 0, 0)
         assignTeams(homeTeamId, awayTeamId)
         match?.let {
             val matchId = matchDao.insert(it)
             it.uid = matchId
             getEventTypes()
             eventTypes.first { eventType -> eventType.eventTitle == "Match Start" }.uid?.let { uid ->
-                latestMatchEvent = MatchEvent(
+                val startEvent = MatchEvent(
                         null,
                         matchId,
                         eventOrderNum,
                         timestamp,
                         uid
                 )
+                latestMatchEvent = startEvent
+                eventDao.insert(startEvent)
                 addMatchEventToList()
             }
         }

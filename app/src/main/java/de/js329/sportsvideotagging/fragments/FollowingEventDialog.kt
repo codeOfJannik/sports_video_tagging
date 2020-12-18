@@ -166,7 +166,19 @@ class FollowingEventDialog: DialogFragment(), EventTypesRecyclerAdapter.ItemClic
 
     override fun onItemClick(view: View?, position: Int) {
         followUpEvent = eventTypesAdapter.getItem(position)
-        setupPlayerSelection()
+        followUpEvent?.let {
+            when {
+                it.playerSelection -> {
+                    setupPlayerSelection()
+                }
+                it.attributesAllowed -> {
+                    setupAttributeSelection()
+                }
+                else -> {
+                    onSaveFollowUpClicked()
+                }
+            }
+        }
     }
 
     override fun onPlayerSelected(player: Player) {

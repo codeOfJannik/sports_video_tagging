@@ -115,4 +115,7 @@
     <string name="teamPlaceholderScore_txt">%1s Score</string>
     <string name="invalidScoreMessage">Invalid Score entered!</string>
     <string name="followUpEvent">Follow Up Event</string>
+    <string name="view_tagged_matches">View Tagged Matches</string>
+    <string name="taggedMatches">Tagged Matches</string>
+    <string name="minusSign">-</string>
 </resources>

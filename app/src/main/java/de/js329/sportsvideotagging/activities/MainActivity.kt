@@ -22,9 +22,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val startTaggingBtn = findViewById<Button>(R.id.startTaggingBtn)
         val configTaggingOptsBtn = findViewById<Button>(R.id.configTaggingOptionsBtn)
+        val taggedMatchesOverviewBtn = findViewById<Button>(R.id.viewTaggedMatchesBtn)
 
         startTaggingBtn.setOnClickListener(onStartTaggingClicked)
-        configTaggingOptsBtn.setOnClickListener(onConfigureTagOptionsClicked)
+        configTaggingOptsBtn.setOnClickListener {
+            val intent = Intent(this, ConfigurationActivity::class.java)
+            startActivity(intent)
+        }
+        taggedMatchesOverviewBtn.setOnClickListener {
+            val intent = Intent(this, TaggedMatchesOverviewActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onStart() {
@@ -56,11 +64,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         val intent = Intent(this, PreTaggingActivity::class.java)
-        startActivity(intent)
-    }
-
-    private val onConfigureTagOptionsClicked = View.OnClickListener {
-        val intent = Intent(this, ConfigurationActivity::class.java)
         startActivity(intent)
     }
 }

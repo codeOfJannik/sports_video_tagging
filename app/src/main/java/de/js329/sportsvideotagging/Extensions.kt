@@ -5,6 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import java.time.Duration
+import java.time.LocalDateTime
+import java.time.Month
+import java.time.format.TextStyle
 import java.util.*
 import kotlin.math.abs
 
@@ -31,4 +34,14 @@ fun Duration.toHHMMSSString(): String {
     val minutes = this.minusHours(hours).toMinutes()
     val seconds = this.minusHours(hours).minusMinutes(minutes).seconds
     return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
+}
+
+fun Calendar.toFormattedString(): String {
+    return String.format(
+        Locale.getDefault(),
+        "%02d. %s %d",
+        this.get(Calendar.DAY_OF_MONTH),
+        Month.of(this.get(Calendar.MONTH)).getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+        this.get(Calendar.YEAR)
+    )
 }
