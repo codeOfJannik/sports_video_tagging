@@ -41,7 +41,7 @@ fun Calendar.toFormattedString(): String {
         Locale.getDefault(),
         "%02d. %s %d",
         this.get(Calendar.DAY_OF_MONTH),
-        Month.of(this.get(Calendar.MONTH)).getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+        Month.of(this.get(Calendar.MONTH) + 1).getDisplayName(TextStyle.SHORT, Locale.getDefault()),
         this.get(Calendar.YEAR)
     )
 }
