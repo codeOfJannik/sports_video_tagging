@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    targetNamespace="urn:Test.Namespace"
+    xmlns="urn:Test.Namespace"
+    elementFormDefault="qualified"
+    vc:minVersion="1.1">
+
+    <xs:element name="svt">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="match" type="Match"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="Match">
+        <xs:sequence>
+            <xs:element name="metadata" type="Metadata"/>
+            <xs:element name="homeTeam" type="xs:string"/>
+            <xs:element name="awayTeam" type="xs:string"/>
+            <xs:element name="matchEvents" type="MatchEvents"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Metadata">
+        <xs:sequence>
+            <xs:element name="matchDateTime" type="xs:dateTime"/>
+            <xs:element name="homeTeamScore" type="xs:int"/>
+            <xs:element name="awayTeamScore" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="MatchEvents">
+        <xs:sequence>
+            <xs:element name="matchEvent" type="MatchEvent" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="MatchEvent">
+        <xs:sequence>
+            <xs:element name="eventAttributes" type="EventAttributes" minOccurs="0"/>
+            <xs:element name="players" type="InvolvedPlayers"/>
+        </xs:sequence>
+        <xs:attribute name="eventTitle" type="xs:string"/>
+        <xs:attribute name="matchEventOrderNum" type="xs:int"/>
+        <xs:attribute name="matchEventTimeOffset" type="xs:long"/>
+    </xs:complexType>
+
+    <xs:complexType name="EventAttributes">
+        <xs:sequence>
+            <xs:element name="attribute" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="InvolvedPlayers">
+        <xs:sequence>
+            <xs:element name="homeTeamPlayers" type="Players" minOccurs="0"/>
+            <xs:element name="awayTeamPlayers" type="Players" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Players">
+        <xs:sequence>
+            <xs:element name="player" type="Player" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Player">
+        <xs:attribute name="playerName" type="xs:string"/>
+        <xs:attribute name="jerseyNumber" type="xs:int"/>
+    </xs:complexType>
+</xs:schema>

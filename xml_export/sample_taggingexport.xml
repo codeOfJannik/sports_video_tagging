@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<svt xmlns="urn:Test.Namespace">
+    <match>
+        <metadata>
+            <matchDateTime>2020-10-24T20:30:00</matchDateTime>
+            <homeTeamScore>27</homeTeamScore>
+            <awayTeamScore>24</awayTeamScore>
+        </metadata>
+        <homeTeam>HSG Ostfildern</homeTeam>
+        <awayTeam>SG Hegensberg-Liebersbronn</awayTeam>
+        <matchEvents>
+            <matchEvent eventTitle="Match Start" matchEventOrderNum="0" matchEventTimeOffset="0">
+                <players>
+                </players>
+            </matchEvent>
+            <matchEvent eventTitle="Torwurf" matchEventOrderNum="1" matchEventTimeOffset="34">
+                <eventAttributes>
+                    <attribute>Ballbesitz Heim</attribute>
+                    <attribute>Rückraum</attribute>
+                    <attribute>Tor</attribute>
+                </eventAttributes>
+                <players>
+                    <homeTeamPlayers>
+                        <player playerName="Jannik Schlemmer" jerseyNumber="9"/>
+                    </homeTeamPlayers>
+                </players>
+            </matchEvent>
+            <matchEvent eventTitle="gute Defensivaktion" matchEventOrderNum="2" matchEventTimeOffset="57">
+                <eventAttributes>
+                    <attribute>Ballbesitz Auswärts</attribute>
+                    <attribute>Rückraum</attribute>
+                    <attribute>Kreuzen</attribute>
+                </eventAttributes>
+                <players>
+                    <homeTeamPlayers>
+                        <player playerName="Jannik Schlemmer" jerseyNumber="9"/>
+                        <player playerName="Sebastian Pollich" jerseyNumber="77"/>
+                    </homeTeamPlayers>
+                    <awayTeamPlayers>
+                        <player playerName="Fabian Sokele" jerseyNumber="19"/>
+                        <player playerName="Henning Richter" jerseyNumber="5"/>
+                    </awayTeamPlayers>
+                </players>
+            </matchEvent>
+            <matchEvent eventTitle="Konter" matchEventOrderNum="3" matchEventTimeOffset="63">
+                <eventAttributes>
+                    <attribute>Ballbesitz Heim</attribute>
+                    <attribute>Tor</attribute>
+                </eventAttributes>
+                <players>
+                    <homeTeamPlayers>
+                        <player playerName="Jon Gehrung" jerseyNumber="3"/>
+                    </homeTeamPlayers>
+                </players>
+            </matchEvent>
+        </matchEvents>
+    </match>
+</svt>
