@@ -1,7 +1,7 @@
 package de.js329.sportsvideotagging.activities
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +9,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.js329.sportsvideotagging.R
 import de.js329.sportsvideotagging.controller.ExportController
@@ -28,6 +29,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
         val db = VideoTagDatabase.getInstance(this, lifecycleScope)
         ExportController(db.eventDao(), db.matchDao(), db.teamDao())
     }
+    lateinit var taggedMatchesAdapter: TaggedMatchesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +43,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
 
     private fun setListData() {
         val matchesTagsPairs = ArrayList<Pair<Match, List<MatchEvent>>>()
+        val matchesListview = findViewById<ListView>(R.id.listView)
         lifecycleScope.launch {
             val matches = exportController.getMatches()
             val teams = exportController.getTeams()
@@ -50,10 +53,57 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                     events.removeIf { it.matchEventOrderNumber == 0 }
                     matchesTagsPairs.add(Pair(match, events))
                 }
-                findViewById<ListView>(R.id.listView).adapter =
-                        TaggedMatchesAdapter(this@TaggedMatchesOverviewActivity, matchesTagsPairs, teams)
+                taggedMatchesAdapter = TaggedMatchesAdapter(this@TaggedMatchesOverviewActivity, matchesTagsPairs, teams)
+                matchesListview.adapter = taggedMatchesAdapter
+                matchesListview.setOnItemClickListener { _, _, position, _ ->
+                    val clickedMatch = taggedMatchesAdapter.getItem(position).first
+                    onTaggedMatchClicked(clickedMatch)
+                }
             }
         }
+    }
+
+    private fun onTaggedMatchClicked(match: Match) {
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setTitle(R.string.matchActionsTitle)
+            .setNegativeButton(android.R.string.cancel) {dialog, _ -> dialog.dismiss() }
+            .setItems(
+                arrayOf("Delete Match", "Export in .svt file")
+            ) { dialog, which ->
+                when (which) {
+                    0 -> {
+                        onDeleteMatchClicked(match)
+                        dialog.dismiss()
+                    }
+                    1 -> {
+                        // TODO
+                        dialog.dismiss()
+                    }
+                }
+            }
+        val dialog = builder.create()
+        dialog.listView.divider = ColorDrawable(resources.getColor(R.color.light_grey, null))
+        dialog.listView.dividerHeight = 1
+        dialog.show()
+    }
+
+    private fun onDeleteMatchClicked(match: Match) {
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setTitle(R.string.deleteTaggedMatchTitle)
+            .setMessage(R.string.deleteTaggedMatchMessage)
+            .setPositiveButton(android.R.string.ok) {_, _ ->
+                lifecycleScope.launch {
+                    exportController.deleteMatchWithAllTags(match)
+                }
+                val matches = taggedMatchesAdapter.matches.toMutableList()
+                matches.removeIf { it.first == match }
+                taggedMatchesAdapter.matches = matches
+                taggedMatchesAdapter.notifyDataSetChanged()
+            }
+            .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss()}
+            .show()
     }
 }
 

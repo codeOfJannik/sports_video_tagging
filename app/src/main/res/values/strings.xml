@@ -118,4 +118,8 @@
     <string name="view_tagged_matches">View Tagged Matches</string>
     <string name="taggedMatches">Tagged Matches</string>
     <string name="minusSign">-</string>
+    <string name="matchActionsTitle">Match Actions</string>
+    <string name="matchActionsMessage">The following actions for the match are available</string>
+    <string name="deleteTaggedMatchTitle">Delete Tagged Match?</string>
+    <string name="deleteTaggedMatchMessage">You really want to delete the match and all tags of it?</string>
 </resources>

@@ -23,4 +23,8 @@ class ExportController(
     suspend fun getEventsForMatch(matchId: Long): List<MatchEvent> {
         return eventDao.getMatchEventsForMatch(matchId)
     }
+
+    suspend fun deleteMatchWithAllTags(match: Match) {
+        matchDao.delete(match)
+    }
 }

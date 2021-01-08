@@ -1,11 +1,10 @@
 package de.js329.sportsvideotagging
 
-import android.view.LayoutInflater
+ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import java.time.Duration
-import java.time.LocalDateTime
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*

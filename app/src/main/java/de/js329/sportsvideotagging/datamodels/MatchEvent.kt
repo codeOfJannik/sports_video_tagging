@@ -3,13 +3,14 @@ package de.js329.sportsvideotagging.datamodels
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "MatchEvent",
     foreignKeys = [
-        ForeignKey(entity = Match::class, parentColumns = ["uid"], childColumns = ["match"]),
-        ForeignKey(entity = MatchEvent::class, parentColumns = ["matchEventId"], childColumns = ["following_event"])
+        ForeignKey(entity = Match::class, parentColumns = ["uid"], childColumns = ["match"], onDelete = CASCADE),
+        ForeignKey(entity = MatchEvent::class, parentColumns = ["matchEventId"], childColumns = ["following_event"], onDelete = CASCADE)
     ]
 )
 data class MatchEvent (
