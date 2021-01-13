@@ -122,4 +122,10 @@
     <string name="matchActionsMessage">The following actions for the match are available</string>
     <string name="deleteTaggedMatchTitle">Delete Tagged Match?</string>
     <string name="deleteTaggedMatchMessage">You really want to delete the match and all tags of it?</string>
+    <string name="addLongTimedEventType">Add Long Timed Event Type</string>
+    <string name="switchable">Switchable</string>
+    <string name="event_title">Event Title</string>
+    <string name="toggleable">Toggleable</string>
+    <string name="switchable_event_title">Switchable Event Title</string>
+    <string name="swap_image">Swap Image</string>
 </resources>

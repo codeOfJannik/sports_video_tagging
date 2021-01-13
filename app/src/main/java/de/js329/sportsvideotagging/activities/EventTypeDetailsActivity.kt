@@ -20,7 +20,6 @@ class EventTypeDetailsActivity : AppCompatActivity() {
     private lateinit var eventTypeTitleEditText: EditText
     private lateinit var timeOffsetPreSign: RadioGroup
     private lateinit var timeOffsetSecondsEditText: EditText
-    private lateinit var longTimedEventCheckBox: CheckBox
     private lateinit var enablePlayerSelectionCheckBox: CheckBox
     private lateinit var attributesAllowedCheckBox: CheckBox
     private var eventType: EventType? = null
@@ -33,7 +32,6 @@ class EventTypeDetailsActivity : AppCompatActivity() {
         eventTypeTitleEditText = findViewById(R.id.eventTypeTitleEditText)
         timeOffsetPreSign = findViewById(R.id.positiveNegativeTimeOffsetRadioGroup)
         timeOffsetSecondsEditText = findViewById(R.id.timeOffsetSecondsEditText)
-        longTimedEventCheckBox = findViewById(R.id.longTimeEventCheckBox)
         enablePlayerSelectionCheckBox = findViewById(R.id.playerSelectionEnabledCheckBox)
         attributesAllowedCheckBox = findViewById(R.id.allowAttributesCheckBox)
         findViewById<Button>(R.id.cancelEventTypeBtn).setOnClickListener { this.finish() }
@@ -59,7 +57,6 @@ class EventTypeDetailsActivity : AppCompatActivity() {
             eventTypeTitleEditText.setText(it.eventTitle)
             if (it.timeOffset >= 0) timeOffsetPreSign.check(R.id.positiveTimeOfffset) else timeOffsetPreSign.check(R.id.negativeTimeOffset)
             timeOffsetSecondsEditText.setText(it.timeOffset.toString())
-            longTimedEventCheckBox.isChecked = it.longTimedEvent
             enablePlayerSelectionCheckBox.isChecked = it.playerSelection
             attributesAllowedCheckBox.isChecked = it.attributesAllowed
         }
@@ -73,14 +70,12 @@ class EventTypeDetailsActivity : AppCompatActivity() {
         }
         var timeOffset = if (timeOffsetSecondsEditText.text.toString() != "") timeOffsetSecondsEditText.text.toString().toLong() else 0
         timeOffset = if (findViewById<RadioButton>(R.id.negativeTimeOffset).isChecked) timeOffset * (-1) else timeOffset
-        val longTimed = longTimedEventCheckBox.isChecked
         val playerSelectionEnabled = enablePlayerSelectionCheckBox.isChecked
         val attributesAllowed = attributesAllowedCheckBox.isChecked
         val isActive = eventType?.activeEventType ?: true
         val updatedEventType = EventType(
                 eventType?.uid,
                 titleInput,
-                longTimed,
                 timeOffset,
                 playerSelectionEnabled,
                 attributesAllowed,

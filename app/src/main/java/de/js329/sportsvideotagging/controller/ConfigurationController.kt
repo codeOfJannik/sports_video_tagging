@@ -3,10 +3,7 @@ package de.js329.sportsvideotagging.controller
 import de.js329.sportsvideotagging.database.EventDao
 import de.js329.sportsvideotagging.database.PlayerDao
 import de.js329.sportsvideotagging.database.TeamDao
-import de.js329.sportsvideotagging.datamodels.EventAttribute
-import de.js329.sportsvideotagging.datamodels.EventType
-import de.js329.sportsvideotagging.datamodels.Player
-import de.js329.sportsvideotagging.datamodels.Team
+import de.js329.sportsvideotagging.datamodels.*
 
 class ConfigurationController(
         private val eventDao: EventDao,
@@ -55,20 +52,40 @@ class ConfigurationController(
         return eventDao.getAllEventTypes()
     }
 
+    suspend fun getAllLongTimedEventTypes(): List<LongTimedEventType> {
+        return eventDao.getAllLongTimedEventTypes()
+    }
+
     suspend fun getEventTypeForId(id: Long): EventType? {
         return eventDao.getEventTypeForId(id)
+    }
+
+    suspend fun getLongTimedEventTypeForId(id: Long): LongTimedEventType? {
+        return eventDao.getLongTimedEventTypeForId(id)
     }
 
     suspend fun addEventType(eventType: EventType) {
         eventType.uid = eventDao.insert(eventType)
     }
 
+    suspend fun addLongTimedEventType(longTimedEventType: LongTimedEventType) {
+        longTimedEventType.uid = eventDao.insertAllLongEventTypes(longTimedEventType)[0]
+    }
+
     suspend fun updateEventType(eventType: EventType) {
         eventDao.update(eventType)
     }
 
+    suspend fun updateEventType(longTimedEventType: LongTimedEventType) {
+        eventDao.update(longTimedEventType)
+    }
+
     suspend fun deleteEventType(eventType: EventType) {
         eventDao.delete(eventType)
+    }
+
+    suspend fun deleteEventType(longTimedEventType: LongTimedEventType) {
+        eventDao.delete(longTimedEventType)
     }
 
     suspend fun getAllTeams(): List<Team> {

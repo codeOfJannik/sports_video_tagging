@@ -8,7 +8,6 @@ import androidx.room.PrimaryKey
 data class EventType (
         @PrimaryKey(autoGenerate = true) var uid: Long? = null,
         @ColumnInfo(name = "event_title") val eventTitle: String,
-        @ColumnInfo(name = "long_time_event") val longTimedEvent: Boolean,
         @ColumnInfo(name = "time_offset") val timeOffset: Long,
         @ColumnInfo(name = "player_selection") val playerSelection: Boolean,
         @ColumnInfo(name = "attributes_allowed") val attributesAllowed: Boolean,

@@ -44,35 +44,13 @@
         app:layout_constraintTop_toBottomOf="@+id/eventTitleTextView" />
 
     <TextView
-        android:id="@+id/longTimedEventTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/long_time_event_txt"
-        app:layout_constraintStart_toStartOf="@+id/timeOffsetTextView"
-        app:layout_constraintTop_toBottomOf="@+id/timeOffsetTextView" />
-
-    <ImageView
-        android:id="@+id/longTimedEventCheckImageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/longTimedEventTextView"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toEndOf="@+id/longTimedEventTextView"
-        app:layout_constraintTop_toTopOf="@id/longTimedEventTextView"
-        app:srcCompat="@drawable/ic_baseline_check_24"
-        app:tint="?attr/colorControlNormal"
-        android:contentDescription="@string/longTimedEventCheck_contentDesc" />
-
-    <TextView
         android:id="@+id/playerSelectionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/player_selection"
-        app:layout_constraintStart_toStartOf="@+id/longTimedEventTextView"
-        app:layout_constraintTop_toBottomOf="@+id/longTimedEventTextView" />
+        app:layout_constraintStart_toStartOf="@+id/timeOffsetTextView"
+        app:layout_constraintTop_toBottomOf="@+id/timeOffsetTextView" />
 
     <ImageView
         android:id="@+id/playerSelectionCheckImageView"

@@ -16,7 +16,6 @@ import de.js329.sportsvideotagging.R
 import de.js329.sportsvideotagging.controller.ConfigurationController
 import de.js329.sportsvideotagging.database.VideoTagDatabase
 import de.js329.sportsvideotagging.datamodels.Team
-import kotlinx.android.synthetic.main.activity_configuration_listview.*
 import kotlinx.coroutines.launch
 
 class EditTeamsActivity : AppCompatActivity() {

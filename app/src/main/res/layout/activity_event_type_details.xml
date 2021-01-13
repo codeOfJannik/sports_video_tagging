@@ -105,21 +105,13 @@
         app:layout_constraintTop_toTopOf="@+id/timeOffsetSecondsEditText" />
 
     <CheckBox
-        android:id="@+id/longTimeEventCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/long_timed_event"
-        app:layout_constraintStart_toStartOf="@+id/optionsLbl"
-        app:layout_constraintTop_toBottomOf="@+id/optionsLbl" />
-
-    <CheckBox
         android:id="@+id/playerSelectionEnabledCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/enable_player_selection"
-        app:layout_constraintStart_toStartOf="@+id/longTimeEventCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/longTimeEventCheckBox" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/optionsLbl"
+        app:layout_constraintTop_toBottomOf="@+id/optionsLbl" />
 
     <CheckBox
         android:id="@+id/allowAttributesCheckBox"

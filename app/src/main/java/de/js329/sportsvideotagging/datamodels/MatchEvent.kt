@@ -10,7 +10,8 @@ import androidx.room.PrimaryKey
     tableName = "MatchEvent",
     foreignKeys = [
         ForeignKey(entity = Match::class, parentColumns = ["uid"], childColumns = ["match"], onDelete = CASCADE),
-        ForeignKey(entity = MatchEvent::class, parentColumns = ["matchEventId"], childColumns = ["following_event"], onDelete = CASCADE)
+        ForeignKey(entity = MatchEvent::class, parentColumns = ["matchEventId"], childColumns = ["following_event"], onDelete = CASCADE),
+        ForeignKey(entity = EventType::class, parentColumns = ["uid"], childColumns = ["event_type"], onDelete = CASCADE)
     ]
 )
 data class MatchEvent (

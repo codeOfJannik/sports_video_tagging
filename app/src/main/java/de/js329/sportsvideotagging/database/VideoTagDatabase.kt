@@ -20,9 +20,11 @@ import kotlinx.coroutines.launch
         EventType::class,
         MatchEvent::class,
         MatchEventAttribute::class,
-        MatchEventPlayer::class
+        MatchEventPlayer::class,
+        LongTimedEventType::class,
+        MatchLongTimedEvent::class
     ],
-    version = 2,
+    version = 4,
     exportSchema = true
 )
 @TypeConverters(DateConverter::class)
@@ -51,7 +53,52 @@ abstract class VideoTagDatabase: RoomDatabase() {
                 database.execSQL("INSERT INTO MatchEvent_New SELECT * FROM MatchEvent")
                 database.execSQL("DROP TABLE MatchEvent")
                 database.execSQL("ALTER TABLE MatchEvent_New RENAME TO MatchEvent")
+            }
+        }
 
+        private val MIGRATION_2_3 = object : Migration(2,3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""CREATE TABLE IF NOT EXISTS EventType_New (
+                    `uid` INTEGER PRIMARY KEY AUTOINCREMENT,
+                     `event_title` TEXT NOT NULL,
+                       `time_offset` INTEGER NOT NULL,
+                        `player_selection` INTEGER NOT NULL,
+                         `attributes_allowed` INTEGER NOT NULL,
+                          `active_type` INTEGER NOT NULL)"""
+                    .trimMargin())
+                database.execSQL("INSERT INTO EventType_New SELECT uid, event_title, time_offset, player_selection, attributes_allowed, active_type FROM EventType")
+                database.execSQL("DROP TABLE EventType")
+                database.execSQL("ALTER TABLE EventType_New RENAME TO EventType")
+                database.execSQL("CREATE TABLE IF NOT EXISTS LongTimedEventType ('uid' INTEGER PRIMARY KEY AUTOINCREMENT, 'switchable' INTEGER NOT NULL, 'eventA_title' TEXT NOT NULL, 'eventB_title' TEXT)")
+            }
+        }
+
+        private val MIGRATION_3_4 = object : Migration(3,4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE LongTimedEventType ADD COLUMN active_type INTEGER NOT NULL DEFAULT 1")
+                database.execSQL("""CREATE TABLE IF NOT EXISTS MatchEvent_New (
+                    `matchEventId` INTEGER PRIMARY KEY AUTOINCREMENT,
+                    `match` INTEGER NOT NULL,
+                    `match_order_number` INTEGER NOT NULL,
+                    `timestamp` INTEGER NOT NULL,
+                    `event_type` INTEGER NOT NULL,
+                    `following_event` INTEGER,
+                    FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE ,
+                    FOREIGN KEY(`following_event`) REFERENCES `MatchEvent`(`matchEventId`) ON UPDATE NO ACTION ON DELETE CASCADE ),
+                    FOREIGN KEY(`event_type`) REFERENCES `EventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE"""
+                        .trimIndent())
+                database.execSQL("INSERT INTO MatchEvent_New SELECT * FROM MatchEvent")
+                database.execSQL("DROP TABLE MatchEvent")
+                database.execSQL("ALTER TABLE MatchEvent_New RENAME TO MatchEvent")
+                database.execSQL("""CREATE TABLE IF NOT EXISTS MatchLongTimedEvent (
+                    'matchLongTimedEventId' INTEGER PRIMARY KEY AUTOINCREMENT,
+                     'match' INTEGER NOT NULL,
+                      'match_order_number' INTEGER NOT NULL,
+                       'timestamp' INTEGER NOT NULL,
+                        'event_type' INTEGER NOT NULL,
+                         FOREIGN KEY('match') REFERENCES 'Match'('uid') ON UPDATE NO ACTION ON DELETE CASCADE,
+                          FOREIGN KEY('event_type') REFERENCES 'LongTimedEventType'('uid') ON UPDATE NO ACTION ON DELETE CASCADE)"""
+                        .trimMargin())
             }
         }
 
@@ -64,7 +111,7 @@ abstract class VideoTagDatabase: RoomDatabase() {
                 )
                     .createFromAsset("database/db_v1.json")
                     .addCallback(VideoTagDatabaseCallback(scope))
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .build()
             }
             return INSTANCE as VideoTagDatabase
@@ -77,7 +124,6 @@ abstract class VideoTagDatabase: RoomDatabase() {
         private val prePopulateStartMatchEventType = EventType(
             null,
             "Match Start",
-            longTimedEvent = false,
             0,
             playerSelection = false,
             attributesAllowed = false,

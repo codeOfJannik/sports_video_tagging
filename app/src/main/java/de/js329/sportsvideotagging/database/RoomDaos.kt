@@ -90,6 +90,12 @@ interface EventDao {
     @Query("SELECT * FROM MatchEvent WHERE `match` = :matchId")
     suspend fun getMatchEventsForMatch(matchId: Long): List<MatchEvent>
 
+    @Query("SELECT * FROM LongTimedEventType WHERE uid = :eventTypeId")
+    suspend fun getLongTimedEventTypeForId(eventTypeId: Long): LongTimedEventType?
+
+    @Query("SELECT * FROM LongTimedEventType")
+    suspend fun getAllLongTimedEventTypes(): List<LongTimedEventType>
+
     @Insert
     suspend fun insertAllEventAttributes(vararg attributes: EventAttribute): List<Long>
 
@@ -98,6 +104,9 @@ interface EventDao {
 
     @Insert
     suspend fun insertAllEventTypes(vararg eventTypes: EventType): List<Long>
+
+    @Insert
+    suspend fun insertAllLongEventTypes(vararg longTimedEventType: LongTimedEventType): List<Long>
 
     @Insert
     suspend fun insert(eventType: EventType): Long
@@ -112,6 +121,9 @@ interface EventDao {
     suspend fun update(eventType: EventType)
 
     @Update
+    suspend fun update(longTimedEventType: LongTimedEventType)
+
+    @Update
     suspend fun update(matchEvent: MatchEvent)
 
     @Delete
@@ -122,6 +134,9 @@ interface EventDao {
 
     @Delete
     suspend fun delete(matchEvent: MatchEvent)
+
+    @Delete
+    suspend fun delete(longTimedEventType: LongTimedEventType)
 }
 
 @Dao
