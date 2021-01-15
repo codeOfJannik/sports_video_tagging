@@ -117,6 +117,9 @@ interface EventDao {
     @Insert
     suspend fun insert(matchEvent: MatchEvent): Long
 
+    @Insert
+    suspend fun insert(matchLongTimedEvent: MatchLongTimedEvent): Long
+
     @Update
     suspend fun update(eventType: EventType)
 

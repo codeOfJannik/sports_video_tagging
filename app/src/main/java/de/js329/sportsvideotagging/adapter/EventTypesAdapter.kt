@@ -23,7 +23,7 @@ class EventTypesAdapter(private val context: Context, var allEventTypes: List<Ev
     override fun getItem(position: Int): Any {
         if (position == 0) { return "Event Types" }
         if (position - 1 < allEventTypes.size) { return allEventTypes[position - 1] }
-        if (position - 1 == allEventTypes.size) { return "Long Timed Event Typed" }
+        if (position - 1 == allEventTypes.size) { return "Long Timed Event Types" }
         if (position - 1 > allEventTypes.size) { return allLongTimedEventTypes[position - allEventTypes.size - 2] }
         return "null"
     }
@@ -89,9 +89,9 @@ class EventTypesAdapter(private val context: Context, var allEventTypes: List<Ev
                     view = convertView
                 }
                 view.findViewById<TextView>(R.id.eventATitleTextView).text = item.eventATitle
-                view.findViewById<ImageView>(R.id.swapImageView).isVisible = !item.switchable
+                view.findViewById<ImageView>(R.id.swapImageView).isVisible = item.switchable
                 view.findViewById<TextView>(R.id.eventBTitleTextView).apply {
-                    isVisible = !item.switchable
+                    isVisible = item.switchable
                     if (isVisible) {
                         text = item.eventBTitle
                     }

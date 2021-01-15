@@ -47,7 +47,7 @@ class TaggingMatchEventPlayersFragment: Fragment(), InnerRecyclerViewAdapter.Pla
                 taggingFragmentManager.switchToFinalizeMatchInput()
             }
         }
-        expandableRecyclerView = view.findViewById(R.id.recyclerView)
+        expandableRecyclerView = view.findViewById(R.id.eventTypesRecyclerView)
         initiateAdapter()
         return view
     }

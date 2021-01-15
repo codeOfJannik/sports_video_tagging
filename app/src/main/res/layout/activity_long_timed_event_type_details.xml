@@ -86,7 +86,7 @@
         android:layout_marginStart="8dp"
         android:text="@string/switchable"
         android:textSize="14sp"
-        android:textColor="@color/black"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintBottom_toBottomOf="@+id/toggleableSwitchableSwitch"
         app:layout_constraintStart_toEndOf="@+id/toggleableSwitchableSwitch"
         app:layout_constraintTop_toTopOf="@+id/toggleableSwitchableSwitch" />

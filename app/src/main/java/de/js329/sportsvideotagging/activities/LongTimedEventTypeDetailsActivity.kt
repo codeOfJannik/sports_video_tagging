@@ -44,6 +44,7 @@ class LongTimedEventTypeDetailsActivity : AppCompatActivity() {
 
         toggleSwitchableSwitch.setOnCheckedChangeListener { _, isChecked -> onSwitchChanged(isChecked) }
 
+        setEventBVisibility(false)
         if (eventTypeId != -1L) {
             lifecycleScope.launch {
                 longTimedEventType = configurationController.getLongTimedEventTypeForId(eventTypeId)
@@ -60,7 +61,7 @@ class LongTimedEventTypeDetailsActivity : AppCompatActivity() {
         longTimedEventTypeDetailsHeader.text = getString(R.string.editEventTypesHeader_txt)
 
         longTimedEventType?.let {
-            toggleSwitchableSwitch.isChecked = !it.switchable
+            toggleSwitchableSwitch.isChecked = it.switchable
             eventATitleEdittext.setText(it.eventATitle)
             if (it.switchable) {
                 eventBTitleEdittext.setText(it.eventBTitle)
@@ -69,7 +70,7 @@ class LongTimedEventTypeDetailsActivity : AppCompatActivity() {
     }
 
     private fun onSwitchChanged(isChecked: Boolean) {
-        setEventBVisibility(!isChecked)
+        setEventBVisibility(isChecked)
     }
 
     private fun setEventBVisibility(visible: Boolean) {
@@ -78,10 +79,6 @@ class LongTimedEventTypeDetailsActivity : AppCompatActivity() {
     }
 
     private fun onSaveBtnClicked() {
-        // TODO: validate input
-        // - add activeType parameter
-        // - add update functionality
-        // - add toggle-/switchable event types in match tagging
         val eventATitle = eventATitleEdittext.text.toString()
         if (eventATitle == "") {
             Toast.makeText(this, R.string.noEventTypeTitle, Toast.LENGTH_LONG).show()
@@ -100,6 +97,7 @@ class LongTimedEventTypeDetailsActivity : AppCompatActivity() {
             } else {
                 configurationController.addLongTimedEventType(longTimedEventType)
             }
+            this@LongTimedEventTypeDetailsActivity.finish()
         }
     }
 

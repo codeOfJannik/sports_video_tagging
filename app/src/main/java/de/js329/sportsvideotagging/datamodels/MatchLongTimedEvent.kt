@@ -18,5 +18,6 @@ data class MatchLongTimedEvent (
         @ColumnInfo(name = "match") val matchId: Long,
         @ColumnInfo(name = "match_order_number") val matchLongTimedEventOrderNumber: Int,
         @ColumnInfo(name = "timestamp") val eventTimestamp: Long,
-        @ColumnInfo(name = "event_type") val eventTypeId: Long
+        @ColumnInfo(name = "event_type") val eventTypeId: Long,
+        @ColumnInfo(name = "switched_to_event_b") val switchedEvent: Boolean
 )

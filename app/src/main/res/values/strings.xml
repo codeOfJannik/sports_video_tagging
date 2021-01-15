@@ -128,4 +128,5 @@
     <string name="toggleable">Toggleable</string>
     <string name="switchable_event_title">Switchable Event Title</string>
     <string name="swap_image">Swap Image</string>
+    <string name="event_types">Event Types</string>
 </resources>

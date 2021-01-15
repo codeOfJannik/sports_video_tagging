@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
         LongTimedEventType::class,
         MatchLongTimedEvent::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = true
 )
 @TypeConverters(DateConverter::class)
@@ -84,8 +84,8 @@ abstract class VideoTagDatabase: RoomDatabase() {
                     `event_type` INTEGER NOT NULL,
                     `following_event` INTEGER,
                     FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE ,
-                    FOREIGN KEY(`following_event`) REFERENCES `MatchEvent`(`matchEventId`) ON UPDATE NO ACTION ON DELETE CASCADE ),
-                    FOREIGN KEY(`event_type`) REFERENCES `EventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE"""
+                    FOREIGN KEY(`following_event`) REFERENCES `MatchEvent`(`matchEventId`) ON UPDATE NO ACTION ON DELETE CASCADE,
+                    FOREIGN KEY(`event_type`) REFERENCES `EventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE)"""
                         .trimIndent())
                 database.execSQL("INSERT INTO MatchEvent_New SELECT * FROM MatchEvent")
                 database.execSQL("DROP TABLE MatchEvent")
@@ -102,6 +102,12 @@ abstract class VideoTagDatabase: RoomDatabase() {
             }
         }
 
+        private val MIGRATION_4_5 = object : Migration(4,5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE MatchLongTimedEvent ADD COLUMN switched_to_event_b INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
         fun getInstance(context: Context, scope: CoroutineScope): VideoTagDatabase {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(
@@ -111,7 +117,7 @@ abstract class VideoTagDatabase: RoomDatabase() {
                 )
                     .createFromAsset("database/db_v1.json")
                     .addCallback(VideoTagDatabaseCallback(scope))
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                     .build()
             }
             return INSTANCE as VideoTagDatabase

@@ -38,6 +38,10 @@ class MatchTaggingController(
         return eventTypes
     }
 
+    suspend fun getLongTimedEventTypes(): List<LongTimedEventType> {
+        return eventDao.getAllLongTimedEventTypes()
+    }
+
     suspend fun getAllTeams(): List<Team> {
         return teamDao.getAll()
     }
@@ -94,6 +98,14 @@ class MatchTaggingController(
                 timestamp,
                 eventTypeId
         )
+        return true
+    }
+
+    suspend fun createLongTimedMatchEvent(longTimedEventType: LongTimedEventType, timestamp: Long, isSwitched: Boolean) :Boolean {
+        val matchId = match?.uid ?: return false
+        val eventTypeId = longTimedEventType.uid ?: return false
+        val longTimedMatchEvent = MatchLongTimedEvent(null, matchId, ++eventOrderNum, timestamp, eventTypeId, isSwitched)
+        longTimedMatchEvent.matchLongTimedEventId = eventDao.insert(longTimedMatchEvent)
         return true
     }
 

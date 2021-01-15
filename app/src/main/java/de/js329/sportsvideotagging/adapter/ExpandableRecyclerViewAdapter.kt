@@ -24,7 +24,7 @@ class ExpandableRecyclerViewAdapter(
     class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.parentNameItemTextView)
         val expandIcon: ImageView = itemView.findViewById(R.id.expandIconImageView)
-        val recyclerView: RecyclerView = itemView.findViewById(R.id.recyclerView)
+        val recyclerView: RecyclerView = itemView.findViewById(R.id.eventTypesRecyclerView)
         val cardView: CardView = itemView.findViewById(R.id.cardView)
     }
 

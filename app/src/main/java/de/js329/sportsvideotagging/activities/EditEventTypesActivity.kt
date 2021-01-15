@@ -44,6 +44,7 @@ class EditEventTypesActivity : AppCompatActivity(), EventTypeChangedListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuration_listview)
         val fabFrame = findViewById<FrameLayout>(R.id.fabFrame)
+        fabFrame.visibility = View.VISIBLE
         addEventTypeLayoutButton = fabFrame.findViewById(R.id.layoutFabAddEventType)
         addLongTimedEventTypeLayoutButton = fabFrame.findViewById(R.id.layoutFabAddLongTimedEventType)
         addFab = findViewById(R.id.addFAB)
