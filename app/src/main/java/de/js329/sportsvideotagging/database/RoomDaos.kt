@@ -9,6 +9,9 @@ interface MatchDao {
     @Query("SELECT * FROM `Match`")
     suspend fun getAll(): List<Match>
 
+    @Query("SELECT * FROM `Match` WHERE uid = :matchId")
+    suspend fun getMatchForId(matchId: Long): Match
+
     @Insert
     suspend fun insertAll(vararg matches: Match): List<Long>
 
@@ -30,6 +33,9 @@ interface PlayerDao {
 
     @Query("SELECT * FROM Player WHERE team = :teamId")
     suspend fun getPlayersForTeam(teamId: Long): List<Player>
+
+    @Query("SELECT * FROM Player WHERE playerId IN (:playerIdList) AND team = :teamId")
+    suspend fun getPlayersWithIdsForTeam(playerIdList: List<Long>, teamId: Long): List<Player>
 
     @Insert
     suspend fun insertAll(vararg players: Player): List<Long>
@@ -89,6 +95,9 @@ interface EventDao {
 
     @Query("SELECT * FROM MatchEvent WHERE `match` = :matchId")
     suspend fun getMatchEventsForMatch(matchId: Long): List<MatchEvent>
+
+    @Query("SELECT * FROM MatchLongTimedEvent WHERE `match` = :matchId")
+    suspend fun getLongTimedMatchEventsForMatch(matchId: Long): List<MatchLongTimedEvent>
 
     @Query("SELECT * FROM LongTimedEventType WHERE uid = :eventTypeId")
     suspend fun getLongTimedEventTypeForId(eventTypeId: Long): LongTimedEventType?
@@ -156,6 +165,10 @@ interface EventJoinDao {
     @Transaction
     @Query("SELECT * FROM Attribute")
     suspend fun getAttributesForMatchEvent(): List<AttributesForMatchEvents>
+
+    @Transaction
+    @Query("SELECT * FROM MatchEvent WHERE matchEventId = :matchEventId")
+    suspend fun getAttributesForMatchEventWithId(matchEventId: Long): MatchEventsWithAttributes
 
     @Transaction
     @Query("SELECT * FROM MatchEvent")

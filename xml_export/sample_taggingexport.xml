@@ -10,8 +10,7 @@
         <awayTeam>SG Hegensberg-Liebersbronn</awayTeam>
         <matchEvents>
             <matchEvent eventTitle="Match Start" matchEventOrderNum="0" matchEventTimeOffset="0">
-                <players>
-                </players>
+                <players/>
             </matchEvent>
             <matchEvent eventTitle="Torwurf" matchEventOrderNum="1" matchEventTimeOffset="34">
                 <eventAttributes>

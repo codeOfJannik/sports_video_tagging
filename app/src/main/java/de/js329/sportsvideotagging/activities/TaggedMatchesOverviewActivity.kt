@@ -29,7 +29,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
 
     private val exportController by lazy {
         val db = VideoTagDatabase.getInstance(this, lifecycleScope)
-        ExportController(db.eventDao(), db.matchDao(), db.teamDao())
+        ExportController(db.playerDao(), db.eventDao(), db.matchDao(), db.teamDao(), db.eventJoinDao())
     }
     lateinit var taggedMatchesAdapter: TaggedMatchesAdapter
 
@@ -79,7 +79,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                         dialog.dismiss()
                     }
                     1 -> {
-                        // TODO
+                        exportToSVT(match)
                         dialog.dismiss()
                     }
                 }
@@ -106,6 +106,10 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
             }
             .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss()}
             .show()
+    }
+
+    private fun exportToSVT(match: Match) {
+        // TODO: handle export here
     }
 }
 
