@@ -7,23 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.FrameLayout
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.js329.sportsvideotagging.R
 import de.js329.sportsvideotagging.controller.ExportController
 import de.js329.sportsvideotagging.database.VideoTagDatabase
-import de.js329.sportsvideotagging.datamodels.Match
-import de.js329.sportsvideotagging.datamodels.MatchEvent
-import de.js329.sportsvideotagging.datamodels.Team
+import de.js329.sportsvideotagging.datamodels.*
 import de.js329.sportsvideotagging.toFormattedString
 import kotlinx.coroutines.launch
+import org.redundent.kotlin.xml.PrintOptions
+import org.redundent.kotlin.xml.xml
 import java.util.*
+import kotlin.collections.ArrayList
 
 class TaggedMatchesOverviewActivity : AppCompatActivity() {
 
@@ -109,7 +108,154 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
     }
 
     private fun exportToSVT(match: Match) {
-        // TODO: handle export here
+        match.uid?.let { matchId ->
+            lifecycleScope.launch {
+                exportController.queryEventTypes()
+                val homeTeam = exportController.getTeamForId(match.homeTeamId)
+                val awayTeam = exportController.getTeamForId(match.awayTeamId)
+                val matchEvents = exportController.getEventsForMatch(matchId)
+                val matchEventData: MutableList<Pair<HashMap<String, Any>, Any>> = ArrayList()
+                val longTimedMatchEvents = exportController.getLongTimedEventsForMatch(matchId)
+                val longTimedEventData: MutableList<Pair<HashMap<String, Any>, LongTimedEventType>> = ArrayList()
+                for (event in matchEvents) {
+                    val eventType = exportController.getEventTypeById(event.eventTypeId)
+                    val attributes = exportController.getAttributesForMatchEvent(event)
+                    val homePlayers = exportController.getPlayersForTeamOfMatchEvent(event, match.homeTeamId)
+                    val awayPlayers =  exportController.getPlayersForTeamOfMatchEvent(event, match.awayTeamId)
+                    eventType?.let {
+                        val data = Pair(
+                            hashMapOf(
+                                "event" to event,
+                                "attributes" to attributes,
+                                "homePlayers" to homePlayers,
+                                "awayPlayers" to awayPlayers
+                            ),
+                            it
+                        )
+                        matchEventData.add(data)
+                    }
+                }
+                for (event in longTimedMatchEvents) {
+                    val eventType = exportController.getLongTimedEventTypeById(event.eventTypeId)
+                    eventType?.let {
+                        longTimedEventData.add(Pair(hashMapOf("event" to event), it))
+                    }
+                }
+                val allEvents: List<Pair<HashMap<String, Any>, Any>> = matchEventData + longTimedEventData
+                val sortedEvents = allEvents.sortedBy {
+                    when (val event = it.first["event"]) {
+                        is MatchEvent -> {
+                            event.matchEventOrderNumber
+                        }
+                        is MatchLongTimedEvent -> {
+                            event.matchLongTimedEventOrderNumber
+                        }
+                        else -> {
+                            allEvents.size * 2
+                        }
+                    }
+                }
+                var orderNum = 0
+                var startTimeStamp = 0L
+                val svt = xml("svt") {
+                    "match" {
+                        "metadata" {
+                            "matchDateTime" {
+                                match.date?.let { Date(it).toString() }
+                            }
+                            "homeTeamScore" {
+                                match.homeScore
+                            }
+                            "awayTeamScore" {
+                                match.awayScore
+                            }
+                        }
+                        "homeTeam" {
+                            homeTeam?.teamName
+                        }
+                        "awayTeam" {
+                            awayTeam?.teamName
+                        }
+                        "matchEvents" {
+                            for (eventData in sortedEvents) {
+                                val eventType = eventData.second
+                                when (val event = eventData.first["event"]) {
+                                    is MatchLongTimedEvent -> {
+                                        if (eventType is LongTimedEventType) {
+                                            exportController.longTimedEventHandler(event, eventType)
+                                        }
+                                        continue
+                                    }
+                                    is MatchEvent -> {
+                                        val attributes = eventData.first["attributes"]
+                                        val homePlayers = eventData.first["homePlayers"]
+                                        val awayPlayers = eventData.first["awayPlayers"]
+
+                                        if (event.matchEventOrderNumber == 0) {
+                                            startTimeStamp = event.eventTimestamp
+                                        }
+                                        "matchEvent" {
+                                            if (eventType is EventType) {
+                                                attribute("eventTitle", eventType.eventTitle)
+                                            }
+                                            attribute(
+                                                "matchEventOrderNum",
+                                                orderNum++
+                                            )
+                                            attribute(
+                                                "matchEventTimeOffset",
+                                                event.eventTimestamp - startTimeStamp
+                                            )
+                                            if (attributes is List<*> && attributes.isNotEmpty()) {
+                                                "eventAttributes" {
+                                                    for (attribute in attributes.filterIsInstance<EventAttribute>()) {
+                                                        "attribute" { attribute.attribute_name }
+                                                    }
+                                                }
+                                            }
+                                            "players" {
+                                                if (homePlayers is List<*> && homePlayers.isNotEmpty()) {
+                                                    "homeTeamPlayers" {
+                                                        for (player in homePlayers.filterIsInstance<Player>()) {
+                                                            "player" {
+                                                                player.name?.let {
+                                                                    attribute("playerName", it)
+                                                                }
+                                                                attribute(
+                                                                    "jerseyNumber",
+                                                                    player.number
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                if (awayPlayers is List<*> && awayPlayers.isNotEmpty()) {
+                                                    "awayPlayers" {
+                                                        for (player in awayPlayers.filterIsInstance<Player>()) {
+                                                            "player" {
+                                                                player.name?.let {
+                                                                    attribute("playerName", it)
+                                                                }
+                                                                attribute("jerseyNumber", player.number)
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                val xmlString = svt.toString(PrintOptions(
+                    pretty = true,
+                    singleLineTextElements = true,
+                    useSelfClosingTags = true
+                ))
+            }
+        }
     }
 }
 
