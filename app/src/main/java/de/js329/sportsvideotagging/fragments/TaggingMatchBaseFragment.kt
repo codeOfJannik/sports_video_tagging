@@ -38,6 +38,7 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
     private lateinit var longTimedEventAdapter: LongTimedEventTypesAdapter
     private lateinit var matchTaggingController: MatchTaggingController
     private lateinit var taggingFragmentManager: TaggingFragmentManager
+    private var selectedLongTimedItemsIndeces: MutableList<Int> = ArrayList()
     private var matchStarted = false
     private var taggingStartTimestamp = 0L
     private var homeTeamId = -1L
@@ -150,7 +151,7 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
         longTimedEventsRecyclerView = view.findViewById(R.id.longTimedEventsRecyclerView)
         lifecycleScope.launch {
             val longTimedEventTypes = matchTaggingController.getLongTimedEventTypes()
-            longTimedEventAdapter = LongTimedEventTypesAdapter(this@TaggingMatchBaseFragment, longTimedEventTypes, requireContext())
+            longTimedEventAdapter = LongTimedEventTypesAdapter(this@TaggingMatchBaseFragment, longTimedEventTypes, ArrayList(selectedLongTimedItemsIndeces), requireContext())
             longTimedEventsRecyclerView.adapter = longTimedEventAdapter
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
@@ -260,27 +261,29 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
 
     override fun onSwitchableItemClicked(view: View?, position: Int) {
         if (matchStarted) {
-            if (longTimedEventAdapter.selectedItemIndeces.contains(position)) {
+            if (longTimedEventAdapter.selectedItemIndices.contains(position)) {
+                selectedLongTimedItemsIndeces = longTimedEventAdapter.selectedItemIndices
                 return
             }
             val longTimedEvent = longTimedEventAdapter.getItem(position)
             val selectedTitle = longTimedEventAdapter.getStringItem(position)
             longTimedEvent?.let {
                 var isSwitched = false
-                longTimedEventAdapter.selectedItemIndeces.add(position)
+                longTimedEventAdapter.selectedItemIndices.add(position)
                 if (selectedTitle == it.first.eventATitle) {
-                    longTimedEventAdapter.selectedItemIndeces.remove(position + 1)
+                    longTimedEventAdapter.selectedItemIndices.remove(position + 1)
                     isSwitched = false
                     longTimedEventAdapter.notifyItemRangeChanged(position, 2)
                 }
                 if (selectedTitle == it.first.eventBTitle) {
-                    longTimedEventAdapter.selectedItemIndeces.remove(position - 1)
+                    longTimedEventAdapter.selectedItemIndices.remove(position - 1)
                     isSwitched = true
                     longTimedEventAdapter.notifyItemRangeChanged(position - 1, 2)
                 }
                 lifecycleScope.launch {
                     matchTaggingController.createLongTimedMatchEvent(it.first, System.currentTimeMillis() / 1000, isSwitched)
                 }
+                selectedLongTimedItemsIndeces = longTimedEventAdapter.selectedItemIndices
             }
         }
     }
@@ -293,12 +296,13 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
                     matchTaggingController.createLongTimedMatchEvent(it.first, System.currentTimeMillis() / 1000, false)
                 }
             }
-            if (longTimedEventAdapter.selectedItemIndeces.contains(position)) {
-                longTimedEventAdapter.selectedItemIndeces.remove(position)
+            if (longTimedEventAdapter.selectedItemIndices.contains(position)) {
+                longTimedEventAdapter.selectedItemIndices.remove(position)
             } else {
-                longTimedEventAdapter.selectedItemIndeces.add(position)
+                longTimedEventAdapter.selectedItemIndices.add(position)
             }
             longTimedEventAdapter.notifyItemChanged(position)
+            selectedLongTimedItemsIndeces = longTimedEventAdapter.selectedItemIndices
         }
     }
 }

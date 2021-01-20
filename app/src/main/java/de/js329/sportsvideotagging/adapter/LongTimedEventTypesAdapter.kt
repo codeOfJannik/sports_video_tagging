@@ -1,8 +1,6 @@
 package de.js329.sportsvideotagging.adapter
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -13,10 +11,15 @@ import de.js329.sportsvideotagging.R
 import de.js329.sportsvideotagging.datamodels.LongTimedEventType
 import de.js329.sportsvideotagging.inflate
 
-class LongTimedEventTypesAdapter(val mClickListener: ItemClickListener, private val longTimedEventTypes: List<LongTimedEventType>, val context: Context): RecyclerView.Adapter<LongTimedEventTypesAdapter.ViewHolder>() {
+class LongTimedEventTypesAdapter(
+    val mClickListener: ItemClickListener,
+    private val longTimedEventTypes: List<LongTimedEventType>,
+    preSelectedItems: ArrayList<Int>,
+    val context: Context
+    ): RecyclerView.Adapter<LongTimedEventTypesAdapter.ViewHolder>() {
 
     private val itemList = createLongTimedItemList()
-    val selectedItemIndeces = ArrayList<Int>()
+    val selectedItemIndices: MutableList<Int> = preSelectedItems
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val eventTitleTextView: TextView = itemView.findViewById(R.id.eventTypeTitleTextView)
@@ -36,7 +39,7 @@ class LongTimedEventTypesAdapter(val mClickListener: ItemClickListener, private 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.eventTitleTextView.text = getStringItem(position)
-        if (selectedItemIndeces.contains(position)) {
+        if (selectedItemIndices.contains(position)) {
             holder.rootView.setBackgroundColor(ContextCompat.getColor(context, R.color.light_grey))
         } else {
             holder.rootView.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
