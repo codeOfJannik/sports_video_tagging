@@ -18,9 +18,10 @@ import de.js329.sportsvideotagging.controller.ExportController
 import de.js329.sportsvideotagging.database.VideoTagDatabase
 import de.js329.sportsvideotagging.datamodels.*
 import de.js329.sportsvideotagging.toFormattedString
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.redundent.kotlin.xml.PrintOptions
 import org.redundent.kotlin.xml.xml
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -67,22 +68,32 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
     private fun onTaggedMatchClicked(match: Match) {
         val builder = AlertDialog.Builder(this)
         builder
-            .setTitle(R.string.matchActionsTitle)
-            .setNegativeButton(android.R.string.cancel) {dialog, _ -> dialog.dismiss() }
-            .setItems(
-                arrayOf("Delete Match", "Export in .svt file")
-            ) { dialog, which ->
-                when (which) {
-                    0 -> {
-                        onDeleteMatchClicked(match)
-                        dialog.dismiss()
-                    }
-                    1 -> {
-                        exportToSVT(match)
-                        dialog.dismiss()
+                .setTitle(R.string.matchActionsTitle)
+                .setNegativeButton(android.R.string.cancel) {dialog, _ -> dialog.dismiss() }
+                .setItems(
+                        arrayOf("Delete Match", "Export in .svt file")
+                ) { dialog, which ->
+                    when (which) {
+                        0 -> {
+                            onDeleteMatchClicked(match)
+                            dialog.dismiss()
+                        }
+                        1 -> {
+                            val file = File(getExternalFilesDir(null),"export.xml")
+                            val created = file.createNewFile()
+                            GlobalScope.launch(Dispatchers.Main) {
+                                val xmlString = exportToSVT(match)
+                                xmlString?.let {
+                                    if (created) {
+                                        file.writeText(xmlString)
+                                    }
+                                }
+
+                            }
+                            dialog.dismiss()
+                        }
                     }
                 }
-            }
         val dialog = builder.create()
         dialog.listView.divider = ColorDrawable(resources.getColor(R.color.light_grey, null))
         dialog.listView.dividerHeight = 1
@@ -92,27 +103,31 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
     private fun onDeleteMatchClicked(match: Match) {
         val builder = AlertDialog.Builder(this)
         builder
-            .setTitle(R.string.deleteTaggedMatchTitle)
-            .setMessage(R.string.deleteTaggedMatchMessage)
-            .setPositiveButton(android.R.string.ok) {_, _ ->
-                lifecycleScope.launch {
-                    exportController.deleteMatchWithAllTags(match)
+                .setTitle(R.string.deleteTaggedMatchTitle)
+                .setMessage(R.string.deleteTaggedMatchMessage)
+                .setPositiveButton(android.R.string.ok) {_, _ ->
+                    lifecycleScope.launch {
+                        exportController.deleteMatchWithAllTags(match)
+                    }
+                    val matches = taggedMatchesAdapter.matches.toMutableList()
+                    matches.removeIf { it.first == match }
+                    taggedMatchesAdapter.matches = matches
+                    taggedMatchesAdapter.notifyDataSetChanged()
                 }
-                val matches = taggedMatchesAdapter.matches.toMutableList()
-                matches.removeIf { it.first == match }
-                taggedMatchesAdapter.matches = matches
-                taggedMatchesAdapter.notifyDataSetChanged()
-            }
-            .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss()}
-            .show()
+                .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss()}
+                .show()
     }
 
-    private fun exportToSVT(match: Match) {
+    private suspend fun exportToSVT(match: Match): String? {
         match.uid?.let { matchId ->
-            lifecycleScope.launch {
+            exportController.reset()
+            var allEvents: List<Pair<HashMap<String, Any>, Any>> = ArrayList()
+            var homeTeam: Team? = null
+            var awayTeam: Team? = null
+            val worker = lifecycleScope.async {
                 exportController.queryEventTypes()
-                val homeTeam = exportController.getTeamForId(match.homeTeamId)
-                val awayTeam = exportController.getTeamForId(match.awayTeamId)
+                homeTeam = exportController.getTeamForId(match.homeTeamId)
+                awayTeam = exportController.getTeamForId(match.awayTeamId)
                 val matchEvents = exportController.getEventsForMatch(matchId)
                 val matchEventData: MutableList<Pair<HashMap<String, Any>, Any>> = ArrayList()
                 val longTimedMatchEvents = exportController.getLongTimedEventsForMatch(matchId)
@@ -121,16 +136,16 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                     val eventType = exportController.getEventTypeById(event.eventTypeId)
                     val attributes = exportController.getAttributesForMatchEvent(event)
                     val homePlayers = exportController.getPlayersForTeamOfMatchEvent(event, match.homeTeamId)
-                    val awayPlayers =  exportController.getPlayersForTeamOfMatchEvent(event, match.awayTeamId)
+                    val awayPlayers = exportController.getPlayersForTeamOfMatchEvent(event, match.awayTeamId)
                     eventType?.let {
                         val data = Pair(
-                            hashMapOf(
-                                "event" to event,
-                                "attributes" to attributes,
-                                "homePlayers" to homePlayers,
-                                "awayPlayers" to awayPlayers
-                            ),
-                            it
+                                hashMapOf(
+                                        "event" to event,
+                                        "attributes" to attributes,
+                                        "homePlayers" to homePlayers,
+                                        "awayPlayers" to awayPlayers
+                                ),
+                                it
                         )
                         matchEventData.add(data)
                     }
@@ -141,103 +156,116 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                         longTimedEventData.add(Pair(hashMapOf("event" to event), it))
                     }
                 }
-                val allEvents: List<Pair<HashMap<String, Any>, Any>> = matchEventData + longTimedEventData
-                val sortedEvents = allEvents.sortedBy {
-                    when (val event = it.first["event"]) {
-                        is MatchEvent -> {
-                            event.matchEventOrderNumber
-                        }
-                        is MatchLongTimedEvent -> {
-                            event.matchLongTimedEventOrderNumber
-                        }
-                        else -> {
-                            allEvents.size * 2
-                        }
+                allEvents = matchEventData + longTimedEventData
+            }
+
+            print(worker.await())
+            val sortedEvents = allEvents.sortedBy {
+                when (val event = it.first["event"]) {
+                    is MatchEvent -> {
+                        event.matchEventOrderNumber
+                    }
+                    is MatchLongTimedEvent -> {
+                        event.matchLongTimedEventOrderNumber
+                    }
+                    else -> {
+                        allEvents.size * 2
                     }
                 }
-                var orderNum = 0
-                var startTimeStamp = 0L
-                val svt = xml("svt") {
-                    "match" {
-                        "metadata" {
-                            "matchDateTime" {
-                                match.date?.let { Date(it).toString() }
-                            }
-                            "homeTeamScore" {
-                                match.homeScore
-                            }
-                            "awayTeamScore" {
-                                match.awayScore
-                            }
+            }
+            var orderNum = 0
+            var startTimeStamp = 0L
+            val svt = xml("svt") {
+                "match" {
+                    "metadata" {
+                        "matchDateTime" {
+                            match.date?.let { -Date(it).toString() }
                         }
-                        "homeTeam" {
-                            homeTeam?.teamName
+                        "homeTeamScore" {
+                            -match.homeScore.toString()
                         }
-                        "awayTeam" {
-                            awayTeam?.teamName
+                        "awayTeamScore" {
+                            -match.awayScore.toString()
                         }
-                        "matchEvents" {
-                            for (eventData in sortedEvents) {
-                                val eventType = eventData.second
-                                when (val event = eventData.first["event"]) {
-                                    is MatchLongTimedEvent -> {
-                                        if (eventType is LongTimedEventType) {
-                                            exportController.longTimedEventHandler(event, eventType)
-                                        }
-                                        continue
+                    }
+                    "homeTeam" {
+                        -homeTeam?.teamName.toString()
+                    }
+                    "awayTeam" {
+                        -awayTeam?.teamName.toString()
+                    }
+                    "matchEvents" {
+                        for (eventData in sortedEvents) {
+                            val eventType = eventData.second
+                            when (val event = eventData.first["event"]) {
+                                is MatchLongTimedEvent -> {
+                                    if (eventType is LongTimedEventType) {
+                                        exportController.longTimedEventHandler(event, eventType)
                                     }
-                                    is MatchEvent -> {
-                                        val attributes = eventData.first["attributes"]
-                                        val homePlayers = eventData.first["homePlayers"]
-                                        val awayPlayers = eventData.first["awayPlayers"]
+                                    continue
+                                }
+                                is MatchEvent -> {
+                                    val attributes = eventData.first["attributes"]
+                                    val homePlayers = eventData.first["homePlayers"]
+                                    val awayPlayers = eventData.first["awayPlayers"]
 
-                                        if (event.matchEventOrderNumber == 0) {
-                                            startTimeStamp = event.eventTimestamp
+                                    if (event.matchEventOrderNumber == 0) {
+                                        startTimeStamp = event.eventTimestamp
+                                    }
+                                    "matchEvent" {
+                                        if (eventType is EventType) {
+                                            attribute("eventTitle", eventType.eventTitle)
                                         }
-                                        "matchEvent" {
-                                            if (eventType is EventType) {
-                                                attribute("eventTitle", eventType.eventTitle)
-                                            }
-                                            attribute(
+                                        attribute(
                                                 "matchEventOrderNum",
                                                 orderNum++
-                                            )
-                                            attribute(
+                                        )
+                                        attribute(
                                                 "matchEventTimeOffset",
                                                 event.eventTimestamp - startTimeStamp
-                                            )
-                                            if (attributes is List<*> && attributes.isNotEmpty()) {
-                                                "eventAttributes" {
-                                                    for (attribute in attributes.filterIsInstance<EventAttribute>()) {
-                                                        "attribute" { attribute.attribute_name }
+                                        )
+                                        if (attributes is List<*> && attributes.isNotEmpty()) {
+                                            "eventAttributes" {
+                                                for (attribute in attributes.filterIsInstance<EventAttribute>()) {
+                                                    "attribute" { -attribute.attribute_name }
+                                                }
+                                                if (exportController.activeLongTimedEvents.isNotEmpty()) {
+                                                    for (name in exportController.getActiveLongTimedEventNames()) {
+                                                        "attribute" { -name }
                                                     }
                                                 }
                                             }
-                                            "players" {
-                                                if (homePlayers is List<*> && homePlayers.isNotEmpty()) {
-                                                    "homeTeamPlayers" {
-                                                        for (player in homePlayers.filterIsInstance<Player>()) {
-                                                            "player" {
-                                                                player.name?.let {
-                                                                    attribute("playerName", it)
-                                                                }
-                                                                attribute(
+                                        } else if (exportController.activeLongTimedEvents.isNotEmpty()) {
+                                            "eventAttributes" {
+                                                for (name in exportController.getActiveLongTimedEventNames()) {
+                                                    "attribute" { -name }
+                                                }
+                                            }
+                                        }
+                                        "players" {
+                                            if (homePlayers is List<*> && homePlayers.isNotEmpty()) {
+                                                "homeTeamPlayers" {
+                                                    for (player in homePlayers.filterIsInstance<Player>()) {
+                                                        "player" {
+                                                            player.name?.let {
+                                                                attribute("playerName", it)
+                                                            }
+                                                            attribute(
                                                                     "jerseyNumber",
                                                                     player.number
-                                                                )
-                                                            }
+                                                            )
                                                         }
                                                     }
                                                 }
-                                                if (awayPlayers is List<*> && awayPlayers.isNotEmpty()) {
-                                                    "awayPlayers" {
-                                                        for (player in awayPlayers.filterIsInstance<Player>()) {
-                                                            "player" {
-                                                                player.name?.let {
-                                                                    attribute("playerName", it)
-                                                                }
-                                                                attribute("jerseyNumber", player.number)
+                                            }
+                                            if (awayPlayers is List<*> && awayPlayers.isNotEmpty()) {
+                                                "awayPlayers" {
+                                                    for (player in awayPlayers.filterIsInstance<Player>()) {
+                                                        "player" {
+                                                            player.name?.let {
+                                                                attribute("playerName", it)
                                                             }
+                                                            attribute("jerseyNumber", player.number)
                                                         }
                                                     }
                                                 }
@@ -249,13 +277,15 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                         }
                     }
                 }
-                val xmlString = svt.toString(PrintOptions(
+            }
+            return svt.toString(PrintOptions(
                     pretty = true,
                     singleLineTextElements = true,
                     useSelfClosingTags = true
-                ))
-            }
+            ))
+            // print(xmlString)
         }
+        return null
     }
 }
 

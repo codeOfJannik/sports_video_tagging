@@ -108,6 +108,7 @@ class PreTaggingActivity : AppCompatActivity() {
         val onSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             matchDateCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
             matchDateCalendar.set(Calendar.MINUTE, minute)
+            matchDateCalendar.set(Calendar.SECOND, 0)
             updateDateEditTextValues()
         }
         TimePickerDialog(

@@ -15,6 +15,10 @@ class ExportController(
     lateinit var longTimedEventTypes: List<LongTimedEventType>
     val activeLongTimedEvents: MutableList<MatchLongTimedEvent> = ArrayList()
 
+    fun reset() {
+        activeLongTimedEvents.clear()
+    }
+
     fun longTimedEventHandler(event: MatchLongTimedEvent, eventType: LongTimedEventType) {
         val activeEvent = activeLongTimedEvents.firstOrNull { it.eventTypeId == event.eventTypeId }
         activeEvent?.let {
@@ -22,8 +26,26 @@ class ExportController(
                 activeLongTimedEvents.add(event)
             }
             activeLongTimedEvents.remove(activeEvent)
+            return
         }
         activeLongTimedEvents.add(event)
+    }
+
+    fun getActiveLongTimedEventNames(): List<String> {
+        val eventNames: MutableList<String> = ArrayList()
+        for (event in activeLongTimedEvents) {
+            val longTimedEventType = longTimedEventTypes.firstOrNull() { it.uid == event.eventTypeId }
+            longTimedEventType?.let { eventType ->
+                if (event.switchedEvent) {
+                    eventType.eventBTitle?.let {
+                        eventNames.add(it)
+                    }
+                } else {
+                    eventNames.add(eventType.eventATitle)
+                }
+            }
+        }
+        return eventNames
     }
 
     suspend fun getMatches(): List<Match> {
