@@ -1,6 +1,7 @@
 package de.js329.sportsvideotagging.activities
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -21,11 +23,42 @@ import de.js329.sportsvideotagging.toFormattedString
 import kotlinx.coroutines.*
 import org.redundent.kotlin.xml.PrintOptions
 import org.redundent.kotlin.xml.xml
-import java.io.File
+import java.io.PrintWriter
 import java.util.*
 import kotlin.collections.ArrayList
 
 class TaggedMatchesOverviewActivity : AppCompatActivity() {
+
+    companion object {
+        private const val CREATE_EXPORT_FILE = 1
+    }
+
+    var matchSelectedForExport: Match? = null
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == CREATE_EXPORT_FILE) {
+            val uri = data?.data ?: return
+            matchSelectedForExport?.let {
+                val outputStream = contentResolver.openOutputStream(uri) ?: return
+                GlobalScope.launch(Dispatchers.Main) {
+                    val xmlString = exportToSVT(it)
+                    xmlString?.let {
+                        PrintWriter(outputStream).apply {
+                            print(it)
+                            close()
+                            Toast.makeText(
+                                    this@TaggedMatchesOverviewActivity,
+                                    "Successfully exported to selected directory",
+                                    Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+            }
+
+        }
+    }
 
     private val exportController by lazy {
         val db = VideoTagDatabase.getInstance(this, lifecycleScope)
@@ -79,17 +112,14 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                             dialog.dismiss()
                         }
                         1 -> {
-                            val file = File(getExternalFilesDir(null),"export.xml")
-                            val created = file.createNewFile()
-                            GlobalScope.launch(Dispatchers.Main) {
-                                val xmlString = exportToSVT(match)
-                                xmlString?.let {
-                                    if (created) {
-                                        file.writeText(xmlString)
-                                    }
-                                }
-
+                            matchSelectedForExport = match
+                            val filename = getExportFileNameForMatch(match)
+                            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                                addCategory(Intent.CATEGORY_OPENABLE)
+                                type= "text/xml"
+                                putExtra(Intent.EXTRA_TITLE, filename)
                             }
+                            startActivityForResult(intent, CREATE_EXPORT_FILE)
                             dialog.dismiss()
                         }
                     }
@@ -116,6 +146,17 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                 }
                 .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss()}
                 .show()
+    }
+
+    private fun getExportFileNameForMatch(match: Match): String {
+        var filename: String = ""
+        match.date?.let {
+            val date = Calendar.getInstance()
+            date.time = Date(it)
+            filename = String.format("%d%02d%02d", date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
+            filename += String.format("_%02d%02d_", date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE))
+        }
+        return filename + String.format("%d_matchExport.xml" ,match.uid)
     }
 
     private suspend fun exportToSVT(match: Match): String? {
