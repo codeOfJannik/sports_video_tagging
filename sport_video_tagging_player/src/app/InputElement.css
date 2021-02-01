@@ -1,0 +1,18 @@
+input {
+    display: none;
+}
+
+.input-element {
+    display: flex;
+    margin: 16px 0px;
+    align-items: center;
+}
+
+#upload-button {
+    display: inline-block;
+    margin-right: 16px;
+}
+
+span {
+    min-width: 175px;
+}
