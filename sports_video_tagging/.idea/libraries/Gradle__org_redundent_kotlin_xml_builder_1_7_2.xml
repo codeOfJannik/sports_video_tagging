@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.redundent:kotlin-xml-builder:1.7.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.redundent/kotlin-xml-builder/1.7.2/e4b0804e958f974ea8b471101cb8145aba1babbf/kotlin-xml-builder-1.7.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.redundent/kotlin-xml-builder/1.7.2/ce52f2a19e5383da874b49e7c0de4150754d735d/kotlin-xml-builder-1.7.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.redundent/kotlin-xml-builder/1.7.2/be101826bb7ed901aa8b9d1358b442812825b0b8/kotlin-xml-builder-1.7.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
