@@ -71,8 +71,8 @@ class TaggingDatabaseTest {
     }
 
     private fun createSampleEventTypes(): List<EventType> {
-        val eventTypeA = EventType(null, "Torwurf", longTimedEvent = false, -5, playerSelection = true, attributesAllowed = true, activeEventType = true)
-        val eventTypeB = EventType(null, "gute Defensivaktion", false, -20, false, attributesAllowed = false, activeEventType = true)
+        val eventTypeA = EventType(null, "Torwurf", -5, playerSelection = true, attributesAllowed = true, activeEventType = true)
+        val eventTypeB = EventType(null, "gute Defensivaktion", -20, false, attributesAllowed = false, activeEventType = true)
         return listOf(eventTypeA, eventTypeB)
     }
 
