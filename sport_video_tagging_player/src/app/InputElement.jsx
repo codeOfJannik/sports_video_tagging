@@ -1,8 +1,7 @@
 'use strict'
 import React from "react"
-import { Input as input, Button, TextField } from "@material-ui/core";
+import { Button, TextField, Grid } from "@material-ui/core";
 import "./InputElement.css"
-import changeVideoSource from "./VideoPlayer"
 
 export class InputElement extends React.Component {
     constructor(props) {
@@ -23,8 +22,8 @@ export class InputElement extends React.Component {
 
     render() {
         return (
-            <div className="input-element">
-                <div id="upload-button">
+            <Grid container spacing={2}>
+                <Grid item xs={4} id="upload-button">
                     <label htmlFor={this.props.name}>
                         <input
                             id={this.props.name}
@@ -38,18 +37,19 @@ export class InputElement extends React.Component {
                             {this.props.buttonText}
                         </Button>
                     </label>
-                </div>
-                <TextField
-                    id="input-file-name-textfield"
-                    label={this.props.labelText}
-                    fullWidth
-                    variant="outlined"
-                    size="small"
-                    value={this.state.textFieldContent}
-                    InputProps={{
-                        readOnly: true,
-                    }} />
-            </div>
+                </Grid>
+                <Grid item xs={8}>
+                    <TextField
+                        label={this.props.labelText}
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                        value={this.state.textFieldContent}
+                        InputProps={{
+                            readOnly: true,
+                        }} />
+                </Grid>
+            </Grid>
         )
     }
 }

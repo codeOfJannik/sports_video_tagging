@@ -18,7 +18,11 @@ export class FileControlPanel extends React.Component {
                     buttonText="Upload Video"
                     labelText="Video File"
                     selectionHandler={this.handleVideoSelection} />
-                <InputElement name="upload-tagging-file" accepted=".svt" buttonText="Upload Tagging File" labelText="Tagging File" />
+                <InputElement
+                    name="upload-tagging-file"
+                    accepted=".svt"
+                    buttonText="Upload Tagging File"
+                    labelText="Tagging File" />
             </form>
         )
     }

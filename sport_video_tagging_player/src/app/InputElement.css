@@ -1,18 +1,12 @@
 input {
     display: none;
-}
-
-.input-element {
-    display: flex;
-    margin: 16px 0px;
-    align-items: center;
-}
-
-#upload-button {
-    display: inline-block;
-    margin-right: 16px;
+    width: 100%;
 }
 
 span {
-    min-width: 175px;
+    width: 100%;
+}
+
+label {
+    width: 100%;
 }
