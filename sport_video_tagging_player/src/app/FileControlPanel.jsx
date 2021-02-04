@@ -9,6 +9,10 @@ export class FileControlPanel extends React.Component {
         this.props.videoSelectionHandler(sourceFile)
     }
 
+    handleTaggingFileSelection = (taggingFile) => {
+        this.props.taggingFileSelectionHandler(taggingFile)
+    }
+
     render() {
         return (
             <form id="file-input-form">
@@ -22,7 +26,7 @@ export class FileControlPanel extends React.Component {
                     name="upload-tagging-file"
                     accepted=".svt"
                     buttonText="Upload Tagging File"
-                    labelText="Tagging File" />
+                    labelText="Tagging File" selectionHandler={this.handleTaggingFileSelection} />
             </form>
         )
     }

@@ -4,13 +4,23 @@ import { VideoPlayer } from './VideoPlayer'
 import { FileControlPanel } from "./FileControlPanel";
 import { Grid } from '@material-ui/core';
 import { VideoTagsSyncElement } from "./VideoTagsSyncElement";
+import { readXML } from "./TaggingImport"
 
 export class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             videoSrc: "",
-            taggingStartTime: 0
+            taggingStartTime: 0,
+            matchEvents: [],
+            homeTeam: "",
+            awayTeam: "",
+            players: {
+                home: [],
+                away: []
+            },
+            eventTypes: [],
+            attributes: []
         };
     }
 
@@ -24,6 +34,11 @@ export class App extends React.Component {
             };
             return newState
         })
+    }
+
+    handleTaggingFileSelection = (taggingFile) => {
+        readXML(taggingFile)
+        // TODO: parse xml and save data in state
     }
 
     handleVideoTagSync = (videoSeconds) => {
@@ -47,7 +62,7 @@ export class App extends React.Component {
                     <VideoPlayer sourceFile={this.state.videoSrc} />
                 </Grid>
                 <Grid item xs={8}>
-                    <FileControlPanel videoSelectionHandler={this.handleVideoFileSelection} />
+                    <FileControlPanel videoSelectionHandler={this.handleVideoFileSelection} taggingFileSelectionHandler={this.handleTaggingFileSelection} />
                 </Grid>
                 <Grid item xs={4}>
                     <VideoTagsSyncElement onVideoTimeSynced={this.handleVideoTagSync} />
