@@ -24,6 +24,25 @@ export class App extends React.Component {
         };
     }
 
+    taggingFormattedCallback = (taggingDataObject) => {
+        this.setState(previousState => {
+            const players = {
+                home: taggingDataObject.allPlayers.home,
+                away: taggingDataObject.allPlayers.away
+            }
+            const newState = {
+                ...previousState,
+                matchEvents: taggingDataObject.matchEvents,
+                homeTeam: taggingDataObject.homeTeam,
+                awayTeam: taggingDataObject.awayTeam,
+                players: players,
+                eventTypes: taggingDataObject.allEventTypes,
+                attributes: taggingDataObject.allAttributes
+            };
+            return newState
+        })
+    }
+
     handleVideoFileSelection = (sourceFile) => {
         const fileURL = URL.createObjectURL(sourceFile)
         console.log("created file URL: " + fileURL)
@@ -37,8 +56,7 @@ export class App extends React.Component {
     }
 
     handleTaggingFileSelection = (taggingFile) => {
-        readXML(taggingFile)
-        // TODO: parse xml and save data in state
+        readXML(taggingFile, this.taggingFormattedCallback)
     }
 
     handleVideoTagSync = (videoSeconds) => {
