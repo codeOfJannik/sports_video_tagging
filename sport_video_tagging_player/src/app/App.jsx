@@ -5,6 +5,7 @@ import { FileControlPanel } from "./FileControlPanel";
 import { Grid } from '@material-ui/core';
 import { VideoTagsSyncElement } from "./VideoTagsSyncElement";
 import { readXML } from "./TaggingImport"
+import { EventList } from './EventList';
 
 export class App extends React.Component {
     constructor(props) {
@@ -13,6 +14,7 @@ export class App extends React.Component {
             videoSrc: "",
             taggingStartTime: 0,
             matchEvents: [],
+            filteredEvents: [],
             homeTeam: "",
             awayTeam: "",
             players: {
@@ -33,11 +35,12 @@ export class App extends React.Component {
             const newState = {
                 ...previousState,
                 matchEvents: taggingDataObject.matchEvents,
+                filteredEvents: taggingDataObject.matchEvents,
                 homeTeam: taggingDataObject.homeTeam,
                 awayTeam: taggingDataObject.awayTeam,
                 players: players,
                 eventTypes: taggingDataObject.allEventTypes,
-                attributes: taggingDataObject.allAttributes
+                attributes: taggingDataObject.allAttributes,
             };
             return newState
         })
@@ -78,6 +81,9 @@ export class App extends React.Component {
                 </Grid>
                 <Grid item xs={6}>
                     <VideoPlayer sourceFile={this.state.videoSrc} />
+                </Grid>
+                <Grid item xs={6} >
+                    <EventList events={this.state.filteredEvents} />
                 </Grid>
                 <Grid item xs={8}>
                     <FileControlPanel videoSelectionHandler={this.handleVideoFileSelection} taggingFileSelectionHandler={this.handleTaggingFileSelection} />
