@@ -22,7 +22,8 @@ export class App extends React.Component {
                 away: []
             },
             eventTypes: [],
-            attributes: []
+            attributes: [],
+            videoTimestamp: 0
         };
     }
 
@@ -72,6 +73,17 @@ export class App extends React.Component {
         })
     }
 
+    handleEventSelected = (matchEvent) => {
+        console.log("Selected Event with Timestamp: " + matchEvent.timeOffset)
+        this.setState(previousState => {
+            const newState = {
+                ...previousState,
+                videoTimestamp: parseInt(this.state.taggingStartTime) + parseInt(matchEvent.timeOffset)
+            };
+            return newState
+        })
+    }
+
     render() {
         return (
             <Grid container spacing={2}>
@@ -80,10 +92,10 @@ export class App extends React.Component {
                     <p>Video Player for Syncing and Playback of Videos with Live Tagging Data</p>
                 </Grid>
                 <Grid item xs={6}>
-                    <VideoPlayer sourceFile={this.state.videoSrc} />
+                    <VideoPlayer sourceFile={this.state.videoSrc} timestamp={this.state.videoTimestamp} />
                 </Grid>
                 <Grid item xs={6} >
-                    <EventList events={this.state.filteredEvents} />
+                    <EventList events={this.state.filteredEvents} eventSelected={this.handleEventSelected} />
                 </Grid>
                 <Grid item xs={8}>
                     <FileControlPanel videoSelectionHandler={this.handleVideoFileSelection} taggingFileSelectionHandler={this.handleTaggingFileSelection} />

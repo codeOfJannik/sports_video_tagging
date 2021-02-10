@@ -15,3 +15,19 @@
     height: 100%;
     resize: both;
 }
+
+#time-offset-grid-item {
+    text-align: right;
+    align-items: right;
+    vertical-align: top;
+}
+
+#time-offset-grid-item div {
+    margin-block-start: 6px;
+    margin-block-end: 6px;
+}
+
+#time-offset-grid-item div p {
+    margin-block-start: 0px;
+    margin-block-end: 5px;
+}
