@@ -50,7 +50,7 @@ export class VideoTagsSyncElement extends React.Component {
         return (
             <Grid container spacing={1}>
                 <Grid item xs={12}>
-                    <h1>Sync Tagging Data with Video</h1>
+                    <h1 className="in-grid" >Sync Tagging Data with Video</h1>
                 </Grid>
                 <Grid item xd={12}>
                     Enter the timecode of the video when the live tagging has started (prob. Match Start)

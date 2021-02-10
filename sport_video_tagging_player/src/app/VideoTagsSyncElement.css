@@ -1,8 +1,8 @@
-h1 {
-    font-size: 18px;
-    margin: 0 0;
-}
-
 Button {
     width: 100%;
+}
+
+.in-grid {
+    font-size: 18px;
+    margin: 0 0;
 }

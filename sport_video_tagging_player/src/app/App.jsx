@@ -1,11 +1,12 @@
 'use strict';
 import React from 'react';
-import { VideoPlayer } from './VideoPlayer'
+import { VideoPlayer } from './VideoPlayer';
 import { FileControlPanel } from "./FileControlPanel";
 import { Grid } from '@material-ui/core';
 import { VideoTagsSyncElement } from "./VideoTagsSyncElement";
-import { readXML } from "./TaggingImport"
+import { readXML } from "./TaggingImport";
 import { EventList } from './EventList';
+import './App.css'
 
 export class App extends React.Component {
     constructor(props) {
@@ -98,6 +99,7 @@ export class App extends React.Component {
                     <EventList events={this.state.filteredEvents} eventSelected={this.handleEventSelected} />
                 </Grid>
                 <Grid item xs={8}>
+                    <h1 className="sub-header" >Select Video File and corresponding Live Tagging File</h1>
                     <FileControlPanel videoSelectionHandler={this.handleVideoFileSelection} taggingFileSelectionHandler={this.handleTaggingFileSelection} />
                 </Grid>
                 <Grid item xs={4}>
