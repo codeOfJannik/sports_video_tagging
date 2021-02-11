@@ -2,11 +2,14 @@
 import React from 'react';
 import { VideoPlayer } from './VideoPlayer';
 import { FileControlPanel } from "./FileControlPanel";
-import { Grid } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import { VideoTagsSyncElement } from "./VideoTagsSyncElement";
 import { readXML } from "./TaggingImport";
 import { EventList } from './EventList';
+import { FilterList } from './FilterList';
+import { PlayersFilter } from "./PlayersFilter";
 import './App.css'
+
 
 export class App extends React.Component {
     constructor(props) {
@@ -24,7 +27,10 @@ export class App extends React.Component {
             },
             eventTypes: [],
             attributes: [],
-            videoTimestamp: 0
+            videoTimestamp: 0,
+            selectedFilterEventTypes: new Set(),
+            selectedFilterAttributes: new Set(),
+            selectedFilterPlayers: [new Set(), new Set()]
         };
     }
 
@@ -85,6 +91,30 @@ export class App extends React.Component {
         })
     }
 
+    handleFilterEventTypesChanged = (selectedItems) => {
+        this.setState(previousState => {
+            const newState = {
+                ...previousState,
+                selectedFilterEventTypes: selectedItems
+            };
+            return newState
+        })
+    }
+
+    handleFilterAttributesChanged = (selectedItems) => {
+        this.setState(previousState => {
+            const newState = {
+                ...previousState,
+                selectedFilterAttributes: selectedItems
+            };
+            return newState
+        })
+    }
+
+    filterEventList = () => {
+        // TODO: apply filters on Event List
+    }
+
     render() {
         return (
             <Grid container spacing={2}>
@@ -104,6 +134,33 @@ export class App extends React.Component {
                 </Grid>
                 <Grid item xs={4}>
                     <VideoTagsSyncElement onVideoTimeSynced={this.handleVideoTagSync} />
+                </Grid>
+                <Grid item xs={6}>
+                    <h1 >Filter Events</h1>
+                </Grid>
+                <Grid item xs={6}>
+                    <Button id="reset-filter-button">Reset All Filters</Button>
+                </Grid>
+                <Grid item xs={4}>
+                    <FilterList
+                        listType="Event Type"
+                        listElements={this.state.eventTypes}
+                        selectedItems={this.state.selectedFilterEventTypes}
+                        handleFilterItemsChanged={this.handleFilterEventTypesChanged} />
+                </Grid>
+                <Grid item xs={4}>
+                    <FilterList
+                        listType="Attributes"
+                        listElements={this.state.attributes}
+                        selectedItems={this.state.selectedFilterAttributes}
+                        handleFilterItemsChanged={this.handleFilterAttributesChanged} />
+                </Grid>
+                <Grid item xs={4}>
+                    <PlayersFilter
+                        homeTeam={this.state.homeTeam}
+                        awayTeam={this.state.awayTeam}
+                        players={this.state.players}
+                        selectedPlayers={this.state.selectedFilterPlayers} />
                 </Grid>
             </Grid>
         )

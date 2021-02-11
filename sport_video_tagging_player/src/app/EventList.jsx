@@ -12,7 +12,7 @@ export class EventList extends React.Component {
     render() {
         return (
             <div id="container">
-                <List id="list">
+                <List id="event-list">
                     {this.props.events.map((item, index) => {
                         return (
                             <ListItem

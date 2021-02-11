@@ -38,6 +38,18 @@ function isPlayerInList(player, list) {
     return false
 }
 
+function comparePlayersByJerseyNum(a, b) {
+    return a.jerseyNumber - b.jerseyNumber
+}
+
+function sortMatchPlayers(unsorted) {
+    let matchPlayers = {
+        home: unsorted.home.sort(comparePlayersByJerseyNum),
+        away: unsorted.away.sort(comparePlayersByJerseyNum)
+    }
+    return matchPlayers
+}
+
 function formatJSON(json) {
     let matchEvents = []
     let matchPlayers = {
@@ -99,7 +111,7 @@ function formatJSON(json) {
     }
     return {
         matchEvents: matchEvents,
-        allPlayers: matchPlayers,
+        allPlayers: sortMatchPlayers(matchPlayers),
         allAttributes: attributes,
         allEventTypes: eventTypes,
         homeTeam: homeTeam,
