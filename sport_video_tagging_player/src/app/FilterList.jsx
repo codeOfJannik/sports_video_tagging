@@ -14,7 +14,9 @@ export class FilterList extends React.Component {
     }
 
     handleResetClick = () => {
-        this.props.handleFilterItemsChanged(new Set())
+        let selectedItems = this.props.selectedItems
+        selectedItems.clear()
+        this.props.handleFilterItemsChanged(selectedItems)
     }
 
     render() {

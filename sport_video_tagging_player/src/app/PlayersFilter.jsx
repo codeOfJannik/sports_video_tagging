@@ -20,8 +20,24 @@ export class PlayersFilter extends React.Component {
         })
     }
 
-    //TODO: add function for selection of players
-    //TODO: uplift selected Players
+    handlePlayerSelected = (item, tabValue) => {
+        let selectedPlayers = this.props.selectedPlayers
+        let team = selectedPlayers[tabValue]
+        if (team.has(item)) {
+            team.delete(item)
+        } else {
+            team.add(item)
+        }
+        selectedPlayers[tabValue] = team
+        this.props.handleFilterPlayersChanged(selectedPlayers)
+    }
+
+    handleResetClick = () => {
+        let selectedPlayers = this.props.selectedPlayers
+        selectedPlayers[0].clear()
+        selectedPlayers[1].clear()
+        this.props.handleFilterPlayersChanged(selectedPlayers)
+    }
 
     render() {
         let playerElements = []
@@ -33,7 +49,9 @@ export class PlayersFilter extends React.Component {
         return (
             <React.Fragment>
                 <h2>Filter by Players</h2>
-                <Button id="reset-filter-button">Clear Player Filter</Button>
+                <Button
+                    id="reset-filter-button"
+                    onClick={() => this.handleResetClick()}>Clear Player Filter</Button>
                 <Paper square>
                     <Tabs
                         value={this.state.tabValue}

@@ -5,6 +5,7 @@ import { FileControlPanel } from "./FileControlPanel";
 import { Grid, Button } from '@material-ui/core';
 import { VideoTagsSyncElement } from "./VideoTagsSyncElement";
 import { readXML } from "./TaggingImport";
+import { listContainsAllElements, eventContainsPlayers } from "./Utilities";
 import { EventList } from './EventList';
 import { FilterList } from './FilterList';
 import { PlayersFilter } from "./PlayersFilter";
@@ -99,6 +100,7 @@ export class App extends React.Component {
             };
             return newState
         })
+        this.filterEventList()
     }
 
     handleFilterAttributesChanged = (selectedItems) => {
@@ -109,11 +111,55 @@ export class App extends React.Component {
             };
             return newState
         })
+        this.filterEventList()
+    }
+
+    handleFilterPlayersChanged = (selectedPlayers) => {
+        this.setState(previousState => {
+            const newState = {
+                ...previousState,
+                selectedFilterPlayers: selectedPlayers
+            };
+            return newState
+        })
+        this.filterEventList()
+    }
+
+    handleOnResetAllFiltersClick = () => {
+        this.setState(previousState => {
+            const newState = {
+                ...previousState,
+                filteredEvents: this.state.matchEvents,
+                selectedFilterEventTypes: new Set(),
+                selectedFilterAttributes: new Set(),
+                selectedFilterPlayers: [new Set(), new Set()]
+            };
+            return newState
+        })
     }
 
     filterEventList = () => {
-        // TODO: apply filters on Event List
+        let filteredList = this.state.matchEvents
+        if (this.state.selectedFilterEventTypes.size > 0) {
+            filteredList = filteredList.filter(event => this.state.selectedFilterEventTypes.has(event.eventType))
+        }
+        if (this.state.selectedFilterAttributes.size > 0) {
+            filteredList = filteredList.filter(event =>
+                listContainsAllElements(event.attributes, this.state.selectedFilterAttributes)
+            )
+        }
+        if (this.state.selectedFilterPlayers[0].size > 0 || this.state.selectedFilterPlayers[1].size > 0) {
+            filteredList = filteredList.filter(event => eventContainsPlayers(event, this.state.selectedFilterPlayers))
+        }
+        this.setState(previousState => {
+            const newState = {
+                ...previousState,
+                filteredEvents: filteredList
+            };
+            return newState
+        })
     }
+
 
     render() {
         return (
@@ -139,7 +185,10 @@ export class App extends React.Component {
                     <h1 >Filter Events</h1>
                 </Grid>
                 <Grid item xs={6}>
-                    <Button id="reset-filter-button">Reset All Filters</Button>
+                    <Button
+                        id="reset-filter-button"
+                        onClick={() => this.handleOnResetAllFiltersClick()}
+                    >Reset All Filters</Button>
                 </Grid>
                 <Grid item xs={4}>
                     <FilterList
@@ -160,7 +209,8 @@ export class App extends React.Component {
                         homeTeam={this.state.homeTeam}
                         awayTeam={this.state.awayTeam}
                         players={this.state.players}
-                        selectedPlayers={this.state.selectedFilterPlayers} />
+                        selectedPlayers={this.state.selectedFilterPlayers}
+                        handleFilterPlayersChanged={this.handleFilterPlayersChanged} />
                 </Grid>
             </Grid>
         )
