@@ -75,11 +75,11 @@ class EventTypesAdapter(private val context: Context, var allEventTypes: List<Ev
                         if (item.attributesAllowed) R.drawable.ic_baseline_check_24 else R.drawable.ic_baseline_clear_24
                 )
 
-                val activeCheckBox = view.findViewById<CheckBox>(R.id.activeEventTypeCheckBox)
-                activeCheckBox.isChecked = item.activeEventType
-                activeCheckBox.setOnCheckedChangeListener { _, isChecked ->
-                    eventTypeChangedListener.onEventTypeActiveChanged(item, isChecked)
-                }
+                // val activeCheckBox = view.findViewById<CheckBox>(R.id.activeEventTypeCheckBox)
+                // activeCheckBox.isChecked = item.activeEventType
+                // activeCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                //     eventTypeChangedListener.onEventTypeActiveChanged(item, isChecked)
+                // }
             }
             is LongTimedEventType -> {
                 if (convertView == null || convertView.tag != 1) {
@@ -96,11 +96,11 @@ class EventTypesAdapter(private val context: Context, var allEventTypes: List<Ev
                         text = item.eventBTitle
                     }
                 }
-                val activeCheckBox = view.findViewById<CheckBox>(R.id.activeEventTypeCheckBox)
-                activeCheckBox.isChecked = item.activeEventType
-                activeCheckBox.setOnCheckedChangeListener { _, isChecked ->
-                    eventTypeChangedListener.onEventTypeActiveChanged(item, isChecked)
-                }
+                // val activeCheckBox = view.findViewById<CheckBox>(R.id.activeEventTypeCheckBox)
+                // activeCheckBox.isChecked = item.activeEventType
+                // activeCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                //     eventTypeChangedListener.onEventTypeActiveChanged(item, isChecked)
+                // }
             }
         }
         return view
