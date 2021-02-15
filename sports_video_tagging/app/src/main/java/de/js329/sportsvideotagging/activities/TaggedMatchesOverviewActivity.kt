@@ -300,7 +300,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                                                 }
                                             }
                                             if (awayPlayers is List<*> && awayPlayers.isNotEmpty()) {
-                                                "awayPlayers" {
+                                                "awayTeamPlayers" {
                                                     for (player in awayPlayers.filterIsInstance<Player>()) {
                                                         "player" {
                                                             player.name?.let {
