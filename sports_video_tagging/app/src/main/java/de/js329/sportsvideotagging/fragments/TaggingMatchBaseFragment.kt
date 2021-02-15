@@ -150,7 +150,8 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
         val layoutManager = GridLayoutManager(activity, 2)
         longTimedEventsRecyclerView = view.findViewById(R.id.longTimedEventsRecyclerView)
         lifecycleScope.launch {
-            val longTimedEventTypes = matchTaggingController.getLongTimedEventTypes()
+            val longTimedEventTypes = matchTaggingController.getLongTimedEventTypes().toMutableList()
+            longTimedEventTypes.removeIf { !it.activeEventType }
             longTimedEventAdapter = LongTimedEventTypesAdapter(this@TaggingMatchBaseFragment, longTimedEventTypes, ArrayList(selectedLongTimedItemsIndeces), requireContext())
             longTimedEventsRecyclerView.adapter = longTimedEventAdapter
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -244,6 +245,7 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
     private fun setEventTypes(eventTypes: List<EventType>) {
         val tempList = eventTypes.toMutableList()
         tempList.removeIf { it.eventTitle == "Match Start" }
+        tempList.removeIf { !it.activeEventType }
         this.eventTypes = tempList
     }
 

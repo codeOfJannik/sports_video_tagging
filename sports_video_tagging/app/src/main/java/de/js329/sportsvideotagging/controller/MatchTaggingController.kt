@@ -95,7 +95,7 @@ class MatchTaggingController(
                 null,
                 matchId,
                 ++eventOrderNum,
-                timestamp,
+                timestamp + eventType.timeOffset,
                 eventTypeId
         )
         return true
