@@ -11,6 +11,7 @@
             <xs:sequence>
                 <xs:element name="match" type="Match"/>
             </xs:sequence>
+            <xs:anyAttribute processContents="skip"/>
         </xs:complexType>
     </xs:element>
 
