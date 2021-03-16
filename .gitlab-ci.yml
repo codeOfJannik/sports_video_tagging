@@ -19,6 +19,6 @@ pages:
     - ls -la public
   artifacts:
     paths:
-      - public
+      - sport_video_tagging_player/public
   only:
     - master
