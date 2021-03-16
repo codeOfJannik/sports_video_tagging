@@ -15,10 +15,10 @@ pages:
     - npm run build
     - rm -rf public
     - ls -la dist
-    - mv dist public
-    - ls -la public
+    - mv dist ../public
+    - ls -la ../public
   artifacts:
     paths:
-      - sport_video_tagging_player/public
+      - public
   only:
     - master
