@@ -1,0 +1,22 @@
+image: node:10 # change to match your node version
+
+cache:
+  paths:
+    - sport_video_tagging_player/node_modules/
+
+before_script:
+  - cd sport_video_tagging_player
+  - rm -rf dist
+  - npm install
+
+pages:
+  stage: deploy
+  script:
+    - npm run publish-demo
+    - rm -rf public
+    - mv dist public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
