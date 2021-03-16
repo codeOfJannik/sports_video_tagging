@@ -16,6 +16,7 @@ pages:
     - rm -rf public
     - ls -la dist
     - mv dist public
+    - ls -la public
   artifacts:
     paths:
       - public
