@@ -11,6 +11,7 @@
             <xs:sequence>
                 <xs:element name="match" type="Match"/>
             </xs:sequence>
+            <xs:anyAttribute processContents="skip"/>
         </xs:complexType>
     </xs:element>
 
@@ -42,9 +43,9 @@
             <xs:element name="eventAttributes" type="EventAttributes" minOccurs="0"/>
             <xs:element name="players" type="InvolvedPlayers"/>
         </xs:sequence>
-        <xs:attribute name="eventTitle" type="xs:string"/>
-        <xs:attribute name="matchEventOrderNum" type="xs:int"/>
-        <xs:attribute name="matchEventTimeOffset" type="xs:long"/>
+        <xs:attribute name="eventTitle" type="xs:string" use="required"/>
+        <xs:attribute name="matchEventOrderNum" type="xs:int" use="required"/>
+        <xs:attribute name="matchEventTimeOffset" type="xs:long" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="EventAttributes">
@@ -68,6 +69,6 @@
 
     <xs:complexType name="Player">
         <xs:attribute name="playerName" type="xs:string"/>
-        <xs:attribute name="jerseyNumber" type="xs:int"/>
+        <xs:attribute name="jerseyNumber" type="xs:int" use="required"/>
     </xs:complexType>
 </xs:schema>
