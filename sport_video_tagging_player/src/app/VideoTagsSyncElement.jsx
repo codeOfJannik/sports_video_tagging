@@ -1,7 +1,6 @@
 'use strict'
 import React from 'react'
 import { Grid, TextField, Button } from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
 import "./VideoTagsSyncElement.css"
 
 const inputProps = { inputProps: { min: 0 } }
@@ -58,7 +57,7 @@ export class VideoTagsSyncElement extends React.Component {
                 <Grid item xs={6}>
                     <TextField
                         disabled={this.state.disabled}
-                        name="minute"
+                        name="minutes"
                         label="Minutes"
                         type="number"
                         variant="outlined"
@@ -71,7 +70,7 @@ export class VideoTagsSyncElement extends React.Component {
                 <Grid item xs={6}>
                     <TextField
                         disabled={this.state.disabled}
-                        name="second"
+                        name="seconds"
                         label="Seconds"
                         type="number"
                         variant="outlined"
