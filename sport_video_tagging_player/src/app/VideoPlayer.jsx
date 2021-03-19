@@ -7,7 +7,7 @@ export class VideoPlayer extends React.Component {
         super(props);
         this.player = React.createRef()
         this.componentDidUpdate = this.componentDidUpdate.bind(this)
-        this.seek = this.jumpToTimeCode.bind(this)
+        this.jumpToTimeCode = this.jumpToTimeCode.bind(this)
     }
 
     componentDidUpdate(prevProps) {
