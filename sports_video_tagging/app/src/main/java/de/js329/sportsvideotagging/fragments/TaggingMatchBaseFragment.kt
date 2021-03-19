@@ -125,9 +125,9 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
         }
 
         timerTextView.text = getString(R.string.noTimerStarted_TextViewValue)
-        tagCounter.text = getString(R.string.tagCounterTextViewValue, matchTaggingController.eventOrderNum)
+        tagCounter.text = getString(R.string.tagCounterTextViewValue, matchTaggingController.eventSequenceNum)
 
-        undoButton.isVisible = matchTaggingController.eventOrderNum > 0
+        undoButton.isVisible = matchTaggingController.eventSequenceNum > 0
         undoButton.setOnClickListener { onUndoButtonClicked() }
     }
 
@@ -198,8 +198,8 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
     private fun onUndoButtonClicked() {
         lifecycleScope.launch {
             matchTaggingController.deleteLastMatchEvent()
-            tagCounter.text = getString(R.string.tagCounterTextViewValue, matchTaggingController.eventOrderNum)
-            undoButton.isVisible = matchTaggingController.eventOrderNum > 0
+            tagCounter.text = getString(R.string.tagCounterTextViewValue, matchTaggingController.eventSequenceNum)
+            undoButton.isVisible = matchTaggingController.eventSequenceNum > 0
         }
     }
 

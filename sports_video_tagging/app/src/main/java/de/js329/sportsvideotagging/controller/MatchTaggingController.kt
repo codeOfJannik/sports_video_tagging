@@ -16,7 +16,7 @@ class MatchTaggingController(
     var match: Match? = null
     private var matchEvents: MutableList<MatchEvent> = ArrayList()
     private var latestMatchEvent: MatchEvent? = null
-    var eventOrderNum = 0
+    var eventSequenceNum = 0
     lateinit var homeTeam: Team
     lateinit var guestTeam: Team
 
@@ -76,7 +76,7 @@ class MatchTaggingController(
                 val startEvent = MatchEvent(
                         null,
                         matchId,
-                        eventOrderNum,
+                        eventSequenceNum,
                         timestamp,
                         uid
                 )
@@ -94,7 +94,7 @@ class MatchTaggingController(
         latestMatchEvent = MatchEvent(
                 null,
                 matchId,
-                ++eventOrderNum,
+                ++eventSequenceNum,
                 timestamp + eventType.timeOffset,
                 eventTypeId
         )
@@ -104,7 +104,7 @@ class MatchTaggingController(
     suspend fun createLongTimedMatchEvent(longTimedEventType: LongTimedEventType, timestamp: Long, isSwitched: Boolean) :Boolean {
         val matchId = match?.uid ?: return false
         val eventTypeId = longTimedEventType.uid ?: return false
-        val longTimedMatchEvent = MatchLongTimedEvent(null, matchId, ++eventOrderNum, timestamp, eventTypeId, isSwitched)
+        val longTimedMatchEvent = MatchLongTimedEvent(null, matchId, ++eventSequenceNum, timestamp, eventTypeId, isSwitched)
         longTimedMatchEvent.matchLongTimedEventId = eventDao.insert(longTimedMatchEvent)
         return true
     }
@@ -120,7 +120,7 @@ class MatchTaggingController(
             }
             deleteFollowingEventIfPresent()
         }
-        eventOrderNum -= 1
+        eventSequenceNum -= 1
         latestMatchEvent = null
     }
 
@@ -131,7 +131,7 @@ class MatchTaggingController(
                 matchEvent.followingEventId = null
                 eventDao.update(matchEvent)
                 eventDao.deleteMatchEventById(it)
-                eventOrderNum -= 1
+                eventSequenceNum -= 1
             }
         }
     }
@@ -140,10 +140,10 @@ class MatchTaggingController(
         val lastAddedEvent = matchEvents.removeLastOrNull()
         lastAddedEvent?.let { matchEvent ->
             eventDao.delete(matchEvent)
-            eventOrderNum -= 1
+            eventSequenceNum -= 1
             matchEvent.followingEventId?.let {
                 eventDao.deleteMatchEventById(it)
-                eventOrderNum -= 1
+                eventSequenceNum -= 1
             }
         }
     }
@@ -188,7 +188,7 @@ class MatchTaggingController(
             val followUpEvent = MatchEvent(
                     null,
                     matchId,
-                    ++eventOrderNum,
+                    ++eventSequenceNum,
                     it.eventTimestamp,
                     eventTypeId
             )

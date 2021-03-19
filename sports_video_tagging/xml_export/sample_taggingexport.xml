@@ -9,10 +9,10 @@
         <homeTeam>HSG Ostfildern</homeTeam>
         <guestTeam>SG Hegensberg-Liebersbronn</guestTeam>
         <matchEvents>
-            <matchEvent eventTitle="Match Start" matchEventOrderNum="0" matchEventTimeOffset="0">
+            <matchEvent eventTitle="Match Start" matchEventSequenceNum="0" matchEventTimeOffset="0">
                 <players/>
             </matchEvent>
-            <matchEvent eventTitle="Torwurf" matchEventOrderNum="1" matchEventTimeOffset="34">
+            <matchEvent eventTitle="Torwurf" matchEventSequenceNum="1" matchEventTimeOffset="34">
                 <eventAttributes>
                     <attribute>Ballbesitz Heim</attribute>
                     <attribute>Rückraum</attribute>
@@ -24,7 +24,7 @@
                     </homeTeamPlayers>
                 </players>
             </matchEvent>
-            <matchEvent eventTitle="gute Defensivaktion" matchEventOrderNum="2" matchEventTimeOffset="57">
+            <matchEvent eventTitle="gute Defensivaktion" matchEventSequenceNum="2" matchEventTimeOffset="57">
                 <eventAttributes>
                     <attribute>Ballbesitz Auswärts</attribute>
                     <attribute>Rückraum</attribute>
@@ -41,7 +41,7 @@
                     </guestTeamPlayers>
                 </players>
             </matchEvent>
-            <matchEvent eventTitle="Konter" matchEventOrderNum="3" matchEventTimeOffset="63">
+            <matchEvent eventTitle="Konter" matchEventSequenceNum="3" matchEventTimeOffset="63">
                 <eventAttributes>
                     <attribute>Ballbesitz Heim</attribute>
                     <attribute>Tor</attribute>

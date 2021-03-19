@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "5b4f65fbf86a83723d007225e0dff95f",
+    "identityHash": "18a937c6ab9a1e2d0e7a72756caf55ac",
     "entities": [
       {
         "tableName": "Match",
@@ -251,7 +251,7 @@
       },
       {
         "tableName": "MatchEvent",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`matchEventId` INTEGER PRIMARY KEY AUTOINCREMENT, `match` INTEGER NOT NULL, `match_order_number` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `event_type` INTEGER NOT NULL, `following_event` INTEGER, FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`following_event`) REFERENCES `MatchEvent`(`matchEventId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`event_type`) REFERENCES `EventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`matchEventId` INTEGER PRIMARY KEY AUTOINCREMENT, `match` INTEGER NOT NULL, `match_sequence_number` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `event_type` INTEGER NOT NULL, `following_event` INTEGER, FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`following_event`) REFERENCES `MatchEvent`(`matchEventId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`event_type`) REFERENCES `EventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "matchEventId",
@@ -266,8 +266,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "matchEventOrderNumber",
-            "columnName": "match_order_number",
+            "fieldPath": "matchEventSequenceNumber",
+            "columnName": "match_sequence_number",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -433,7 +433,7 @@
       },
       {
         "tableName": "MatchLongTimedEvent",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`matchLongTimedEventId` INTEGER PRIMARY KEY AUTOINCREMENT, `match` INTEGER NOT NULL, `match_order_number` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `event_type` INTEGER NOT NULL, `switched_to_event_b` INTEGER NOT NULL, FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`event_type`) REFERENCES `LongTimedEventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`matchLongTimedEventId` INTEGER PRIMARY KEY AUTOINCREMENT, `match` INTEGER NOT NULL, `match_sequence_number` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `event_type` INTEGER NOT NULL, `switched_to_event_b` INTEGER NOT NULL, FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`event_type`) REFERENCES `LongTimedEventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "matchLongTimedEventId",
@@ -448,8 +448,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "matchLongTimedEventOrderNumber",
-            "columnName": "match_order_number",
+            "fieldPath": "matchLongTimedEventSequenceNumber",
+            "columnName": "match_sequence_number",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -508,7 +508,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5b4f65fbf86a83723d007225e0dff95f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '18a937c6ab9a1e2d0e7a72756caf55ac')"
     ]
   }
 }

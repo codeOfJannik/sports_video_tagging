@@ -28,7 +28,7 @@ import java.lang.Exception
         LongTimedEventType::class,
         MatchLongTimedEvent::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = true
 )
 @TypeConverters(DateConverter::class)
@@ -47,7 +47,7 @@ abstract class VideoTagDatabase: RoomDatabase() {
                 database.execSQL("""CREATE TABLE IF NOT EXISTS MatchEvent_New (
                     `matchEventId` INTEGER PRIMARY KEY AUTOINCREMENT,
                     `match` INTEGER NOT NULL,
-                    `match_order_number` INTEGER NOT NULL,
+                    `match_sequence_number` INTEGER NOT NULL,
                     `timestamp` INTEGER NOT NULL,
                     `event_type` INTEGER NOT NULL,
                     `following_event` INTEGER,
@@ -83,26 +83,26 @@ abstract class VideoTagDatabase: RoomDatabase() {
                 database.execSQL("""CREATE TABLE IF NOT EXISTS MatchEvent_New (
                     `matchEventId` INTEGER PRIMARY KEY AUTOINCREMENT,
                     `match` INTEGER NOT NULL,
-                    `match_order_number` INTEGER NOT NULL,
+                    `match_sequence_number` INTEGER NOT NULL,
                     `timestamp` INTEGER NOT NULL,
                     `event_type` INTEGER NOT NULL,
                     `following_event` INTEGER,
                     FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE ,
                     FOREIGN KEY(`following_event`) REFERENCES `MatchEvent`(`matchEventId`) ON UPDATE NO ACTION ON DELETE CASCADE,
                     FOREIGN KEY(`event_type`) REFERENCES `EventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE)"""
-                        .trimIndent())
+                    .trimIndent())
                 database.execSQL("INSERT INTO MatchEvent_New SELECT * FROM MatchEvent")
                 database.execSQL("DROP TABLE MatchEvent")
                 database.execSQL("ALTER TABLE MatchEvent_New RENAME TO MatchEvent")
                 database.execSQL("""CREATE TABLE IF NOT EXISTS MatchLongTimedEvent (
                     'matchLongTimedEventId' INTEGER PRIMARY KEY AUTOINCREMENT,
                      'match' INTEGER NOT NULL,
-                      'match_order_number' INTEGER NOT NULL,
+                      'match_sequence_number' INTEGER NOT NULL,
                        'timestamp' INTEGER NOT NULL,
                         'event_type' INTEGER NOT NULL,
                          FOREIGN KEY('match') REFERENCES 'Match'('uid') ON UPDATE NO ACTION ON DELETE CASCADE,
                           FOREIGN KEY('event_type') REFERENCES 'LongTimedEventType'('uid') ON UPDATE NO ACTION ON DELETE CASCADE)"""
-                        .trimIndent())
+                    .trimIndent())
             }
         }
 
@@ -141,6 +141,53 @@ abstract class VideoTagDatabase: RoomDatabase() {
             }
         }
 
+        private val MIGRATION_6_7 = object : Migration(6,7) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                try {
+                    val matchEventCursor = database.query("SELECT * FROM MatchEvent")
+                    val longMatchEventCursor = database.query("SELECT * FROM MatchLongTimedEvent")
+                    matchEventCursor.use {
+                        if (matchEventCursor.moveToFirst()) {
+                            val cv = ContentValues()
+                            cv.put("matchEventId", matchEventCursor.getLong(matchEventCursor.getColumnIndex("matchEventId")))
+                            cv.put("match", matchEventCursor.getLong(matchEventCursor.getColumnIndex("match")))
+                            cv.put("match_sequence_number", matchEventCursor.getLong(matchEventCursor.getColumnIndex("match_order_number")))
+                            cv.put("timestamp", matchEventCursor.getLong(matchEventCursor.getColumnIndex("timestamp")))
+                            cv.put("event_type", matchEventCursor.getLong(matchEventCursor.getColumnIndex("event_type")))
+                            cv.put("following_event", matchEventCursor.getLong(matchEventCursor.getColumnIndex("following_event")))
+                            database.execSQL("DROP TABLE IF EXISTS 'MatchEvent'")
+                            createMatchEventTable(database)
+                            database.insert("MatchEvent", 0, cv)
+                        } else {
+                            database.execSQL("DROP TABLE IF EXISTS 'MatchEvent'")
+                            createMatchEventTable(database)
+                        }
+                    }
+                    longMatchEventCursor.use {
+                        if (longMatchEventCursor.moveToFirst()) {
+                            val cv = ContentValues()
+                            cv.put("matchLongTimedEventId", longMatchEventCursor.getLong((longMatchEventCursor.getColumnIndex("matchLongTimedEventId"))))
+                            cv.put("match", longMatchEventCursor.getLong((longMatchEventCursor.getColumnIndex("match"))))
+                            cv.put("match_sequence_number", longMatchEventCursor.getLong((longMatchEventCursor.getColumnIndex("match_order_number"))))
+                            cv.put("timestamp", longMatchEventCursor.getLong((longMatchEventCursor.getColumnIndex("timestamp"))))
+                            cv.put("event_type", longMatchEventCursor.getLong((longMatchEventCursor.getColumnIndex("event_type"))))
+                            cv.put("switched_to_event_b", longMatchEventCursor.getLong((longMatchEventCursor.getColumnIndex("switched_to_event_b"))))
+                            database.execSQL("DROP TABLE IF EXISTS 'MatchLongTimedEvent'")
+                            createMatchLongTimedEventTable(database)
+                            database.insert("MatchLongTimedEvent", 0, cv)
+                        } else {
+                            database.execSQL("DROP TABLE IF EXISTS 'MatchLongTimedEvent'")
+                            createMatchLongTimedEventTable(database)
+                        }
+                    }
+                } catch (e: SQLiteException) {
+                    Log.e(e.localizedMessage, "SQLLiteException in Migration from database version 6 to 7")
+                } catch (e: Exception) {
+                    Log.e(e.localizedMessage, "Failed to migrate database version 6 to version 7")
+                }
+            }
+        }
+
         private fun createMatchTable(database: SupportSQLiteDatabase) {
             database.execSQL("""CREATE TABLE IF NOT EXISTS `Match` (
             `uid` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -153,6 +200,31 @@ abstract class VideoTagDatabase: RoomDatabase() {
                    FOREIGN KEY(`guest_team`) REFERENCES `Team`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )""".trimIndent())
         }
 
+        private fun createMatchEventTable(database: SupportSQLiteDatabase) {
+            database.execSQL("""CREATE TABLE IF NOT EXISTS `MatchEvent` (
+            `matchEventId` INTEGER PRIMARY KEY AUTOINCREMENT,
+             `match` INTEGER NOT NULL,
+              `match_sequence_number` INTEGER NOT NULL,
+                `timestamp` INTEGER NOT NULL,
+                `event_type` INTEGER NOT NULL,
+                `following_event` INTEGER,
+                FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE,
+                FOREIGN KEY(`following_event`) REFERENCES `MatchEvent`(`matchEventId`) ON UPDATE NO ACTION ON DELETE CASCADE,
+                FOREIGN KEY(`event_type`) REFERENCES `EventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )""".trimIndent())
+        }
+
+        private fun createMatchLongTimedEventTable(database: SupportSQLiteDatabase) {
+            database.execSQL("""CREATE TABLE IF NOT EXISTS `MatchLongTimedEvent` (
+                `matchLongTimedEventId` INTEGER PRIMARY KEY AUTOINCREMENT,
+                 `match` INTEGER NOT NULL,
+                  `match_sequence_number` INTEGER NOT NULL,
+                   `timestamp` INTEGER NOT NULL,
+                    `event_type` INTEGER NOT NULL,
+                     `switched_to_event_b` INTEGER NOT NULL,
+                      FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE,
+                       FOREIGN KEY(`event_type`) REFERENCES `LongTimedEventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )""".trimIndent())
+        }
+
         fun getInstance(context: Context, scope: CoroutineScope): VideoTagDatabase {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(
@@ -162,7 +234,7 @@ abstract class VideoTagDatabase: RoomDatabase() {
                 )
                     .createFromAsset("database/db_v1.json")
                     .addCallback(VideoTagDatabaseCallback(scope))
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                     .build()
             }
             return INSTANCE as VideoTagDatabase

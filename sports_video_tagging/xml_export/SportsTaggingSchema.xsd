@@ -44,7 +44,7 @@
             <xs:element name="players" type="InvolvedPlayers"/>
         </xs:sequence>
         <xs:attribute name="eventTitle" type="xs:string" use="required"/>
-        <xs:attribute name="matchEventOrderNum" type="xs:int" use="required"/>
+        <xs:attribute name="matchEventSequenceNum" type="xs:int" use="required"/>
         <xs:attribute name="matchEventTimeOffset" type="xs:long" use="required"/>
     </xs:complexType>
 

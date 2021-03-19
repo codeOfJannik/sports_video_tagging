@@ -64,7 +64,7 @@ function formatJSON(json) {
     for (const matchEvent of json.svt.match[0].matchEvents[0].matchEvent) {
         let elementAttributes = matchEvent.$
         let eventTitle = elementAttributes.eventTitle
-        let orderNum = elementAttributes.matchEventOrderNum
+        let sequenceNum = elementAttributes.matchEventSequenceNum
         let timeOffset = elementAttributes.matchEventTimeOffset
         let eventPlayers = {
             home: [],
@@ -102,7 +102,7 @@ function formatJSON(json) {
         }
         let event = {
             eventType: eventTitle,
-            orderNum: orderNum,
+            sequenceNum: sequenceNum,
             timeOffset: timeOffset,
             players: eventPlayers,
             attributes: eventAttributes

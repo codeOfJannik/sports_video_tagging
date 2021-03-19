@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "d9c3d04060531b5ce5596d5c8a20de88",
+    "version": 7,
+    "identityHash": "18a937c6ab9a1e2d0e7a72756caf55ac",
     "entities": [
       {
         "tableName": "Match",
@@ -201,7 +201,7 @@
       },
       {
         "tableName": "EventType",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT, `event_title` TEXT NOT NULL, `long_time_event` INTEGER NOT NULL, `time_offset` INTEGER NOT NULL, `player_selection` INTEGER NOT NULL, `attributes_allowed` INTEGER NOT NULL, `active_type` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT, `event_title` TEXT NOT NULL, `time_offset` INTEGER NOT NULL, `player_selection` INTEGER NOT NULL, `attributes_allowed` INTEGER NOT NULL, `active_type` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -213,12 +213,6 @@
             "fieldPath": "eventTitle",
             "columnName": "event_title",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "longTimedEvent",
-            "columnName": "long_time_event",
-            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -257,7 +251,7 @@
       },
       {
         "tableName": "MatchEvent",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`matchEventId` INTEGER PRIMARY KEY AUTOINCREMENT, `match` INTEGER NOT NULL, `match_sequence_number` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `event_type` INTEGER NOT NULL, `following_event` INTEGER, FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`following_event`) REFERENCES `MatchEvent`(`matchEventId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`matchEventId` INTEGER PRIMARY KEY AUTOINCREMENT, `match` INTEGER NOT NULL, `match_sequence_number` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `event_type` INTEGER NOT NULL, `following_event` INTEGER, FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`following_event`) REFERENCES `MatchEvent`(`matchEventId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`event_type`) REFERENCES `EventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "matchEventId",
@@ -306,7 +300,7 @@
         "foreignKeys": [
           {
             "table": "Match",
-            "onDelete": "NO ACTION",
+            "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
               "match"
@@ -317,13 +311,24 @@
           },
           {
             "table": "MatchEvent",
-            "onDelete": "NO ACTION",
+            "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
               "following_event"
             ],
             "referencedColumns": [
               "matchEventId"
+            ]
+          },
+          {
+            "table": "EventType",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event_type"
+            ],
+            "referencedColumns": [
+              "uid"
             ]
           }
         ]
@@ -381,12 +386,129 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "LongTimedEventType",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT, `switchable` INTEGER NOT NULL, `eventA_title` TEXT NOT NULL, `eventB_title` TEXT, `active_type` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "switchable",
+            "columnName": "switchable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventATitle",
+            "columnName": "eventA_title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventBTitle",
+            "columnName": "eventB_title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "activeEventType",
+            "columnName": "active_type",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uid"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "MatchLongTimedEvent",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`matchLongTimedEventId` INTEGER PRIMARY KEY AUTOINCREMENT, `match` INTEGER NOT NULL, `match_sequence_number` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `event_type` INTEGER NOT NULL, `switched_to_event_b` INTEGER NOT NULL, FOREIGN KEY(`match`) REFERENCES `Match`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`event_type`) REFERENCES `LongTimedEventType`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "matchLongTimedEventId",
+            "columnName": "matchLongTimedEventId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "matchId",
+            "columnName": "match",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "matchLongTimedEventSequenceNumber",
+            "columnName": "match_sequence_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventTimestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventTypeId",
+            "columnName": "event_type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "switchedEvent",
+            "columnName": "switched_to_event_b",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "matchLongTimedEventId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Match",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "match"
+            ],
+            "referencedColumns": [
+              "uid"
+            ]
+          },
+          {
+            "table": "LongTimedEventType",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "event_type"
+            ],
+            "referencedColumns": [
+              "uid"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd9c3d04060531b5ce5596d5c8a20de88')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '18a937c6ab9a1e2d0e7a72756caf55ac')"
     ]
   }
 }

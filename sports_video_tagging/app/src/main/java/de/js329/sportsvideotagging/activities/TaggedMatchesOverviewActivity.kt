@@ -85,7 +85,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
             matches.forEach { match ->
                 match.uid?.let { uid ->
                     val events = exportController.getEventsForMatch(uid).toMutableList()
-                    events.removeIf { it.matchEventOrderNumber == 0 }
+                    events.removeIf { it.matchEventSequenceNumber == 0 }
                     matchesTagsPairs.add(Pair(match, events))
                 }
                 taggedMatchesAdapter = TaggedMatchesAdapter(this@TaggedMatchesOverviewActivity, matchesTagsPairs, teams)
@@ -204,17 +204,17 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
             val sortedEvents = allEvents.sortedBy {
                 when (val event = it.first["event"]) {
                     is MatchEvent -> {
-                        event.matchEventOrderNumber
+                        event.matchEventSequenceNumber
                     }
                     is MatchLongTimedEvent -> {
-                        event.matchLongTimedEventOrderNumber
+                        event.matchLongTimedEventSequenceNumber
                     }
                     else -> {
                         allEvents.size * 2
                     }
                 }
             }
-            var orderNum = 0
+            var sequenceNum = 0
             var startTimeStamp = 0L
             val svt = xml("svt") {
                 "match" {
@@ -250,7 +250,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                                     val homePlayers = eventData.first["homePlayers"]
                                     val guestPlayers = eventData.first["guestPlayers"]
 
-                                    if (event.matchEventOrderNumber == 0) {
+                                    if (event.matchEventSequenceNumber == 0) {
                                         startTimeStamp = event.eventTimestamp
                                     }
                                     "matchEvent" {
@@ -258,8 +258,8 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                                             attribute("eventTitle", eventType.eventTitle)
                                         }
                                         attribute(
-                                                "matchEventOrderNum",
-                                                orderNum++
+                                                "matchEventSequenceNum",
+                                                sequenceNum++
                                         )
                                         attribute(
                                                 "matchEventTimeOffset",
