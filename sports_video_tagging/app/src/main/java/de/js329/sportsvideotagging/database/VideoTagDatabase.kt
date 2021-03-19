@@ -1,6 +1,9 @@
 package de.js329.sportsvideotagging.database
 
+import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteException
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -10,6 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import de.js329.sportsvideotagging.datamodels.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 @Database(
     entities = [
@@ -24,7 +28,7 @@ import kotlinx.coroutines.launch
         LongTimedEventType::class,
         MatchLongTimedEvent::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 @TypeConverters(DateConverter::class)
@@ -98,7 +102,7 @@ abstract class VideoTagDatabase: RoomDatabase() {
                         'event_type' INTEGER NOT NULL,
                          FOREIGN KEY('match') REFERENCES 'Match'('uid') ON UPDATE NO ACTION ON DELETE CASCADE,
                           FOREIGN KEY('event_type') REFERENCES 'LongTimedEventType'('uid') ON UPDATE NO ACTION ON DELETE CASCADE)"""
-                        .trimMargin())
+                        .trimIndent())
             }
         }
 
@@ -106,6 +110,47 @@ abstract class VideoTagDatabase: RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE MatchLongTimedEvent ADD COLUMN switched_to_event_b INTEGER NOT NULL DEFAULT 0")
             }
+        }
+
+        private val MIGRATION_5_6 = object : Migration(5,6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                try {
+                    val c = database.query("SELECT * FROM Match")
+                    c.use {
+                        if (c.moveToFirst()) {
+                            val cv = ContentValues()
+                            cv.put("id", c.getLong((c.getColumnIndex("uid"))))
+                            cv.put("date", c.getLong((c.getColumnIndex("date"))))
+                            cv.put("home_team", c.getLong((c.getColumnIndex("home_team"))))
+                            cv.put("guest_team", c.getLong((c.getColumnIndex("away_team"))))
+                            cv.put("home_score", c.getLong((c.getColumnIndex("home_score"))))
+                            cv.put("guest_score", c.getLong((c.getColumnIndex("away_score"))))
+                            database.execSQL("DROP TABLE IF EXISTS 'Match'")
+                            createMatchTable(database)
+                            database.insert("Match", 0, cv)
+                        } else {
+                            database.execSQL("DROP TABLE IF EXISTS 'Match'")
+                            createMatchTable(database)
+                        }
+                    }
+                } catch (e: SQLiteException) {
+                    Log.e(e.localizedMessage, "SQLLiteException in Migration from database version 5 to 6")
+                } catch (e: Exception) {
+                    Log.e(e.localizedMessage, "Failed to migrate database version 5 to version 6")
+                }
+            }
+        }
+
+        private fun createMatchTable(database: SupportSQLiteDatabase) {
+            database.execSQL("""CREATE TABLE IF NOT EXISTS `Match` (
+            `uid` INTEGER PRIMARY KEY AUTOINCREMENT,
+             `date` INTEGER,
+              `home_team` INTEGER NOT NULL,
+               `guest_team` INTEGER NOT NULL,
+                `home_score` INTEGER NOT NULL,
+                 `guest_score` INTEGER NOT NULL,
+                  FOREIGN KEY(`home_team`) REFERENCES `Team`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE,
+                   FOREIGN KEY(`guest_team`) REFERENCES `Team`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )""".trimIndent())
         }
 
         fun getInstance(context: Context, scope: CoroutineScope): VideoTagDatabase {
@@ -117,7 +162,7 @@ abstract class VideoTagDatabase: RoomDatabase() {
                 )
                     .createFromAsset("database/db_v1.json")
                     .addCallback(VideoTagDatabaseCallback(scope))
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                     .build()
             }
             return INSTANCE as VideoTagDatabase

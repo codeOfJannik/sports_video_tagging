@@ -27,22 +27,22 @@
         android:importantForAutofill="no" />
 
     <TextView
-        android:id="@+id/awayTeamTextView"
+        android:id="@+id/guestTeamTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homeTeamScore"
-        android:labelFor="@id/awayTeamScore"
-        android:contentDescription="@string/away_team_score" />
+        android:labelFor="@id/guestTeamScore"
+        android:contentDescription="@string/guest_team_score" />
 
     <EditText
-        android:id="@+id/awayTeamScore"
+        android:id="@+id/guestTeamScore"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/awayTeamTextView"
+        app:layout_constraintTop_toBottomOf="@+id/guestTeamTextView"
         android:importantForAutofill="no" />
 </androidx.constraintlayout.widget.ConstraintLayout>

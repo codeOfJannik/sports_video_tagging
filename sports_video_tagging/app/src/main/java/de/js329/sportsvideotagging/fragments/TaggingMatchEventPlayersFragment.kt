@@ -54,15 +54,15 @@ class TaggingMatchEventPlayersFragment: Fragment(), InnerRecyclerViewAdapter.Pla
 
     private fun initiateAdapter() {
         val homeTeam = matchTaggingController.homeTeam
-        val awayTeam = matchTaggingController.awayTeam
+        val guestTeam = matchTaggingController.guestTeam
         teams.add(homeTeam)
-        teams.add(awayTeam)
+        teams.add(guestTeam)
 
         lifecycleScope.launch {
             val homeTeamPlayers = matchTaggingController.getPlayersForTeam(homeTeam).sortedBy { it.number }
             players.add(homeTeamPlayers)
-            val awayTeamPlayers = matchTaggingController.getPlayersForTeam(awayTeam).sortedBy { it.number }
-            players.add(awayTeamPlayers)
+            val guestTeamPlayers = matchTaggingController.getPlayersForTeam(guestTeam).sortedBy { it.number }
+            players.add(guestTeamPlayers)
             expandableRecyclerView.adapter = ExpandableRecyclerViewAdapter(requireContext(), teams, players, this@TaggingMatchEventPlayersFragment)
             expandableRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         }

@@ -42,7 +42,7 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
     private var matchStarted = false
     private var taggingStartTimestamp = 0L
     private var homeTeamId = -1L
-    private var awayTeamId = -1L
+    private var guestTeamId = -1L
     private var matchDate = Calendar.getInstance()
     private lateinit var tagCounter: TextView
     private lateinit var timerTextView: TextView
@@ -62,13 +62,13 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
         fun newInstance(
                 matchTaggingController: MatchTaggingController,
                 homeId: Long,
-                awayId: Long,
+                guestId: Long,
                 matchDate: Long,
                 taggingFragmentManager: TaggingFragmentManager
         ) = TaggingMatchBaseFragment().apply {
             this.matchTaggingController = matchTaggingController
             this.homeTeamId = homeId
-            this.awayTeamId = awayId
+            this.guestTeamId = guestId
             this.matchDate.time = Date(matchDate)
             this.taggingFragmentManager = taggingFragmentManager
         }
@@ -181,7 +181,7 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
             matchStarted = true
             taggingFragmentManager.matchTaggingStarted()
             lifecycleScope.launch {
-                matchTaggingController.startMatch(homeTeamId, awayTeamId, matchDate.time.time, taggingStartTimestamp)
+                matchTaggingController.startMatch(homeTeamId, guestTeamId, matchDate.time.time, taggingStartTimestamp)
             }
             context?.let {
                 button.text = it.getString(R.string.stopMatchTagging)
@@ -209,8 +209,8 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.layout_final_score_dialog, null)
         view.findViewById<TextView>(R.id.homeTeamTextView).text =
                 requireContext().getString(R.string.teamPlaceholderScore_txt, matchTaggingController.homeTeam.teamName)
-        view.findViewById<TextView>(R.id.awayTeamTextView).text =
-                requireContext().getString(R.string.teamPlaceholderScore_txt, matchTaggingController.awayTeam.teamName)
+        view.findViewById<TextView>(R.id.guestTeamTextView).text =
+                requireContext().getString(R.string.teamPlaceholderScore_txt, matchTaggingController.guestTeam.teamName)
         builder
                 .setTitle(R.string.finalScoreDialogTitle_txt)
                 .setMessage(R.string.finalScoreDialogMessage_txt)
@@ -218,8 +218,8 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
                 .setPositiveButton(android.R.string.ok) { _, _ ->
                     try {
                         val homeScore = view.findViewById<EditText>(R.id.homeTeamScore).text.toString().toInt()
-                        val awayScore = view.findViewById<EditText>(R.id.awayTeamScore).text.toString().toInt()
-                        onMatchTaggingFinished(homeScore, awayScore)
+                        val guestScore = view.findViewById<EditText>(R.id.guestTeamScore).text.toString().toInt()
+                        onMatchTaggingFinished(homeScore, guestScore)
                     } catch (exception: NumberFormatException) {
                         Toast.makeText(requireContext(), R.string.invalidScoreMessage, Toast.LENGTH_LONG).show()
                     }
@@ -231,9 +231,9 @@ class TaggingMatchBaseFragment : Fragment(), EventTypesRecyclerAdapter.ItemClick
 
     }
 
-    private fun onMatchTaggingFinished(homeScore: Int, awayScore: Int) {
+    private fun onMatchTaggingFinished(homeScore: Int, guestScore: Int) {
         lifecycleScope.launch {
-            matchTaggingController.endMatch(homeScore, awayScore)
+            matchTaggingController.endMatch(homeScore, guestScore)
         }
         taggingFragmentManager.onTaggingFinishedCloseFragments()
     }

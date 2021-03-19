@@ -44,7 +44,7 @@ export class PlayersFilter extends React.Component {
         if (this.state.tabValue == 0) {
             playerElements = this.props.players.home
         } else {
-            playerElements = this.props.players.away
+            playerElements = this.props.players.guest
         }
         return (
             <React.Fragment>
@@ -60,7 +60,7 @@ export class PlayersFilter extends React.Component {
                         variant="fullWidth"
                         onChange={this.handleTabChanged}>
                         <Tab label={this.props.homeTeam} />
-                        <Tab label={this.props.awayTeam} />
+                        <Tab label={this.props.guestTeam} />
                     </Tabs>
                 </Paper>
                 <List>

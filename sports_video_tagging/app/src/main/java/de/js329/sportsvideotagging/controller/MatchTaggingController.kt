@@ -18,7 +18,7 @@ class MatchTaggingController(
     private var latestMatchEvent: MatchEvent? = null
     var eventOrderNum = 0
     lateinit var homeTeam: Team
-    lateinit var awayTeam: Team
+    lateinit var guestTeam: Team
 
     suspend fun getTeamForName(teamName: String): Team {
         return teamDao.getTeamForName(teamName)
@@ -60,14 +60,14 @@ class MatchTaggingController(
         return eventAttributes
     }
 
-    private suspend fun assignTeams(homeTeamId: Long, awayTeamId: Long) {
+    private suspend fun assignTeams(homeTeamId: Long, guestTeamId: Long) {
         teamDao.getTeamForId(homeTeamId)?.let { homeTeam = it }
-        teamDao.getTeamForId(awayTeamId)?.let { awayTeam = it }
+        teamDao.getTeamForId(guestTeamId)?.let { guestTeam = it }
     }
 
-    suspend fun startMatch(homeTeamId: Long, awayTeamId: Long, matchDate: Long, timestamp: Long) {
-        match = Match(null, matchDate, homeTeamId, awayTeamId, 0, 0)
-        assignTeams(homeTeamId, awayTeamId)
+    suspend fun startMatch(homeTeamId: Long, guestTeamId: Long, matchDate: Long, timestamp: Long) {
+        match = Match(null, matchDate, homeTeamId, guestTeamId, 0, 0)
+        assignTeams(homeTeamId, guestTeamId)
         match?.let {
             val matchId = matchDao.insert(it)
             it.uid = matchId
@@ -215,9 +215,9 @@ class MatchTaggingController(
         latestMatchEvent = null
     }
 
-    suspend fun endMatch(homeTeamScore: Int, awayTeamScore: Int) {
+    suspend fun endMatch(homeTeamScore: Int, guestTeamScore: Int) {
         match?.homeScore = homeTeamScore
-        match?.awayScore = awayTeamScore
+        match?.guestScore = guestTeamScore
         match?.let { matchDao.updateAll(it) }
     }
 

@@ -17,7 +17,7 @@ import java.util.*
 class TaggingActivity : AppCompatActivity(), TaggingFragmentManager {
 
     private val homeTeamId by lazy { intent.getLongExtra("homeTeamId", -1) }
-    private val awayTeamId by lazy { intent.getLongExtra("awayTeamId", -1) }
+    private val guestTeamId by lazy { intent.getLongExtra("guestTeamId", -1) }
     private val matchDateTime by lazy {
         intent.getLongExtra("matchDate", -1)
     }
@@ -26,7 +26,7 @@ class TaggingActivity : AppCompatActivity(), TaggingFragmentManager {
         MatchTaggingController(db.matchDao(), db.eventDao(), db.eventJoinDao(), db.teamDao(), db.playerDao())
     }
     private val matchTaggingFragment by lazy {
-        TaggingMatchBaseFragment.newInstance(matchTaggingController, homeTeamId, awayTeamId, matchDateTime, this)
+        TaggingMatchBaseFragment.newInstance(matchTaggingController, homeTeamId, guestTeamId, matchDateTime, this)
     }
     private var allowBack = true
 

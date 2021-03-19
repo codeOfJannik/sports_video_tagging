@@ -4,10 +4,10 @@
         <metadata>
             <matchDateTime>2020-10-24T20:30:00</matchDateTime>
             <homeTeamScore>27</homeTeamScore>
-            <awayTeamScore>24</awayTeamScore>
+            <guestTeamScore>24</guestTeamScore>
         </metadata>
         <homeTeam>HSG Ostfildern</homeTeam>
-        <awayTeam>SG Hegensberg-Liebersbronn</awayTeam>
+        <guestTeam>SG Hegensberg-Liebersbronn</guestTeam>
         <matchEvents>
             <matchEvent eventTitle="Match Start" matchEventOrderNum="0" matchEventTimeOffset="0">
                 <players/>
@@ -35,10 +35,10 @@
                         <player playerName="Jannik Schlemmer" jerseyNumber="9"/>
                         <player playerName="Sebastian Pollich" jerseyNumber="77"/>
                     </homeTeamPlayers>
-                    <awayTeamPlayers>
+                    <guestTeamPlayers>
                         <player playerName="Fabian Sokele" jerseyNumber="19"/>
                         <player playerName="Henning Richter" jerseyNumber="5"/>
-                    </awayTeamPlayers>
+                    </guestTeamPlayers>
                 </players>
             </matchEvent>
             <matchEvent eventTitle="Konter" matchEventOrderNum="3" matchEventTimeOffset="63">

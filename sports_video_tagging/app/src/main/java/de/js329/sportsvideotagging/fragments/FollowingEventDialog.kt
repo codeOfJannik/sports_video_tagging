@@ -101,8 +101,8 @@ class FollowingEventDialog: DialogFragment(), EventTypesRecyclerAdapter.ItemClic
         val recyclerView = RecyclerView(requireContext())
 
         val homeTeam = matchTaggingController.homeTeam
-        val awayTeam = matchTaggingController.awayTeam
-        val teams = listOf(homeTeam, awayTeam)
+        val guestTeam = matchTaggingController.guestTeam
+        val teams = listOf(homeTeam, guestTeam)
         val players: MutableList<List<Player>> = ArrayList()
 
         addAttributesBtn.setOnClickListener { onAddAttributesClicked() }
@@ -110,8 +110,8 @@ class FollowingEventDialog: DialogFragment(), EventTypesRecyclerAdapter.ItemClic
         lifecycleScope.launch {
             val homeTeamPlayers = matchTaggingController.getPlayersForTeam(homeTeam).sortedBy { it.number }
             players.add(homeTeamPlayers)
-            val awayTeamPlayers = matchTaggingController.getPlayersForTeam(awayTeam).sortedBy { it.number }
-            players.add(awayTeamPlayers)
+            val guestTeamPlayers = matchTaggingController.getPlayersForTeam(guestTeam).sortedBy { it.number }
+            players.add(guestTeamPlayers)
             recyclerView.adapter = ExpandableRecyclerViewAdapter(requireContext(), teams, players, this@FollowingEventDialog)
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             frameLayout.addView(recyclerView)

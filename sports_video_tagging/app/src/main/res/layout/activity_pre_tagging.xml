@@ -90,19 +90,19 @@
         android:hint="@string/match_time"/>
 
     <TextView
-        android:id="@+id/awayTeamLbl"
+        android:id="@+id/guestTeamLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:labelFor="@id/awayTeamEditText"
-        android:text="@string/away_team"
+        android:labelFor="@id/guestTeamEditText"
+        android:text="@string/guest_team"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editHomeTeamPlayersBtn" />
 
     <AutoCompleteTextView
-        android:id="@+id/awayTeamEditText"
+        android:id="@+id/guestTeamEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -112,8 +112,8 @@
         android:focusableInTouchMode="false"
         android:focusable="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/awayTeamLbl"
-        app:layout_constraintTop_toBottomOf="@+id/awayTeamLbl"
+        app:layout_constraintStart_toStartOf="@+id/guestTeamLbl"
+        app:layout_constraintTop_toBottomOf="@+id/guestTeamLbl"
         android:importantForAutofill="no" />
 
     <Button
@@ -142,12 +142,12 @@
         app:layout_constraintTop_toBottomOf="@+id/homeTeamEditText" />
 
     <Button
-        android:id="@+id/editAwayTeamPlayersBtn"
+        android:id="@+id/editguestTeamPlayersBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/edit_away_team_players_btn"
-        app:layout_constraintStart_toStartOf="@+id/awayTeamEditText"
-        app:layout_constraintTop_toBottomOf="@+id/awayTeamEditText" />
+        android:text="@string/edit_guest_team_players_btn"
+        app:layout_constraintStart_toStartOf="@+id/guestTeamEditText"
+        app:layout_constraintTop_toBottomOf="@+id/guestTeamEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

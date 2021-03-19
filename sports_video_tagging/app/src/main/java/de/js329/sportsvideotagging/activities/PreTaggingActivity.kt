@@ -27,12 +27,12 @@ class PreTaggingActivity : AppCompatActivity() {
     }
     private var allTeams: List<Team> = ArrayList()
     private var selectedHomeTeam: Team? = null
-    private var selectedAwayTeam: Team? = null
+    private var selectedguestTeam: Team? = null
 
     private lateinit var matchDateEditText: EditText
     private lateinit var matchTimeEditText: EditText
     private lateinit var homeTeamEditText: AutoCompleteTextView
-    private lateinit var awayTeamEditText: AutoCompleteTextView
+    private lateinit var guestTeamEditText: AutoCompleteTextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,18 +41,18 @@ class PreTaggingActivity : AppCompatActivity() {
         findViewById<Button>(R.id.cancelBtn).setOnClickListener { this.finish() }
         findViewById<Button>(R.id.continueBtn).setOnClickListener { onContinueClicked() }
         findViewById<Button>(R.id.editHomeTeamPlayersBtn).setOnClickListener { onEditTeamPlayersClicked(selectedHomeTeam) }
-        findViewById<Button>(R.id.editAwayTeamPlayersBtn).setOnClickListener { onEditTeamPlayersClicked(selectedAwayTeam) }
+        findViewById<Button>(R.id.editguestTeamPlayersBtn).setOnClickListener { onEditTeamPlayersClicked(selectedguestTeam) }
         matchDateEditText = findViewById(R.id.matchDateEditText)
         matchTimeEditText = findViewById(R.id.matchTimeEditText)
         homeTeamEditText = findViewById(R.id.homeTeamEditText)
-        awayTeamEditText = findViewById(R.id.awayTeamEditText)
+        guestTeamEditText = findViewById(R.id.guestTeamEditText)
 
         lifecycleScope.launch {
             allTeams = matchTaggingController.getAllTeams()
             val teamNames = ArrayList<String>()
             allTeams.map { teamNames.add(it.teamName) }
             selectedHomeTeam = allTeams[0]
-            selectedAwayTeam = allTeams[1]
+            selectedguestTeam = allTeams[1]
             setupLayout(teamNames)
         }
     }
@@ -60,7 +60,7 @@ class PreTaggingActivity : AppCompatActivity() {
     private fun setupLayout(teamNames: ArrayList<String>) {
         updateDateEditTextValues()
         homeTeamEditText.setText(selectedHomeTeam?.teamName)
-        awayTeamEditText.setText(selectedAwayTeam?.teamName)
+        guestTeamEditText.setText(selectedguestTeam?.teamName)
 
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, teamNames)
         homeTeamEditText.setAdapter(arrayAdapter)
@@ -73,13 +73,13 @@ class PreTaggingActivity : AppCompatActivity() {
                 }
             }
         }
-        awayTeamEditText.setAdapter(arrayAdapter)
-        awayTeamEditText.setOnClickListener { awayTeamEditText.showDropDown() }
-        awayTeamEditText.setOnItemClickListener { _, _, position, _ ->
+        guestTeamEditText.setAdapter(arrayAdapter)
+        guestTeamEditText.setOnClickListener { guestTeamEditText.showDropDown() }
+        guestTeamEditText.setOnItemClickListener { _, _, position, _ ->
             arrayAdapter.getItem(position)?.let {
                 lifecycleScope.launch {
                     val team = getTeamForName(it)
-                    selectedAwayTeam = team
+                    selectedguestTeam = team
                 }
             }
         }
@@ -130,10 +130,10 @@ class PreTaggingActivity : AppCompatActivity() {
     }
 
     private fun onContinueClicked() {
-        if (selectedHomeTeam != selectedAwayTeam) {
+        if (selectedHomeTeam != selectedguestTeam) {
             val intent = Intent(this, TaggingActivity::class.java)
             intent.putExtra("homeTeamId", selectedHomeTeam?.uid)
-            intent.putExtra("awayTeamId", selectedAwayTeam?.uid)
+            intent.putExtra("guestTeamId", selectedguestTeam?.uid)
             intent.putExtra("matchDate", matchDateCalendar.time.time)
             startActivity(intent)
         } else {

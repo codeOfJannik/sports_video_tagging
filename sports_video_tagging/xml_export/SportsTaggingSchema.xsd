@@ -19,7 +19,7 @@
         <xs:sequence>
             <xs:element name="metadata" type="Metadata"/>
             <xs:element name="homeTeam" type="xs:string"/>
-            <xs:element name="awayTeam" type="xs:string"/>
+            <xs:element name="guestTeam" type="xs:string"/>
             <xs:element name="matchEvents" type="MatchEvents"/>
         </xs:sequence>
     </xs:complexType>
@@ -28,7 +28,7 @@
         <xs:sequence>
             <xs:element name="matchDateTime" type="xs:dateTime"/>
             <xs:element name="homeTeamScore" type="xs:int"/>
-            <xs:element name="awayTeamScore" type="xs:int"/>
+            <xs:element name="guestTeamScore" type="xs:int"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -57,7 +57,7 @@
     <xs:complexType name="InvolvedPlayers">
         <xs:sequence>
             <xs:element name="homeTeamPlayers" type="Players" minOccurs="0"/>
-            <xs:element name="awayTeamPlayers" type="Players" minOccurs="0"/>
+            <xs:element name="guestTeamPlayers" type="Players" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

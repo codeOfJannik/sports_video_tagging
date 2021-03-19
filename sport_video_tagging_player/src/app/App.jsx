@@ -21,10 +21,10 @@ export class App extends React.Component {
             matchEvents: [],
             filteredEvents: [],
             homeTeam: "",
-            awayTeam: "",
+            guestTeam: "",
             players: {
                 home: [],
-                away: []
+                guest: []
             },
             eventTypes: [],
             attributes: [],
@@ -39,14 +39,14 @@ export class App extends React.Component {
         this.setState(previousState => {
             const players = {
                 home: taggingDataObject.allPlayers.home,
-                away: taggingDataObject.allPlayers.away
+                guest: taggingDataObject.allPlayers.guest
             }
             const newState = {
                 ...previousState,
                 matchEvents: taggingDataObject.matchEvents,
                 filteredEvents: taggingDataObject.matchEvents,
                 homeTeam: taggingDataObject.homeTeam,
-                awayTeam: taggingDataObject.awayTeam,
+                guestTeam: taggingDataObject.guestTeam,
                 players: players,
                 eventTypes: taggingDataObject.allEventTypes,
                 attributes: taggingDataObject.allAttributes,
@@ -207,7 +207,7 @@ export class App extends React.Component {
                 <Grid item xs={4}>
                     <PlayersFilter
                         homeTeam={this.state.homeTeam}
-                        awayTeam={this.state.awayTeam}
+                        guestTeam={this.state.guestTeam}
                         players={this.state.players}
                         selectedPlayers={this.state.selectedFilterPlayers}
                         handleFilterPlayersChanged={this.handleFilterPlayersChanged} />

@@ -45,7 +45,7 @@ function comparePlayersByJerseyNum(a, b) {
 function sortMatchPlayers(unsorted) {
     let matchPlayers = {
         home: unsorted.home.sort(comparePlayersByJerseyNum),
-        away: unsorted.away.sort(comparePlayersByJerseyNum)
+        guest: unsorted.guest.sort(comparePlayersByJerseyNum)
     }
     return matchPlayers
 }
@@ -54,12 +54,12 @@ function formatJSON(json) {
     let matchEvents = []
     let matchPlayers = {
         home: [],
-        away: []
+        guest: []
     }
     let eventTypes = []
     let attributes = []
     let homeTeam = json.svt.match[0].homeTeam[0]
-    let awayTeam = json.svt.match[0].awayTeam[0]
+    let guestTeam = json.svt.match[0].guestTeam[0]
 
     for (const matchEvent of json.svt.match[0].matchEvents[0].matchEvent) {
         let elementAttributes = matchEvent.$
@@ -68,7 +68,7 @@ function formatJSON(json) {
         let timeOffset = elementAttributes.matchEventTimeOffset
         let eventPlayers = {
             home: [],
-            away: []
+            guest: []
         }
         let eventAttributes = []
         if (!eventTypes.includes(eventTitle)) {
@@ -91,12 +91,12 @@ function formatJSON(json) {
                 }
             }
         }
-        if (matchEvent.players[0].hasOwnProperty("awayTeamPlayers")) {
-            for (const player of matchEvent.players[0].awayTeamPlayers[0].player) {
+        if (matchEvent.players[0].hasOwnProperty("guestTeamPlayers")) {
+            for (const player of matchEvent.players[0].guestTeamPlayers[0].player) {
                 let eventPlayer = createPlayerObject(player)
-                eventPlayers.away.push(eventPlayer)
-                if (!isPlayerInList(eventPlayer, matchPlayers.away)) {
-                    matchPlayers.away.push(eventPlayer)
+                eventPlayers.guest.push(eventPlayer)
+                if (!isPlayerInList(eventPlayer, matchPlayers.guest)) {
+                    matchPlayers.guest.push(eventPlayer)
                 }
             }
         }
@@ -115,6 +115,6 @@ function formatJSON(json) {
         allAttributes: attributes,
         allEventTypes: eventTypes,
         homeTeam: homeTeam,
-        awayTeam: awayTeam
+        guestTeam: guestTeam
     }
 }

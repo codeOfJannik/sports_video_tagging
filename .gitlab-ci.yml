@@ -1,4 +1,4 @@
-image: node:10 # change to match your node version
+image: node:12 # change to match your node version
 
 cache:
   paths:

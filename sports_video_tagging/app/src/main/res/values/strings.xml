@@ -80,10 +80,10 @@
     <string name="home_team">Home Team</string>
     <string name="match_date">Match Date</string>
     <string name="match_time">Match Time</string>
-    <string name="away_team">Away Team</string>
+    <string name="guest_team">Guest Team</string>
     <string name="continue_btn_txt">Continue</string>
     <string name="edit_home_team_players_btn">Edit Home Team Players</string>
-    <string name="edit_away_team_players_btn">Edit Away Team Players</string>
+    <string name="edit_guest_team_players_btn">Edit Guest Team Players</string>
     <plurals name="numberOfPlayers">
         <item quantity="one">%d player</item>
         <item quantity="other">%d players</item>
@@ -95,7 +95,7 @@
     <string name="tagCounterTextViewValue">Numer of Tags: %1d</string>
     <string name="player_Selection_Header_Txt">Select Players for Event</string>
     <string name="expand_icon">expand Icon</string>
-    <string name="sameTeamError">Home and away team can\'t be the same</string>
+    <string name="sameTeamError">Home and Guest team can\'t be the same</string>
     <string name="checkmark">checkmark</string>
     <string name="match_event_details">Match Event Details</string>
     <string name="save_match_event">Save Match Event</string>
@@ -110,7 +110,7 @@
     <string name="followUpEventAdded">Added follow-up event of type %1s</string>
     <string name="finalScoreDialogTitle_txt">Final Score</string>
     <string name="finalScoreDialogMessage_txt">Enter final score of the match</string>
-    <string name="away_team_score">Away Team Score</string>
+    <string name="guest_team_score">Guest Team Score</string>
     <string name="home_team_score">Home Team Score</string>
     <string name="teamPlaceholderScore_txt">%1s Score</string>
     <string name="invalidScoreMessage">Invalid Score entered!</string>

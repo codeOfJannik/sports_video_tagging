@@ -101,7 +101,7 @@ class TaggingDatabaseTest {
     private fun createSampleMatch(): Match? {
         insertSampleTeams()
         val homeTeamId = sampleTeams[0].uid ?: return null
-        val awayTeamId = sampleTeams[1].uid ?: return null
+        val guestTeamId = sampleTeams[1].uid ?: return null
 
         return Match(
                 null,
@@ -114,7 +114,7 @@ class TaggingDatabaseTest {
                     set(Calendar.SECOND, 22)
                 }.time.time,
                 homeTeamId,
-                awayTeamId,
+                guestTeamId,
                 27,
                 24
         )

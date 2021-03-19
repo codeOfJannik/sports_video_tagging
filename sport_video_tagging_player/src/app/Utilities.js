@@ -23,7 +23,7 @@ function eventPlayersInPlayerfilter(eventPlayers, filterPlayers) {
 
 export function eventContainsPlayers(event, filteredPlayers) {
     let homePlayers = filteredPlayers[0]
-    let awayPlayers = filteredPlayers[1]
+    let guestPlayers = filteredPlayers[1]
     let filterMatches = true
     if (homePlayers.size > 0) {
         filterMatches = eventPlayersInPlayerfilter(event.players.home, homePlayers)
@@ -31,8 +31,8 @@ export function eventContainsPlayers(event, filteredPlayers) {
     if (!filterMatches) {
         return false
     }
-    if (awayPlayers.size > 0) {
-        filterMatches = eventPlayersInPlayerfilter(event.players.away, awayPlayers)
+    if (guestPlayers.size > 0) {
+        filterMatches = eventPlayersInPlayerfilter(event.players.guest, guestPlayers)
     }
     return filterMatches
 

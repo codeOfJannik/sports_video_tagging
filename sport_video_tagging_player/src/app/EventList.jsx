@@ -28,7 +28,7 @@ export class EventList extends React.Component {
                                                 <EventProperties
                                                     attributes={item.attributes}
                                                     homePlayers={item.players.home}
-                                                    awayPlayers={item.players.away} />
+                                                    guestPlayers={item.players.guest} />
                                             }
                                             secondaryTypographyProps={{ component: 'div' }}
                                         />

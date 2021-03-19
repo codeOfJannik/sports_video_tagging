@@ -164,11 +164,11 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
             exportController.reset()
             var allEvents: List<Pair<HashMap<String, Any>, Any>> = ArrayList()
             var homeTeam: Team? = null
-            var awayTeam: Team? = null
+            var guestTeam: Team? = null
             val worker = lifecycleScope.async {
                 exportController.queryEventTypes()
                 homeTeam = exportController.getTeamForId(match.homeTeamId)
-                awayTeam = exportController.getTeamForId(match.awayTeamId)
+                guestTeam = exportController.getTeamForId(match.guestTeamId)
                 val matchEvents = exportController.getEventsForMatch(matchId)
                 val matchEventData: MutableList<Pair<HashMap<String, Any>, Any>> = ArrayList()
                 val longTimedMatchEvents = exportController.getLongTimedEventsForMatch(matchId)
@@ -177,14 +177,14 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                     val eventType = exportController.getEventTypeById(event.eventTypeId)
                     val attributes = exportController.getAttributesForMatchEvent(event)
                     val homePlayers = exportController.getPlayersForTeamOfMatchEvent(event, match.homeTeamId)
-                    val awayPlayers = exportController.getPlayersForTeamOfMatchEvent(event, match.awayTeamId)
+                    val guestPlayers = exportController.getPlayersForTeamOfMatchEvent(event, match.guestTeamId)
                     eventType?.let {
                         val data = Pair(
                                 hashMapOf(
                                         "event" to event,
                                         "attributes" to attributes,
                                         "homePlayers" to homePlayers,
-                                        "awayPlayers" to awayPlayers
+                                        "guestPlayers" to guestPlayers
                                 ),
                                 it
                         )
@@ -225,15 +225,15 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                         "homeTeamScore" {
                             -match.homeScore.toString()
                         }
-                        "awayTeamScore" {
-                            -match.awayScore.toString()
+                        "guestTeamScore" {
+                            -match.guestScore.toString()
                         }
                     }
                     "homeTeam" {
                         -homeTeam?.teamName.toString()
                     }
-                    "awayTeam" {
-                        -awayTeam?.teamName.toString()
+                    "guestTeam" {
+                        -guestTeam?.teamName.toString()
                     }
                     "matchEvents" {
                         for (eventData in sortedEvents) {
@@ -248,7 +248,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                                 is MatchEvent -> {
                                     val attributes = eventData.first["attributes"]
                                     val homePlayers = eventData.first["homePlayers"]
-                                    val awayPlayers = eventData.first["awayPlayers"]
+                                    val guestPlayers = eventData.first["guestPlayers"]
 
                                     if (event.matchEventOrderNumber == 0) {
                                         startTimeStamp = event.eventTimestamp
@@ -299,9 +299,9 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                                                     }
                                                 }
                                             }
-                                            if (awayPlayers is List<*> && awayPlayers.isNotEmpty()) {
-                                                "awayTeamPlayers" {
-                                                    for (player in awayPlayers.filterIsInstance<Player>()) {
+                                            if (guestPlayers is List<*> && guestPlayers.isNotEmpty()) {
+                                                "guestTeamPlayers" {
+                                                    for (player in guestPlayers.filterIsInstance<Player>()) {
                                                         "player" {
                                                             player.name?.let {
                                                                 attribute("playerName", it)
@@ -347,16 +347,16 @@ class TaggedMatchesAdapter(val context: Context, var matches: List<Pair<Match, L
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.layout_tagged_match_listitem, parent, false)
         val match = matches[position]
         val homeTeam = teams.find { it.uid == match.first.homeTeamId }
-        val awayTeam = teams.find { it.uid == match.first.awayTeamId }
+        val guestTeam = teams.find { it.uid == match.first.guestTeamId }
         view.findViewById<TextView>(R.id.matchDateTextView).text = Calendar.getInstance().apply {
             match.first.date?.let {
                 time = Date(it)
             }
         }.toFormattedString()
         view.findViewById<TextView>(R.id.homeTeamNameTextView).text = homeTeam?.teamName ?: "No team name"
-        view.findViewById<TextView>(R.id.awayTeamNameTextView).text = awayTeam?.teamName ?: "No team name"
+        view.findViewById<TextView>(R.id.guestTeamNameTextView).text = guestTeam?.teamName ?: "No team name"
         view.findViewById<TextView>(R.id.homeTeamScoreTextView).text = match.first.homeScore.toString()
-        view.findViewById<TextView>(R.id.awayTeamScoreTextView).text = match.first.awayScore.toString()
+        view.findViewById<TextView>(R.id.guestTeamScoreTextView).text = match.first.guestScore.toString()
         view.findViewById<TextView>(R.id.numberOfTagsTextView).text = String.format(Locale.getDefault(), "Tags for match: %d", match.second.size)
         return view
     }
