@@ -11,8 +11,8 @@ export class VideoTagsSyncElement extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            minute: 0,
-            second: 0,
+            minutes: 0,
+            seconds: 0,
             buttonText: "Confirm Time Sync",
             disabled: false
         }
@@ -42,7 +42,7 @@ export class VideoTagsSyncElement extends React.Component {
             };
             return newState
         })
-        const videoSeconds = 60 * this.state.minute + this.state.second
+        const videoSeconds = 60 * this.state.minutes + this.state.seconds
         this.props.onVideoTimeSynced(videoSeconds)
     }
 
@@ -63,7 +63,7 @@ export class VideoTagsSyncElement extends React.Component {
                         type="number"
                         variant="outlined"
                         size="small"
-                        value={this.state.minute}
+                        value={this.state.minutes}
                         onChange={this.handleChange}
                         InputProps={inputProps}
                     ></TextField>
@@ -76,7 +76,7 @@ export class VideoTagsSyncElement extends React.Component {
                         type="number"
                         variant="outlined"
                         size="small"
-                        value={this.state.second}
+                        value={this.state.seconds}
                         onChange={this.handleChange}
                         InputProps={inputProps}
                     ></TextField>
