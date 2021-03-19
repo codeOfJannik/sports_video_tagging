@@ -116,7 +116,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                             val filename = getExportFileNameForMatch(match)
                             val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                                 addCategory(Intent.CATEGORY_OPENABLE)
-                                type= "text/xml"
+                                type= "text/svt"
                                 putExtra(Intent.EXTRA_TITLE, filename)
                             }
                             startActivityForResult(intent, CREATE_EXPORT_FILE)
@@ -156,7 +156,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
             filename = String.format("%d%02d%02d", date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
             filename += String.format("_%02d%02d_", date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE))
         }
-        return filename + String.format("%d_matchExport.xml" ,match.uid)
+        return filename + String.format("%d_matchExport.svt" ,match.uid)
     }
 
     private suspend fun exportToSVT(match: Match): String? {
