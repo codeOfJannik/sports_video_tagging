@@ -178,6 +178,18 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                     val attributes = exportController.getAttributesForMatchEvent(event)
                     val homePlayers = exportController.getPlayersForTeamOfMatchEvent(event, match.homeTeamId)
                     val guestPlayers = exportController.getPlayersForTeamOfMatchEvent(event, match.guestTeamId)
+
+                    /* Each element of variable data will look like:
+                    Pair(
+                        [first]: {
+                            “event”: MatchEvent(),
+                            “attributes”: [MatchEventAttribute(), MatchEventAttribute(), …] 
+                            “homePlayers”: [Player(), Player(), …],
+                            “guestPlayers”: [Player(), Player(), …]
+                        },
+                        [second]: EventType()
+                    )
+                    */
                     eventType?.let {
                         val data = Pair(
                                 hashMapOf(
