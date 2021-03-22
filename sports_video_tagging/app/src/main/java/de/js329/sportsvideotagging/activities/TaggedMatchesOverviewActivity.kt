@@ -163,6 +163,8 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
         match.uid?.let { matchId ->
             exportController.reset()
             var allEvents: List<Pair<HashMap<String, Any>, Any>> = ArrayList()
+            val matchEventData: MutableList<Pair<HashMap<String, Any>, Any>> = ArrayList()
+            val longTimedEventData: MutableList<Pair<HashMap<String, Any>, LongTimedEventType>> = ArrayList()
             var homeTeam: Team? = null
             var guestTeam: Team? = null
             val worker = lifecycleScope.async {
@@ -170,9 +172,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                 homeTeam = exportController.getTeamForId(match.homeTeamId)
                 guestTeam = exportController.getTeamForId(match.guestTeamId)
                 val matchEvents = exportController.getEventsForMatch(matchId)
-                val matchEventData: MutableList<Pair<HashMap<String, Any>, Any>> = ArrayList()
                 val longTimedMatchEvents = exportController.getLongTimedEventsForMatch(matchId)
-                val longTimedEventData: MutableList<Pair<HashMap<String, Any>, LongTimedEventType>> = ArrayList()
                 for (event in matchEvents) {
                     val eventType = exportController.getEventTypeById(event.eventTypeId)
                     val attributes = exportController.getAttributesForMatchEvent(event)
