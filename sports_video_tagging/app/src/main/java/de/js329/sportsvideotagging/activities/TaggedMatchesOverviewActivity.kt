@@ -149,7 +149,7 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
     }
 
     private fun getExportFileNameForMatch(match: Match): String {
-        var filename: String = ""
+        var filename = ""
         match.date?.let {
             val date = Calendar.getInstance()
             date.time = Date(it)
@@ -164,7 +164,8 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
             exportController.reset()
             var allEvents: List<Pair<HashMap<String, Any>, Any>> = ArrayList()
             val matchEventData: MutableList<Pair<HashMap<String, Any>, Any>> = ArrayList()
-            val longTimedEventData: MutableList<Pair<HashMap<String, Any>, LongTimedEventType>> = ArrayList()
+            val longTimedEventData: MutableList<Pair<HashMap<String, Any>, LongTimedEventType>> =
+                ArrayList()
             var homeTeam: Team? = null
             var guestTeam: Team? = null
             val worker = lifecycleScope.async {
@@ -176,8 +177,10 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                 for (event in matchEvents) {
                     val eventType = exportController.getEventTypeById(event.eventTypeId)
                     val attributes = exportController.getAttributesForMatchEvent(event)
-                    val homePlayers = exportController.getPlayersForTeamOfMatchEvent(event, match.homeTeamId)
-                    val guestPlayers = exportController.getPlayersForTeamOfMatchEvent(event, match.guestTeamId)
+                    val homePlayers =
+                        exportController.getPlayersForTeamOfMatchEvent(event, match.homeTeamId)
+                    val guestPlayers =
+                        exportController.getPlayersForTeamOfMatchEvent(event, match.guestTeamId)
 
                     /* Each element of variable data will look like:
                     Pair(
@@ -192,13 +195,13 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                     */
                     eventType?.let {
                         val data = Pair(
-                                hashMapOf(
-                                        "event" to event,
-                                        "attributes" to attributes,
-                                        "homePlayers" to homePlayers,
-                                        "guestPlayers" to guestPlayers
-                                ),
-                                it
+                            hashMapOf(
+                                "event" to event,
+                                "attributes" to attributes,
+                                "homePlayers" to homePlayers,
+                                "guestPlayers" to guestPlayers
+                            ),
+                            it
                         )
                         matchEventData.add(data)
                     }
@@ -226,100 +229,105 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                     }
                 }
             }
-            var sequenceNum = 0
-            var startTimeStamp = 0L
-            val svt = xml("svt") {
-                "match" {
-                    "metadata" {
-                        "matchDateTime" {
-                            match.date?.let { -Date(it).toString() }
-                        }
-                        "homeTeamScore" {
-                            -match.homeScore.toString()
-                        }
-                        "guestTeamScore" {
-                            -match.guestScore.toString()
-                        }
-                    }
-                    "homeTeam" {
-                        -homeTeam?.teamName.toString()
-                    }
-                    "guestTeam" {
-                        -guestTeam?.teamName.toString()
-                    }
-                    "matchEvents" {
-                        for (eventData in sortedEvents) {
-                            val eventType = eventData.second
-                            when (val event = eventData.first["event"]) {
-                                is MatchLongTimedEvent -> {
-                                    if (eventType is LongTimedEventType) {
-                                        exportController.longTimedEventHandler(event, eventType)
-                                    }
-                                    continue
-                                }
-                                is MatchEvent -> {
-                                    val attributes = eventData.first["attributes"]
-                                    val homePlayers = eventData.first["homePlayers"]
-                                    val guestPlayers = eventData.first["guestPlayers"]
+            return writeXMLString(match, homeTeam, guestTeam, sortedEvents)
+        }
+        return null
+    }
 
-                                    if (event.matchEventSequenceNumber == 0) {
-                                        startTimeStamp = event.eventTimestamp
+    private fun writeXMLString(match: Match, homeTeam: Team?, guestTeam: Team?, sortedEvents: List<Pair<HashMap<String, Any>, Any>>): String {
+        var sequenceNum = 0
+        var startTimeStamp = 0L
+        val svt = xml("svt") {
+            "match" {
+                "metadata" {
+                    "matchDateTime" {
+                        match.date?.let { -Date(it).toString() }
+                    }
+                    "homeTeamScore" {
+                        -match.homeScore.toString()
+                    }
+                    "guestTeamScore" {
+                        -match.guestScore.toString()
+                    }
+                }
+                "homeTeam" {
+                    -homeTeam?.teamName.toString()
+                }
+                "guestTeam" {
+                    -guestTeam?.teamName.toString()
+                }
+                "matchEvents" {
+                    for (eventData in sortedEvents) {
+                        val eventType = eventData.second
+                        when (val event = eventData.first["event"]) {
+                            is MatchLongTimedEvent -> {
+                                if (eventType is LongTimedEventType) {
+                                    exportController.longTimedEventHandler(event, eventType)
+                                }
+                                continue
+                            }
+                            is MatchEvent -> {
+                                val attributes = eventData.first["attributes"]
+                                val homePlayers = eventData.first["homePlayers"]
+                                val guestPlayers = eventData.first["guestPlayers"]
+
+                                if (event.matchEventSequenceNumber == 0) {
+                                    startTimeStamp = event.eventTimestamp
+                                }
+                                "matchEvent" {
+                                    if (eventType is EventType) {
+                                        attribute("eventTitle", eventType.eventTitle)
                                     }
-                                    "matchEvent" {
-                                        if (eventType is EventType) {
-                                            attribute("eventTitle", eventType.eventTitle)
-                                        }
-                                        attribute(
-                                                "matchEventSequenceNum",
-                                                sequenceNum++
-                                        )
-                                        attribute(
-                                                "matchEventTimeOffset",
-                                                event.eventTimestamp - startTimeStamp
-                                        )
-                                        if (attributes is List<*> && attributes.isNotEmpty()) {
-                                            "eventAttributes" {
-                                                for (attribute in attributes.filterIsInstance<EventAttribute>()) {
-                                                    "attribute" { -attribute.attribute_name }
-                                                }
-                                                if (exportController.activeLongTimedEvents.isNotEmpty()) {
-                                                    for (name in exportController.getActiveLongTimedEventNames()) {
-                                                        "attribute" { -name }
-                                                    }
-                                                }
+                                    attribute(
+                                        "matchEventSequenceNum",
+                                        sequenceNum++
+                                    )
+                                    attribute(
+                                        "matchEventTimeOffset",
+                                        event.eventTimestamp - startTimeStamp
+                                    )
+                                    if (attributes is List<*> && attributes.isNotEmpty()) {
+                                        "eventAttributes" {
+                                            for (attribute in attributes.filterIsInstance<EventAttribute>()) {
+                                                "attribute" { -attribute.attribute_name }
                                             }
-                                        } else if (exportController.activeLongTimedEvents.isNotEmpty()) {
-                                            "eventAttributes" {
+                                            if (exportController.activeLongTimedEvents.isNotEmpty()) {
                                                 for (name in exportController.getActiveLongTimedEventNames()) {
                                                     "attribute" { -name }
                                                 }
                                             }
                                         }
-                                        "players" {
-                                            if (homePlayers is List<*> && homePlayers.isNotEmpty()) {
-                                                "homeTeamPlayers" {
-                                                    for (player in homePlayers.filterIsInstance<Player>()) {
-                                                        "player" {
-                                                            player.name?.let {
-                                                                attribute("playerName", it)
-                                                            }
-                                                            attribute(
-                                                                    "jerseyNumber",
-                                                                    player.number
-                                                            )
+                                    } else if (exportController.activeLongTimedEvents.isNotEmpty()) {
+                                        "eventAttributes" {
+                                            for (name in exportController.getActiveLongTimedEventNames()) {
+                                                "attribute" { -name }
+                                            }
+                                        }
+                                    }
+                                    "players" {
+                                        if (homePlayers is List<*> && homePlayers.isNotEmpty()) {
+                                            "homeTeamPlayers" {
+                                                for (player in homePlayers.filterIsInstance<Player>()) {
+                                                    "player" {
+                                                        player.name?.let {
+                                                            attribute("playerName", it)
                                                         }
+                                                        attribute(
+                                                            "jerseyNumber",
+                                                            player.number
+                                                        )
                                                     }
                                                 }
                                             }
-                                            if (guestPlayers is List<*> && guestPlayers.isNotEmpty()) {
-                                                "guestTeamPlayers" {
-                                                    for (player in guestPlayers.filterIsInstance<Player>()) {
-                                                        "player" {
-                                                            player.name?.let {
-                                                                attribute("playerName", it)
-                                                            }
-                                                            attribute("jerseyNumber", player.number)
+                                        }
+                                        if (guestPlayers is List<*> && guestPlayers.isNotEmpty()) {
+                                            "guestTeamPlayers" {
+                                                for (player in guestPlayers.filterIsInstance<Player>()) {
+                                                    "player" {
+                                                        player.name?.let {
+                                                            attribute("playerName", it)
                                                         }
+                                                        attribute("jerseyNumber", player.number)
                                                     }
                                                 }
                                             }
@@ -331,14 +339,12 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                     }
                 }
             }
-            return svt.toString(PrintOptions(
-                    pretty = true,
-                    singleLineTextElements = true,
-                    useSelfClosingTags = true
-            ))
-            // print(xmlString)
         }
-        return null
+        return svt.toString(PrintOptions(
+            pretty = true,
+            singleLineTextElements = true,
+            useSelfClosingTags = true
+        ))
     }
 }
 
