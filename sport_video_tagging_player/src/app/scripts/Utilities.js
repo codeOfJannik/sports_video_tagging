@@ -17,8 +17,8 @@ function eventPlayersInPlayerfilter(eventPlayers, filterPlayers) {
         )) {
             return false
         }
-        return true
     }
+    return true
 }
 
 export function eventContainsPlayers(event, filteredPlayers) {
