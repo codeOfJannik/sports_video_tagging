@@ -1,0 +1,174 @@
+<svt>
+	<match>
+		<metadata>
+			<matchDateTime>Wed Dec 12 19:00:00 GMT+01:00 2018</matchDateTime>
+			<homeTeamScore>2</homeTeamScore>
+			<guestTeamScore>2</guestTeamScore>
+		</metadata>
+		<homeTeam>Deutschland</homeTeam>
+		<guestTeam>Polen</guestTeam>
+		<matchEvents>
+			<matchEvent eventTitle="Match Start" matchEventSequenceNum="0" matchEventTimeOffset="0">
+				<players/>
+			</matchEvent>
+			<matchEvent eventTitle="gute Offensivaktion" matchEventSequenceNum="1" matchEventTimeOffset="39">
+				<eventAttributes>
+					<attribute>Fehlwurf</attribute>
+					<attribute>Rückraum</attribute>
+					<attribute>6:0 Abwehr</attribute>
+					<attribute>Ballbesitz Heim</attribute>
+				</eventAttributes>
+				<players>
+					<homeTeamPlayers>
+						<player playerName="Fabian Böhm" jerseyNumber="38"/>
+					</homeTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="Tempoangriff" matchEventSequenceNum="2" matchEventTimeOffset="45">
+				<eventAttributes>
+					<attribute>Tor</attribute>
+					<attribute>Ballbesitz Gast</attribute>
+				</eventAttributes>
+				<players>
+					<guestTeamPlayers>
+						<player jerseyNumber="6"/>
+					</guestTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="technischer Fehler" matchEventSequenceNum="3" matchEventTimeOffset="81">
+				<eventAttributes>
+					<attribute>Ballbesitz Heim</attribute>
+					<attribute>6:0 Abwehr</attribute>
+				</eventAttributes>
+				<players>
+					<homeTeamPlayers>
+						<player playerName="Fabian Böhm" jerseyNumber="38"/>
+					</homeTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="Tempoangriff" matchEventSequenceNum="4" matchEventTimeOffset="85">
+				<eventAttributes>
+					<attribute>Tor</attribute>
+					<attribute>Konter</attribute>
+					<attribute>Ballbesitz Gast</attribute>
+				</eventAttributes>
+				<players>
+					<guestTeamPlayers>
+						<player jerseyNumber="6"/>
+					</guestTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="gute Offensivaktion" matchEventSequenceNum="5" matchEventTimeOffset="110">
+				<eventAttributes>
+					<attribute>Kreiskooperation</attribute>
+					<attribute>Ballbesitz Heim</attribute>
+					<attribute>6:0 Abwehr</attribute>
+				</eventAttributes>
+				<players>
+					<homeTeamPlayers>
+						<player playerName="Fabian Böhm" jerseyNumber="38"/>
+						<player playerName="Hendrik Pekeler" jerseyNumber="13"/>
+					</homeTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="7-Meter" matchEventSequenceNum="6" matchEventTimeOffset="140">
+				<eventAttributes>
+					<attribute>Tor</attribute>
+					<attribute>Ballbesitz Heim</attribute>
+				</eventAttributes>
+				<players>
+					<homeTeamPlayers>
+						<player playerName="Tobias Reichmann" jerseyNumber="9"/>
+					</homeTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="gute Defensivaktion" matchEventSequenceNum="7" matchEventTimeOffset="182">
+				<eventAttributes>
+					<attribute>Ballbesitz Gast</attribute>
+					<attribute>6:0 Abwehr</attribute>
+				</eventAttributes>
+				<players>
+					<homeTeamPlayers>
+						<player playerName="Andreas Wolff" jerseyNumber="33"/>
+						<player playerName="Patrick Winczek" jerseyNumber="7"/>
+					</homeTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="gute Offensivaktion" matchEventSequenceNum="8" matchEventTimeOffset="231">
+				<eventAttributes>
+					<attribute>1:1 Aktion</attribute>
+					<attribute>Ballbesitz Heim</attribute>
+					<attribute>6:0 Abwehr</attribute>
+				</eventAttributes>
+				<players>
+					<homeTeamPlayers>
+						<player playerName="Fabian Böhm" jerseyNumber="38"/>
+					</homeTeamPlayers>
+					<guestTeamPlayers>
+						<player jerseyNumber="18"/>
+					</guestTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="gute Defensivaktion" matchEventSequenceNum="9" matchEventTimeOffset="252">
+				<eventAttributes>
+					<attribute>Rückraum</attribute>
+					<attribute>Ballbesitz Heim</attribute>
+					<attribute>6:0 Abwehr</attribute>
+				</eventAttributes>
+				<players>
+					<guestTeamPlayers>
+						<player jerseyNumber="22"/>
+					</guestTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="technischer Fehler" matchEventSequenceNum="10" matchEventTimeOffset="262">
+				<eventAttributes>
+					<attribute>Ballbesitz Heim</attribute>
+					<attribute>6:0 Abwehr</attribute>
+				</eventAttributes>
+				<players>
+					<homeTeamPlayers>
+						<player playerName="Steffen Weinhold" jerseyNumber="17"/>
+					</homeTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="gute Defensivaktion" matchEventSequenceNum="11" matchEventTimeOffset="273">
+				<eventAttributes>
+					<attribute>Rückraum</attribute>
+					<attribute>Ballbesitz Gast</attribute>
+					<attribute>6:0 Abwehr</attribute>
+				</eventAttributes>
+				<players>
+					<homeTeamPlayers>
+						<player playerName="Steffen Weinhold" jerseyNumber="17"/>
+					</homeTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="gute Defensivaktion" matchEventSequenceNum="12" matchEventTimeOffset="306">
+				<eventAttributes>
+					<attribute>Ballbesitz Gast</attribute>
+					<attribute>6:0 Abwehr</attribute>
+				</eventAttributes>
+				<players>
+					<homeTeamPlayers>
+						<player playerName="Hendrik Pekeler" jerseyNumber="13"/>
+					</homeTeamPlayers>
+				</players>
+			</matchEvent>
+			<matchEvent eventTitle="Tempoangriff" matchEventSequenceNum="13" matchEventTimeOffset="314">
+				<eventAttributes>
+					<attribute>Tor</attribute>
+					<attribute>Ballbesitz Heim</attribute>
+				</eventAttributes>
+				<players>
+					<homeTeamPlayers>
+						<player playerName="Hendrik Pekeler" jerseyNumber="13"/>
+					</homeTeamPlayers>
+					<guestTeamPlayers>
+						<player jerseyNumber="61"/>
+					</guestTeamPlayers>
+				</players>
+			</matchEvent>
+		</matchEvents>
+	</match>
+</svt>
