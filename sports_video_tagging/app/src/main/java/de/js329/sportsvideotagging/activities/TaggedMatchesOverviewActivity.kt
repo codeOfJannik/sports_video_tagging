@@ -24,6 +24,7 @@ import kotlinx.coroutines.*
 import org.redundent.kotlin.xml.PrintOptions
 import org.redundent.kotlin.xml.xml
 import java.io.PrintWriter
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -241,7 +242,9 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
             "match" {
                 "metadata" {
                     "matchDateTime" {
-                        match.date?.let { -Date(it).toString() }
+                        match.date?.let {
+                            -SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).format(Date(it))
+                        }
                     }
                     "homeTeamScore" {
                         -match.homeScore.toString()
@@ -310,7 +313,9 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                                                 for (player in homePlayers.filterIsInstance<Player>()) {
                                                     "player" {
                                                         player.name?.let {
-                                                            attribute("playerName", it)
+                                                            if (it != "") {
+                                                                attribute("playerName", it)
+                                                            }
                                                         }
                                                         attribute(
                                                             "jerseyNumber",
@@ -325,7 +330,9 @@ class TaggedMatchesOverviewActivity : AppCompatActivity() {
                                                 for (player in guestPlayers.filterIsInstance<Player>()) {
                                                     "player" {
                                                         player.name?.let {
-                                                            attribute("playerName", it)
+                                                            if (it != "") {
+                                                                attribute("playerName", it)
+                                                            }
                                                         }
                                                         attribute("jerseyNumber", player.number)
                                                     }
