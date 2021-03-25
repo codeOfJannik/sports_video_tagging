@@ -2,10 +2,10 @@ image: node:12 # change to match your node version
 
 cache:
   paths:
-    - sport_video_tagging_player/node_modules/
+    - sports_video_tagging_player/node_modules/
 
 before_script:
-  - cd sport_video_tagging_player
+  - cd sports_video_tagging_player
   - rm -rf dist
   - npm install
 
