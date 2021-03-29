@@ -5,7 +5,7 @@ To run the web app locally, follow these steps:
 ## Setup Instructions
 **node.js** must be installed in order to run npm commands. Follow [node.js installation manual](https://nodejs.org/en/download/package-manager/)
 
-Ater node.js is installed to your device, `cd` into [sports_video_tagging_player](/sports_video_tagging_player) and run the following command  
+After node.js is installed to your device, `cd` into [sports_video_tagging_player](/sports_video_tagging_player) and run the following command  
 ```
 npm install
 ```
@@ -21,4 +21,4 @@ As soon as the bundle.js has been created, run the following command to host the
 ```
 npm run serve
 ```
-You can access the application at https://localhost:8080 using your browser 
+You can access the application at http://localhost:8080/ using your browser 
