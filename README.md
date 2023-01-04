@@ -10,4 +10,4 @@ contains tagging data for the first five minutes of the handball match Germany v
 A prototype Android app written in Kotlin to create tags for events in sport matches live during the match. The created tags can be exported into the .svt-file format.
 
 ## sports_video_tagging_player
-A prototype web application written created in React to use an video along with tagging data of a svt-file. A demo version of the web app is hosted at https://js329.pages.mi.hdm-stuttgart.de/sports_video_tagging/.
+A prototype web application written created in React to use an video along with tagging data of a svt-file.
